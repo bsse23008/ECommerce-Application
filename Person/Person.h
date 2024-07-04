@@ -10,7 +10,7 @@
 using json = nlohmann ::json;
 using std::endl;
 using std::cout;
-
+using std::cin;
 
 class Person
 {
