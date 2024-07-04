@@ -1,5 +1,5 @@
-#if !defined(Inventory_H_)
-#define Inventory_H_
+#ifndef _INVENTORY_H_
+#define _INVENTORY_H_
 
 #include <iostream>
 #include <vector>
@@ -44,4 +44,4 @@ public:
 
 
 
-#endif // Inventory_H_
+#endif // _INVENTORY_H_

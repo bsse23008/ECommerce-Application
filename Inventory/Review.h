@@ -1,5 +1,6 @@
-#if !defined(Review_H_)
-#define Review_H_
+#ifndef _REVIEW_H_
+#define _REVIEW_H_
+
 #include <iostream>
 
 class Review
@@ -15,4 +16,4 @@ public:
 
 
 
-#endif // Review_H_
+#endif // _REVIEW_H_
