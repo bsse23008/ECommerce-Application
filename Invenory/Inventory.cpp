@@ -1,5 +1,6 @@
 #include "inventory.h"
 
+//constructor and destructor
 Inventory::Inventory(/* args */)
 {
 }
@@ -37,6 +38,10 @@ void Inventory::set_stock(double stock)
 {
     this->stock = stock;
 }
+void Inventory::add_review(std::string review)
+{
+    this->reviews.push_back(review);
+}
 // getters
 std::string Inventory::get_name()
 {
@@ -62,6 +67,14 @@ double Inventory::get_price()
 {
     return this->price;
 }
+double Inventory::get_stock(){
+    return this->stock;
+}
+std::vector <std::string> Inventory:: get_reviews(){
+    return this->reviews;
+}
+
+    //ostream operator
 
 std::ostream& operator<<(std::ostream& os, const Inventory& inventory){
     os << "Name: " << inventory.name << std::endl;
