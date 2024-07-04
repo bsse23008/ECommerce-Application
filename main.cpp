@@ -33,6 +33,5 @@ int main() {
             }
         }
     }while (toupper(choice)!='Q');
-
     return 0;
 }
