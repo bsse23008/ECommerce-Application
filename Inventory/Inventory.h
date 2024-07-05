@@ -8,15 +8,24 @@
 class Inventory
 {
 private:
-   std::vector<Product> products;
+    static Inventory* instance;
+    std::vector<Product> products;
+    // pivate constructor
+    Inventory();
+
 public:
-    //constructor and destructor
-    Inventory(/* args */);
+    //singleton pattern
+    static Inventory* getInstance();
+    static void deleteInstance();
+    // destructor
     ~Inventory();
-   
+    //methods
+    void addProduct();
+    void removeProduct();
+    void updateProduct();
+    void displayProducts();
+    void searchProduct();
+    
 };
-
-
-
 
 #endif // _INVENTORY_H_

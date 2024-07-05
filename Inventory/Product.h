@@ -10,6 +10,7 @@ private:
     std::string name;
     std::string description;
     std::string category;
+    std::string subCategory;
     std::string location;
     std::string supplier;
     double price;
@@ -22,6 +23,7 @@ public:
     void set_name(std::string name);
     void set_description(std::string description);
     void set_category(std::string category);
+    void set_SubCategory(std::string category);
     void set_location(std::string location);
     void set_supplier(std::string supplier);
     void set_price(double price);
@@ -37,6 +39,7 @@ public:
     double get_price();
     double get_stock();
     double get_rating();
+    std::string get_subCategory();
     std::vector<std::string> get_reviews();
     // constructor and destructor
     Product(/* args */);

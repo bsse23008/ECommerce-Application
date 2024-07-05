@@ -29,6 +29,11 @@ void Product::set_stock(double stock)
 {
     this->stock = stock;
 }
+void Product::set_SubCategory(std::string category)
+{
+    subCategory = category;
+}
+
 // void Product::add_review(std::string review)
 // {
 //     this->reviews.push_back(review);
@@ -62,21 +67,30 @@ double Product::get_price()
 {
     return this->price;
 }
-double Product::get_stock(){
+double Product::get_stock()
+{
     return this->stock;
 }
+std::string Product::get_subCategory()
+{
+    return this->subCategory;
+}
+
 // std::vector <std::string> Product:: get_reviews(){
 //     return this->reviews;
 // }
-double Product::get_rating(){
+double Product::get_rating()
+{
     return this->rating;
 }
-  //ostream operator
+// ostream operator
 
-std::ostream& operator<<(std::ostream& os, const Product& product){
+std::ostream &operator<<(std::ostream &os, const Product &product)
+{
     os << "Name: " << product.name << std::endl;
     os << "Description: " << product.description << std::endl;
     os << "Category: " << product.category << std::endl;
+    os << "Sub Category: " << product.subCategory << std::endl;
     os << "Location: " << product.location << std::endl;
     os << "Supplier: " << product.supplier << std::endl;
     os << "Price: " << product.price << std::endl;
