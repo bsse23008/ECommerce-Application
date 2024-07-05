@@ -38,7 +38,7 @@ public:
 
     virtual void display () const; 
 
-private:
+protected:
     std::string firstName, lastName, userName, password;
 
 }; // Abstract class Person

@@ -1,9 +1,9 @@
-#include "./Person/Person.h"
+#include "Modules.h"
 
 int main() {
     // Main menu
     char choice; 
-
+    Module* module = new Module();
     do
     {
         cout << "_____________________________________________________________________________\n";
@@ -14,18 +14,19 @@ int main() {
 
         switch (toupper(choice)) {
             case 'A':{ 
-                Person* p = new Person ("Ahmad", "Khan", "bsse23008", "*****");
-                p->display();
-                delete p;
+                module->adminModule();
                 break;
             }
             case 'B':{
+                module->buyerModule();
                 break;
             }
             case 'S':{
+                module->sellerModule();
                 break;
             }
             case 'C':{
+                // Buyer
                 break;
             }
             case 'X':{
@@ -42,5 +43,6 @@ int main() {
             }
         }
     }while (toupper(choice)!='Q');
+    delete module;
     return 0;
 }
