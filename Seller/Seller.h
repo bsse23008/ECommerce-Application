@@ -1,20 +1,25 @@
 #ifndef _SELLER_H_
 #define _SELLER_H_
 
-#include "../Person/Person.h"
+#include "../User/User.h"
 
-class Seller : public Person
+class Seller : public User
 {
 public:
     Seller();
+    ~Seller () {
+        cout << "\nSeller destructor called!" << endl;
+    }
     Seller(
         const std::string &,
         const std::string &,
         const std::string &,
         const std::string &);
 
-        // Seller Functionalities
+        static Seller* fromJson (json& j); 
+        json toJson ();
 
+        // Seller Functionalities
 };
 
 #endif // _SELLER_H_

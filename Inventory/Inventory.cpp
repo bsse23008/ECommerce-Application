@@ -1,4 +1,4 @@
-#include "inventory.h"
+#include "Inventory.h"
 
 //constructor and destructor
 Inventory::Inventory(/* args */)

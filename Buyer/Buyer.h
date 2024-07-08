@@ -1,12 +1,15 @@
 #ifndef _BUYER_H_
 #define _BUYER_H_
 
-#include "../Person/Person.h"
+#include "../User/User.h"
 
-class Buyer : public Person
+class Buyer : public User
 {
 public:
     Buyer();
+    ~Buyer () {
+        cout << "\nBuyer destructor called!" << endl;
+    }
     Buyer(
         const std::string &,
         const std::string &,
@@ -15,6 +18,8 @@ public:
 
         // Buyer/Customer Functionalities
 
+        static Buyer* fromJson (json& j); 
+        json toJson ();
 };
 
 #endif // _BUYER_H_

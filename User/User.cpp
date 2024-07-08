@@ -1,11 +1,11 @@
-#include "Person.h"
+#include "User.h"
 
 
-Person :: Person () : firstName {"None"}, lastName {"None"}, userName {"None"}, password {"None"} {
+User :: User () : firstName {"None"}, lastName {"None"}, userName {"None"}, password {"None"} {
 
 }
 
-Person :: Person (
+User :: User (
         const std::string & first,
         const std::string & last,
         const std::string & user_name,
@@ -16,47 +16,49 @@ Person :: Person (
 
 
 // Setters 
-void Person :: setFirstName(const std::string & first) {
+void User :: setFirstName(const std::string & first) {
     this->firstName = first;
 }
 
-void Person :: setLastName(const std::string & last) { 
+void User :: setLastName(const std::string & last) { 
     this->lastName = last;
 }
 
-void Person :: setUserName(const std::string & user_name) {
+void User :: setUserName(const std::string & user_name) {
     this->userName = user_name; 
 }
 
-void Person :: setPassword(const std::string & pass) {
+void User :: setPassword(const std::string & pass) {
     this->password = pass;
 }
 
 
 // Getters 
-std::string Person :: getFirstName() const {
+std::string User :: getFirstName() const {
     return firstName; 
 }
 
-std::string Person :: getLastName() const {
+std::string User :: getLastName() const {
     return lastName;
 }
 
-std::string Person :: getUserName() const {
+std::string User :: getUserName() const {
     return userName;
 }
 
-std::string Person :: getPassword() const {
+std::string User :: getPassword() const {
     return password;
 }
 
 // Display method
-void Person :: display () const {
+void User :: display () const {
     cout << *this << endl;
 }
 
+
+
 // I/O stream Operators
-std::ostream& operator << (std::ostream& os, const Person& p) {
+std::ostream& operator << (std::ostream& os, const User& p) {
     os << endl;
     os << "First Name: " << p.firstName << endl; 
     os << "Last Name : " << p.lastName << endl; 
@@ -66,11 +68,11 @@ std::ostream& operator << (std::ostream& os, const Person& p) {
     return os; 
 }
 
-std::istream& operator >> (std::istream& is, Person& p) {
+std::istream& operator >> (std::istream& is, User& p) {
 
     cout << "\nEnter first name: "; is >> p.firstName;
     cout << "Enter last name : "; is >> p.lastName;
-    cout << "Enter user name : "; is >> p.userName;
+    cout << "Enter user name : "; is >> p.userName; 
     cout << "Enter password  : "; is >> p.password;
     return is;
 }
