@@ -1,10 +1,11 @@
-#ifndef _PERSON_H_
-#define _PERSON_H_
+#ifndef _USER_H_
+#define _USER_H_
 
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <vector>
+#include <exception>
 #include <sstream>
 #include "./../nlohmann/json.hpp"
 using json = nlohmann ::json;
@@ -12,19 +13,19 @@ using std::endl;
 using std::cout;
 using std::cin;
 
-class Person
+class User
 {
-    friend std::ostream& operator << (std::ostream& os, const Person& p);
-    friend std::istream& operator >> (std::istream& is, Person& p);
+    friend std::ostream& operator << (std::ostream& os, const User& p);
+    friend std::istream& operator >> (std::istream& is, User& p);
 public:
-    Person();
-    Person(
+    User();
+    User(
         const std::string &,
         const std::string &,
         const std::string &,
         const std::string &);
 
-    Person(const Person &) = default;
+    User(const User &) = default;
 
     void setFirstName(const std::string &);
     void setLastName(const std::string &);
@@ -38,9 +39,9 @@ public:
 
     virtual void display () const; 
 
-private:
+protected:
     std::string firstName, lastName, userName, password;
 
-}; // Abstract class Person
+}; // Abstract class User
 
-#endif // _PERSON_H_
+#endif // _USER_H_

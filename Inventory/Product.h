@@ -48,12 +48,5 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Product& product);
 };
 
-Product::Product(/* args */)
-{
-}
-
-Product::~Product()
-{
-}
 
 #endif // PRODUCT_H_

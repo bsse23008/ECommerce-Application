@@ -1,37 +1,58 @@
-#include "./Person/Person.h"
+#include "./ECommerce/ECommerce.h"
 
+
+void retrieveData(void (ECommerce::*retrieveFunction)(), const std::string& functionName) {
+    try {
+        (ECommerce::getInstance()->*retrieveFunction)();
+    }
+    catch (std::exception& ex) {
+        std::cerr << "Unable to retrieve data from Database in " << functionName << ": " << ex.what() << std::endl;
+    }
+    catch (...) {
+        std::cerr << "Unknown Exception caught in " << functionName << "!" << std::endl;
+    }
+}
+
+ 
 int main() {
-    // Main menu
-    char choice; 
-    cout << "\n\t\t E-COMMERCE PLATFORM APPLICATION \n" << endl;
+    
+    // Retrieving data from Database folder
+    retrieveData(&ECommerce::retrieveAdmins, "retrieveAdmins");
+    retrieveData(&ECommerce::retrieveBuyers, "retrieveBuyers");
+    retrieveData(&ECommerce::retrieveSellers, "retrieveSellers");
 
+    // Application Menu
+    char choice; 
     do
     {
-        cout << "\n\t A = Admin \n\t B = Buyer \n\t S = Seller \n\t C = Customer \n\t Q = Quit" << endl;
-        cin >> choice;
-
+        cout << "____________________________________________________________" << endl;
+        cout << "\n\t\t E-COMMERCE APPLICATION " << endl;
+        cout << "\n L = Login \n\n S = Sign-Up \n\n G = Guest User \n\n X = Clear Screen \n\n E = Exit " << endl;
+        cout << "\nEnter choice: ";
+        cin >> choice; 
         switch (toupper(choice)) {
-            case 'A':{ 
-                break;
-            }
-            case 'B':{
+            case 'L':{
+                login();                
                 break;
             }
             case 'S':{
+                ECommerce :: getInstance ()->signUp ();
                 break;
             }
-            case 'C':{
+            case 'G':{
                 break;
             }
-            case 'Q':{
-                cout << "\nHave a nice day!" << endl;
+            case 'X':{
+                system("clear"); // clear the console
                 break;
             }
-            default:{
-                cout << "\nYou made and invalid choice!" << endl;
-                continue;
+            case 'E':{
+                ECommerce::releaseInstance(); // release all the dynamically allocated memory
+                cout << "\nExiting........." << endl;
+                break;
             }
         }
-    }while (toupper(choice)!='Q');
+    }while (toupper(choice)!='E');    
+
     return 0;
 }

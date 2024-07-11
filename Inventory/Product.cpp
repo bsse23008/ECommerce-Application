@@ -1,5 +1,23 @@
 #include "Product.h"
 
+Product :: Product () 
+:   name{"None"}, 
+    description{"None"}, 
+    category{"None"}, 
+    location{"None"}, 
+    supplier{"None"},
+    price{0.0},
+    stock{0.0},
+    rating{0.0} {
+}
+
+// Hey Samer also Implement the parameterized constructor!
+
+Product :: ~Product() {
+
+}
+
+
 // setters
 void Product::set_name(std::string name)
 {
