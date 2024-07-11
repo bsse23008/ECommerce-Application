@@ -2,12 +2,18 @@
 #define _BUYER_H_
 
 #include "../User/User.h"
-
+#include <vector>
+#include "../Summer-Project/ECommerce/Categories.h";
 class Buyer : public User
 {
+    std::vector<Categories> categories;
+    std::vector<std::string> preferredCategory;
+    std::vector<std::string> preferredSubCategory;
+
 public:
     Buyer();
-    ~Buyer () {
+    ~Buyer()
+    {
         cout << "\nBuyer destructor called!" << endl;
     }
     Buyer(
@@ -16,10 +22,16 @@ public:
         const std::string &,
         const std::string &);
 
-        // Buyer/Customer Functionalities
-
-        static Buyer* fromJson (json& j); 
-        json toJson ();
+    /// setters
+    void setCategoty(const std::vector<Categories> &);
+    void setPreferredCategory(std::string &);
+    void setPreferredSubCategory(std::string &);
+    // getters
+    std::vector<std::string> getPreferredCategory();
+    std::vector<std::string> getPreferredSubCategory();
+    // json functions
+    static Buyer *fromJson(json &j);
+    json toJson();
 };
 
 #endif // _BUYER_H_

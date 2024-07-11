@@ -16,9 +16,17 @@ Admin* ECommerce :: adminSignUp (const std::string& firstName, const std::string
 }
 
 Buyer* ECommerce :: buyerSignUp (const std::string& firstName, const std::string&lastName, const std::string&userName, const std::string&password)  {
-    // Take input of additional attributes below
-    int age;
-    return new Buyer (firstName, lastName, userName, password);
+    Buyer* b = new Buyer (firstName, lastName, userName, password);
+    // Take input of additional attributes 
+    std::cout <<" Selection of the categories you are interested in: \n";
+    int i=0;
+    do{
+    for (int i=0; i<categories.size(); i++) {
+        categories[i].displayCategories();
+    }
+    }while (true);
+
+    return b;
 }
 
 Seller* ECommerce :: sellerSignUp (const std::string& firstName, const std::string&lastName, const std::string&userName, const std::string&password) {
