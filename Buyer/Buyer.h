@@ -24,11 +24,15 @@ public:
 
     /// setters
     void setCategoty(const std::vector<Categories> &);
-    void setPreferredCategory(std::string &);
+    void setPreferredCategory(std::string );
     void setPreferredSubCategory(std::string &);
     // getters
     std::vector<std::string> getPreferredCategory();
     std::vector<std::string> getPreferredSubCategory();
+    //checking if cattegory is already present
+    bool isCategoryPresent(std::string);
+    //selecting the categories
+    void selectCategory();
     // json functions
     static Buyer *fromJson(json &j);
     json toJson();

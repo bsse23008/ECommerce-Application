@@ -17,7 +17,7 @@ void Buyer::setCategoty(const std::vector<Categories> &)
 {
     this->categories = categories;
 }
-void Buyer::setPreferredCategory(std::string &preferredCategory)
+void Buyer::setPreferredCategory(std::string preferredCategory)
 {
     this->preferredCategory.push_back(preferredCategory);
 }
@@ -43,6 +43,60 @@ Buyer *Buyer ::fromJson(json &j)
 void Buyer ::setCategoty(const std::vector<Categories> &categories)
 {
     this->categories = categories;
+}
+// selecting the categories
+void Buyer::selectCategory()
+{
+    int k = 0, j = 0;
+    std::vector<int> cat;
+    do
+    {
+        for (int i = 0; i < categories.size(); i++)
+        {
+            if (isCategoryPresent(categories[i].getCategory()))
+            {
+                continue;
+            }
+            categories[i].displayCategories();
+            cat.push_back(i);
+        }
+
+        int choice;
+        bool flag = false;
+        do
+        {
+            std::cout << "Enter the category number you are interested in: ";
+            std::cin >> choice;
+            for (int h = 0; h < cat.size(); h++)
+            {
+                if (cat[h] == (choice - 1))
+                {
+                    flag = true;
+                    setPreferredCategory(categories[choice - 1].getCategory());
+                    cat.erase(cat.begin() + h);
+                    break;
+                }
+            }
+            if (!flag)
+            {
+                std::cout << "Invalid choice. Please try again!" << std::endl;
+            }
+        } while (!flag);
+        std::cout << "Enter positive integer to continue selecting the categories and negative integer to stop : ";
+        std::cin >> j;
+        k++;
+    } while (k != 7 || j > 0);
+}
+
+// checking if cattegory is already present
+bool Buyer::isCategoryPresent(std::string category)
+{
+    for (int i = 0; i < categories.size(); i++)
+    {
+        if (preferredCategory[i] == category)
+            return true;
+    }
+    return false;
 }
 
 json Buyer ::toJson()
