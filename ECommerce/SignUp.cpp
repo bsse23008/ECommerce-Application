@@ -21,17 +21,49 @@ Buyer *ECommerce ::buyerSignUp(const std::string &firstName, const std::string &
 {
     Buyer *b = new Buyer(firstName, lastName, userName, password);
     // Take input of additional attributes
-    int x;
-    std::cout << "Enter [1] if you want to select the categories you are interested \n Enter [0] if you want to skip this step\n";
-    std::cin >> x;
-    if (x == 1)
+    int choice, choice2;
+    do
     {
-        std::cout << "Selection of the categories you are interested in: \n";
-        b->selectCategory();
-        std::cout << "Congratulations! you have successfully created your account.\n";
-    }
+        std::cout << "Enter [1] if you want to select the categories you are interested \n Enter [0] if you want to skip this stop\n";
+        std::cin >> choice;
+        switch (choice)
+        {
+        case 0:
+        {
+            std::cout << "Congratulations! you have successfully created your account.\n";
+        }
+        case 1:
+        {
+            std::cout << "Selection of the categories you are interested in: \n";
+            b->selectCategory();
 
-    std::cout << "Congratulations! you have successfully created your account.\n";
+            std::cout << "Enter [1] if you want to select the sub categories of the categories you are interested \n Enter [0] if you want to skip this stop\n";
+            do
+            {
+                switch (choice2)
+                {
+                case 0:
+                {
+                    break;
+                }
+                case 1:
+                {
+                    b->selectSubCategory();
+                }
+                default:
+                    std::cout << "Invalid Input. Try Again :( \n";
+                    break;
+                }
+            } while (choice2 != 0);
+            std::cout << "Congratulations! you have successfully created your account.\n";
+            break;
+        }
+        default:
+        {
+            std::cout << "Invalid Input. Try Again :( \n";
+        }
+        }
+    } while (choice != 0);
 
     return b;
 }
