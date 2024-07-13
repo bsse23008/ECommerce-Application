@@ -13,7 +13,7 @@ Buyer ::Buyer(
 }
 
 /// setters
-void Buyer::setCategoty(const std::vector<Categories> &)
+void Buyer::setCategory(const std::vector<Categories> & categories)
 {
     this->categories = categories;
 }
@@ -39,11 +39,6 @@ Buyer *Buyer ::fromJson(json &j)
 {
     return new Buyer(j["firstName"], j["lastName"], j["userName"], j["password"]);
 }
-// setter
-void Buyer ::setCategoty(const std::vector<Categories> &categories)
-{
-    this->categories = categories;
-}
 // selecting the categories and subcategories
 void Buyer::selectCategory()
 {
@@ -51,6 +46,7 @@ void Buyer::selectCategory()
     std::vector<int> cat;
     do
     {
+        std::cout<<"Categories:-\n";
         //displaying only unselected categories 
         for (int i = 0; i < categories.size(); i++)
         {
@@ -59,11 +55,10 @@ void Buyer::selectCategory()
                 continue;
             }
             inputCheck++;
-            categories[i].displayCategories();
+            std::cout<<i+1<<". "<<categories[i].getCategory()<<std::endl;
             cat.push_back(i);
         }
         //checking if all categories are selected or not
-
         if(inputCheck!=0){
         int choice;
         bool flag = false;
@@ -93,10 +88,10 @@ void Buyer::selectCategory()
         count++;
         }
         else{
-            std:: cout<<" You have already selected all of the categories.";
+            std:: cout<<" You have already selected all of the categories.\n";
             break;
         }
-    } while (count != 7 || exit > 0);
+    } while ( exit > 0);
 }
 
 void Buyer::selectSubCategory()
@@ -116,14 +111,14 @@ void Buyer::selectSubCategory()
             //displaying only unselected subcategories
             for (size_t j = 0; j < 4; j++)
             {
-                for (int h = 0; i < subCat.size(); h++)
+                for (int h = 0; h < subCat.size(); h++)
                 {
                     if (j == subCat[h])
                     {
                         check = false;
                     }
                     check = true;
-
+                }
                     if (!check)
                     {
                         continue;
@@ -132,7 +127,7 @@ void Buyer::selectSubCategory()
                     Categories category("");
                     category = findCategory(preferredCategory[i]);
                     std::cout << j + 1 << ". " << category.getSubCategory()[j] << std::endl;
-                }
+                
             }
             //checking if all subcategories are selected or not
             if(inputCheck!=0)
@@ -153,9 +148,13 @@ void Buyer::selectSubCategory()
                     }
                     else
                     {
+                        flag = true;
                         subCat.push_back((choice - 1));
                         setPreferredSubCategory(category.getSubCategory()[(choice - 1)]);
                     }
+                }
+                if(subCat.size()==0){
+                    flag=true;
                 }
                 if (!flag)
                 {
@@ -171,26 +170,29 @@ void Buyer::selectSubCategory()
                 std::cout <<"You have already selected all of the subcategories of this category.";
                 break;
             }
-        } while (count != 4 || exit > 0);
+        } while (exit > 0);
         std::cout<<"===============================================";
     }
 }
 
 Categories Buyer::findCategory(std::string category)
 {
+    Categories cat ("");
     for (size_t i = 0; i < categories.size(); i++)
     {
         if (categories[i].getCategory() == category)
         {
-            return categories[i];
+            cat=categories[i];
+           
         }
     }
+    return cat;
 }
 
 // checking if cattegory is already present
 bool Buyer::isCategoryPresent(std::string category)
 {
-    for (int i = 0; i < categories.size(); i++)
+    for (int i = 0; i < preferredCategory.size(); i++)
     {
         if (preferredCategory[i] == category)
             return true;

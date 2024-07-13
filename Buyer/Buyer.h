@@ -3,7 +3,7 @@
 
 #include "../User/User.h"
 #include <vector>
-#include "../Summer-Project/ECommerce/Categories.h";
+#include "../ECommerce/Categories.h"
 class Buyer : public User
 {
     std::vector<Categories> categories;
@@ -23,7 +23,7 @@ public:
         const std::string &);
 
     /// setters
-    void setCategoty(const std::vector<Categories> &);
+    void setCategory(const std::vector<Categories> &);
     void setPreferredCategory(std::string );
     void setPreferredSubCategory(std::string &);
     // getters

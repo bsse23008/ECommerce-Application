@@ -22,6 +22,9 @@ Buyer *ECommerce ::buyerSignUp(const std::string &firstName, const std::string &
     Buyer *b = new Buyer(firstName, lastName, userName, password);
     // Take input of additional attributes
     int choice, choice2;
+    b->setCategory(categories);
+    
+    
     do
     {
         std::cout << "Enter [1] if you want to select the categories you are interested \n Enter [0] if you want to skip this stop\n";
@@ -38,6 +41,7 @@ Buyer *ECommerce ::buyerSignUp(const std::string &firstName, const std::string &
             b->selectCategory();
 
             std::cout << "Enter [1] if you want to select the sub categories of the categories you are interested \n Enter [0] if you want to skip this stop\n";
+            std::cin>>choice2;
             do
             {
                 switch (choice2)
@@ -49,10 +53,12 @@ Buyer *ECommerce ::buyerSignUp(const std::string &firstName, const std::string &
                 case 1:
                 {
                     b->selectSubCategory();
+                    break;
                 }
-                default:
+                default:{
                     std::cout << "Invalid Input. Try Again :( \n";
                     break;
+                }
                 }
             } while (choice2 != 0);
             std::cout << "Congratulations! you have successfully created your account.\n";

@@ -20,6 +20,7 @@ int main() {
     retrieveData(&ECommerce::retrieveAdmins, "retrieveAdmins");
     retrieveData(&ECommerce::retrieveBuyers, "retrieveBuyers");
     retrieveData(&ECommerce::retrieveSellers, "retrieveSellers");
+    retrieveData(&ECommerce::loadCategories, "loadCategories");
 
     // Application Menu
     char choice; 

@@ -56,8 +56,12 @@ Categories::~Categories()
 }
 
 // getters
-std::string Categories ::getCategory(){}
-std::vector<std::string> Categories ::getSubCategory(){}
+std::string Categories ::getCategory(){
+    return category;
+}
+std::vector<std::string> Categories ::getSubCategory(){
+    return subCategory;
+}
 // display categories and subcategories
 void Categories ::displayCategories(){
     static int i = 1;
