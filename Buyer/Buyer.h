@@ -31,8 +31,10 @@ public:
     std::vector<std::string> getPreferredSubCategory();
     //checking if cattegory is already present
     bool isCategoryPresent(std::string);
-    //selecting the categories
+    //selecting the categories and subcategories
     void selectCategory();
+    void selectSubCategory();
+    Categories findCategory(std::string);
     // json functions
     static Buyer *fromJson(json &j);
     json toJson();

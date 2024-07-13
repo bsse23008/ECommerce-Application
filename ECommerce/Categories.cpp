@@ -76,3 +76,11 @@ void Categories ::displaySubCategories(){
         std::cout << i+1 << ". " << subCategory[i] << std::endl;
     }
 }
+
+//assignment operator
+
+Categories Categories:: operator = (Categories cat){
+    category = cat.category;
+    subCategory = cat.subCategory;
+    return *this;
+}

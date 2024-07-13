@@ -21,6 +21,8 @@ public:
     // display categories and subcategories
     void displayCategories();
     void displaySubCategories();
+    //assignment operator
+    Categories operator = (Categories cat);
 };
 
 #endif // _CATEGORIES_H_
