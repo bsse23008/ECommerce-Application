@@ -23,53 +23,55 @@ Buyer *ECommerce ::buyerSignUp(const std::string &firstName, const std::string &
     // Take input of additional attributes
     int choice, choice2;
     b->setCategory(categories);
-    
-    
-    do
+
+    std::cout << "Enter [1] if you want to select the categories you are interested \n Enter [0] if you want to skip this stop\n";
+    std::cin >> choice;
+    switch (choice)
     {
-        std::cout << "Enter [1] if you want to select the categories you are interested \n Enter [0] if you want to skip this stop\n";
-        std::cin >> choice;
-        switch (choice)
+    case 0:
+    {
+        std::cout << "Congratulations! you have successfully created your account.\n";
+    }
+    case 1:
+    {
+        std::cout << "Selection of the categories you are interested in: \n";
+        b->selectCategory();
+
+        std::cout << "Enter [1] if you want to select the sub categories of the categories you are interested \n Enter [0] if you want to skip this stop\n";
+        std::cin >> choice2;
+
+        switch (choice2)
         {
         case 0:
         {
-            std::cout << "Congratulations! you have successfully created your account.\n";
+            break;
         }
         case 1:
         {
-            std::cout << "Selection of the categories you are interested in: \n";
-            b->selectCategory();
-
-            std::cout << "Enter [1] if you want to select the sub categories of the categories you are interested \n Enter [0] if you want to skip this stop\n";
-            std::cin>>choice2;
-            do
+            std::cout << "Selection of the sub categories you are interested in: \n";
+            b->selectSubCategory();
+            for (size_t i = 0; i < b->getPreferredSubCategory().size(); i++)
             {
-                switch (choice2)
-                {
-                case 0:
-                {
-                    break;
-                }
-                case 1:
-                {
-                    b->selectSubCategory();
-                    break;
-                }
-                default:{
-                    std::cout << "Invalid Input. Try Again :( \n";
-                    break;
-                }
-                }
-            } while (choice2 != 0);
-            std::cout << "Congratulations! you have successfully created your account.\n";
+                std::cout<<b->getPreferredSubCategory()[i]<<std::endl;
+            }
+            
+            
             break;
         }
         default:
         {
             std::cout << "Invalid Input. Try Again :( \n";
+            break;
         }
         }
-    } while (choice != 0);
+        std::cout << "Congratulations! you have successfully created your account.\n";
+        break;
+    }
+    default:
+    {
+        std::cout << "Invalid Input. Try Again :( \n";
+    }
+    }
 
     return b;
 }

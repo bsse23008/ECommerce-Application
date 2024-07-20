@@ -7,7 +7,7 @@ Product :: Product ()
     location{"None"}, 
     supplier{"None"},
     price{0.0},
-    stock{0.0},
+    stock{0},
     rating{0.0} {
 }
 
@@ -27,9 +27,36 @@ void Product::set_description(std::string description)
 {
     this->description = description;
 }
-void Product::set_category(std::string category)
+void Product::set_category(std::vector <Categories>& categories)
 {
-    this->category = category;
+    for (size_t i = 0; i < 7; i++)
+    {
+        categories[i].displayCategories();
+    }
+    bool flag = false;
+    std::string category;
+    do
+    {
+        std::cout << "Enter the category number : ";
+        std::getline(std::cin, category);
+        if (category.size() != 1)
+        {
+            std::cout << "Invalid input. Please try again." << std::endl;
+            flag = false;
+        }
+        else if ((static_cast<int>(category[0])) >= 49 || (static_cast<int>(category[0])) <= 55)
+        {
+            flag = true;
+        }
+        else
+        {
+            std::cout << "Invalid input. Please try again." << std::endl;
+            flag = false;
+        }
+    } while (!flag);
+    int cat = category[0] - '0';
+    this->category=categories[cat - 1].getCategory();
+    std::cout << "Category Has been set to " << this->category << std::endl;
 }
 void Product::set_location(std::string location)
 {
@@ -43,13 +70,37 @@ void Product::set_price(double price)
 {
     this->price = price;
 }
-void Product::set_stock(double stock)
+void Product::set_stock(int stock)
 {
     this->stock = stock;
 }
-void Product::set_SubCategory(std::string category)
+void Product::set_SubCategory(Categories &category)
 {
-    subCategory = category;
+    category.displaySubCategories();
+    bool flag = false;
+    std::string subCategory;
+    do
+    {
+        std::cout << "Enter the sub category number : ";
+        std::getline(std::cin, subCategory);
+        if (subCategory.size() != 1)
+        {
+            std::cout << "Invalid input. Please try again." << std::endl;
+            flag = false;
+        }
+        else if ((static_cast<int>(subCategory[0])) >= 49 || (static_cast<int>(subCategory[0])) <= 52)
+        {
+            flag = true;
+        }
+        else
+        {
+            std::cout << "Invalid input. Please try again." << std::endl;
+            flag = false;
+        }
+    } while (!flag);
+    int subCat = subCategory[0] - '0';
+    this->subCategory = category.getSubCategory()[subCat - 1];
+    std::cout << "Sub Category Has been set to " << this->subCategory << std::endl;
 }
 
 // void Product::add_review(std::string review)

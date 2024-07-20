@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "Review.h"
+#include "./../ECommerce/Categories.h"
 class Product
 {
 private:
@@ -14,7 +15,7 @@ private:
     std::string location;
     std::string supplier;
     double price;
-    double stock;
+    int stock;
     double rating;
     std::vector<Review> reviews;
 
@@ -22,12 +23,12 @@ public:
     // setters
     void set_name(std::string name);
     void set_description(std::string description);
-    void set_category(std::string category);
-    void set_SubCategory(std::string category);
+    void set_category(std::vector<Categories> &categories);
+    void set_SubCategory(Categories &category);
     void set_location(std::string location);
     void set_supplier(std::string supplier);
     void set_price(double price);
-    void set_stock(double stock);
+    void set_stock(int stock);
     void add_review(std::string review);
     void set_rating(double rating);
     // getters
@@ -44,9 +45,8 @@ public:
     // constructor and destructor
     Product(/* args */);
     ~Product();
-     //ostream operator
-    friend std::ostream& operator<<(std::ostream& os, const Product& product);
+    // ostream operator
+    friend std::ostream &operator<<(std::ostream &os, const Product &product);
 };
-
 
 #endif // PRODUCT_H_
