@@ -5,6 +5,12 @@
             "lastName": "nisar",
             "password": "radoz123",
             "userName": "radoz"
+        },
+        {
+            "firstName": "Noman",
+            "lastName": "Ijaz",
+            "password": "nomi1234",
+            "userName": "nomi"
         }
     ]
 }

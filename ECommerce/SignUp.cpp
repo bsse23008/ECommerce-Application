@@ -87,6 +87,7 @@ void ECommerce :: signUp () {
                 addAdmin(a);
                 login();     // Login to your accout after signUp 
                 a = nullptr;
+                // Delete the pointer here! after the user logs out ??
                 break;
             }
             case 'B': {
@@ -113,6 +114,9 @@ void ECommerce :: signUp () {
                 std::cout << "\nGoing back to home page........" << std::endl;
                 break;
             }
+            default: {
+                cout << "\nInvalid command! " << endl;
+            }
         }
-    } while (std::toupper(choice) != 'E');
+    } while (std::toupper(choice) != 'G');
 }

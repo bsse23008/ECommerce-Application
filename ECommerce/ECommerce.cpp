@@ -3,6 +3,8 @@
 // Release the dynamically allocated memory
 ECommerce :: ~ECommerce () {
     cout << "\nECommerce destructor called!" << endl;
+    // Do we need to delete all the dynamically allocated memory here? 
+    
     for (Buyer* buyer : buyers) {
         delete buyer;
     }

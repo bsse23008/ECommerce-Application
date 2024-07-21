@@ -13,8 +13,7 @@ void retrieveData(void (ECommerce::*retrieveFunction)(), const std::string& func
     }
 }
 
- 
-int main() {
+ int main() {
     
     // Retrieving data from Database folder
     retrieveData(&ECommerce::retrieveAdmins, "retrieveAdmins");
