@@ -1,31 +1,13 @@
 #ifndef _ECOMMERCE_H_
 #define _ECOMMERCE_H_
 
-#include "./../Inventory/Inventory.h"
-#include "./../Admin/Admin.h"
-#include "./../Seller/Seller.h"
-#include "./../Buyer/Buyer.h"
-
-// File Paths for convenience 
-const std::string buyers_filePath = "Database/buyers.json";
-const std::string sellers_filePath = "Database/sellers.json";
-const std::string admins_filePath = "Database/admins.json";
-
+#include "./../Database/Database.h"
 
 class ECommerce
 {
 public:
     static ECommerce* getInstance ();
     static void releaseInstance ();
-
-    template <typename type>
-    void retrieveData (const std::string&, std::vector<type*>&); // template function to retrieve data 
-    void retrieveBuyers ();
-    void retrieveSellers ();
-    void retrieveAdmins ();
-
-    template <typename type>
-    void updateFile (const std::string&, std::vector<type*>&); // template function to update the files
 
     template <typename type> 
     bool isUserNameTaken (const std::string&, const std::vector<type*>&);
@@ -60,7 +42,12 @@ public:
     template <typename T>
     void inputCredentials ( std::string&, std::string&, std::string&, std::string&, const std::vector<T*>&);
 
-    
+    void loadData () { 
+        Database :: getInstance()->loadAdmins(admins);
+        Database :: getInstance()->loadBuyers(buyers);
+        Database :: getInstance()->loadSellers(sellers);
+    }
+
 private:
 
     ECommerce() = default;

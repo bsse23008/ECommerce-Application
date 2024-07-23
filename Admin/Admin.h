@@ -2,6 +2,7 @@
 #define _ADMIN_H_
 
 #include "../User/User.h"
+#include "../Database/Database.h"
 
 class Admin : public User
 {
@@ -19,6 +20,14 @@ public:
         static Admin* fromJson (json& j); 
         json toJson ();
 
+        void adminControls () { 
+
+        }
+
+        void deleteMyAccount () { 
+            // Database :: getInstance ()->remove_admin (this->toJson()); 
+            delete this; 
+        }
         // Admin Functionalities
 
 };

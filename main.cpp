@@ -1,25 +1,9 @@
 #include "./ECommerce/ECommerce.h"
 
 
-void retrieveData(void (ECommerce::*retrieveFunction)(), const std::string& functionName) {
-    try {
-        (ECommerce::getInstance()->*retrieveFunction)();
-    }
-    catch (std::exception& ex) {
-        std::cerr << "Unable to retrieve data from Database in " << functionName << ": " << ex.what() << std::endl;
-    }
-    catch (...) {
-        std::cerr << "Unknown Exception caught in " << functionName << "!" << std::endl;
-    }
-}
+int main() {
 
- int main() {
-    
-    // Retrieving data from Database folder
-    retrieveData(&ECommerce::retrieveAdmins, "retrieveAdmins");
-    retrieveData(&ECommerce::retrieveBuyers, "retrieveBuyers");
-    retrieveData(&ECommerce::retrieveSellers, "retrieveSellers");
-
+    ECommerce :: getInstance()->loadData();
     // Application Menu
     char choice; 
     do
@@ -46,12 +30,16 @@ void retrieveData(void (ECommerce::*retrieveFunction)(), const std::string& func
                 break;
             }
             case 'E':{
+                Database::releaseInstance(); 
                 ECommerce::releaseInstance(); // release all the dynamically allocated memory
                 cout << "\nExiting........." << endl;
                 break;
             }
+            default: {
+                cout << "Wrong Input!" << endl; 
+                continue; 
+            }
         }
     }while (toupper(choice)!='E');    
-
     return 0;
 }

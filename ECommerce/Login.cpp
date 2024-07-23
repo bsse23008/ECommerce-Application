@@ -44,6 +44,8 @@ void login() {
     char choice; 
     int count = 0;
     std::string userName, pass;
+    
+    // Keep taking input until the total attempts are reached :)
     do {
         if (count == 3) {
             cout << "\nTotal attempts reached. Try again later!" << endl;
@@ -70,6 +72,7 @@ void login() {
         if (Admin* admin = ECommerce::getInstance()->isAdminLoggedIn(userName, pass)) {
             cout << "\nAdmin logged in successfully!" << endl;
             // Additional admin-specific code
+            admin->adminControls ();
             break;
         }
 

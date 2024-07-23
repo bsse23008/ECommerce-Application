@@ -23,7 +23,21 @@ Buyer* ECommerce :: buyerSignUp (const std::string& firstName, const std::string
 
 Seller* ECommerce :: sellerSignUp (const std::string& firstName, const std::string&lastName, const std::string&userName, const std::string&password) {
     // Take input of additional attributes below
-    return new Seller (firstName, lastName, userName, password);
+    std::string phone_number, org, dob, cnic; 
+    cout << "Enter your phone no: "; 
+    getline (cin, phone_number);
+    cout << "Enter your organization name: "; 
+    getline (cin, org);
+    cout << "Enter your date of birth: ";
+    getline (cin, dob);
+    cout << "Enter your CNIC: ";
+    getline (cin, cnic);
+
+    /*Address Info*/
+    /*
+
+    */
+    return new Seller (firstName, lastName, userName, password, phone_number, org, dob, cnic);
 }
 
 
@@ -73,27 +87,61 @@ void ECommerce :: signUp () {
     std::string firstName, lastName, userName, pass;
     char choice;
     do {
+        system ("clear");
         cout << "____________________________________________________________" << endl;
         cout << "\n\t\t CREATE YOUR ACCOUNT " << endl;
         cout << "\nWhat type of account do you want to create? " << endl;
-        cout << "\nSignUp as: \n\nA = Admin \nB = Buyer \nS = Seller \nX = Clear screen \nG = Go Back" << endl;
+        cout << "\nSignUp as: \n\nA = Admin \n\nB = Buyer \n\nS = Seller \n\nX = Clear screen \n\nG = Go Back" << endl;
         cout << "\nEnter choice: ";
         cin >> choice;
 
         switch (std::toupper(choice)) {
             case 'A': {
-                inputCredentials<Admin>(firstName, lastName, userName, pass, admins);
-                Admin* a = adminSignUp (firstName, lastName, userName, pass);
-                addAdmin(a);
-                login();     // Login to your accout after signUp 
-                a = nullptr;
-                // Delete the pointer here! after the user logs out ??
+                const std::string code("adminCode");  // Corrected typo from "amdinCode"
+                int count = 0;
+                bool verified = false;
+
+                cout << "____________________________________________________________" << endl;
+                cout << "\n\t\t\tVERIFICATION \n\nYou have to verify that you are eligible to create an admin account.\n" << endl;
+                
+                cin.ignore();
+                do {
+                    cout << "Enter admin code: ";
+                    getline (cin, firstName);
+                    count++;
+                    if (firstName == code) {
+                        verified = true;
+                        break;
+                    }
+                    else {
+                        cout << "Wrong code.Try again! " << endl;
+                    }
+                    if (count == 3) {
+                        cout << "\nTotal attempts reached." << endl;
+                        break;
+                    }
+                } while (count < 3);
+
+                if (verified) {
+                    firstName.clear();
+                    inputCredentials<Admin>(firstName, lastName, userName, pass, admins);
+                    Admin* a = adminSignUp(firstName, lastName, userName, pass);
+                    addAdmin(a);
+                    
+                    // Login to your account after signUp
+                    cout << "\nNow Login to account below :)" << endl; 
+                    login();  
+                    a = nullptr;
+                } else {
+                    cout << "\nVerification failed. Returning to the main menu." << endl;
+                }
                 break;
             }
             case 'B': {
                 inputCredentials<Buyer>(firstName, lastName, userName, pass, buyers);
                 Buyer* b = buyerSignUp (firstName, lastName, userName, pass);
                 addBuyer(b);
+                cout << "\nNow Login to account below :)" << endl; 
                 login();
                 b = nullptr;
                 break;
@@ -102,6 +150,8 @@ void ECommerce :: signUp () {
                 inputCredentials<Seller>(firstName, lastName, userName, pass, sellers);
                 Seller* s = sellerSignUp (firstName, lastName, userName, pass);
                 addSeller(s);
+                
+                cout << "\nNow Login to account below :)" << endl; 
                 login();
                 s = nullptr; 
                 break;

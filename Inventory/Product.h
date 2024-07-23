@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "Review.h"
+
 class Product
 {
 private:
@@ -18,6 +19,10 @@ private:
     std::vector<Review> reviews;
 
 public:
+    // constructor and destructor
+    Product(/* args */);
+    ~Product();
+
     // setters
     void set_name(std::string name);
     void set_description(std::string description);
@@ -26,8 +31,9 @@ public:
     void set_supplier(std::string supplier);
     void set_price(double price);
     void set_stock(double stock);
-    void add_review(std::string review);
-    void set_rating(double rating);
+    void add_review(const Review);
+    // void set_rating(double rating); // We don,t need to set the rating :(
+
     // getters
     std::string get_name();
     std::string get_description();
@@ -38,10 +44,14 @@ public:
     double get_stock();
     double get_rating();
     std::vector<std::string> get_reviews();
-    // constructor and destructor
-    Product(/* args */);
-    ~Product();
-     //ostream operator
+
+    // Loading data from files
+    static Product* fromJson (json& j, Product* p); 
+    json* toJson (json* j); 
+
+    void displayReviews () const;
+
+    //ostream operator
     friend std::ostream& operator<<(std::ostream& os, const Product& product);
 };
 
