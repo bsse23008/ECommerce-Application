@@ -1,5 +1,10 @@
 #include "ECommerce.h"
 
+#include "./../Inventory/Inventory.h"
+#include "./../Admin/Admin.h"
+#include "./../Seller/Seller.h"
+#include "./../Buyer/Buyer.h"
+
 // template function to login in
 template <typename type>
 type* ECommerce ::isLoggedIn(const std::string &user_name, const std::string &pass, std::vector<type *> vec) {
@@ -72,7 +77,8 @@ void login() {
         if (Admin* admin = ECommerce::getInstance()->isAdminLoggedIn(userName, pass)) {
             cout << "\nAdmin logged in successfully!" << endl;
             // Additional admin-specific code
-            admin->adminControls ();
+            adminControls (admin);
+            admin = nullptr; 
             break;
         }
 

@@ -12,6 +12,13 @@ public:
     template <typename type> 
     bool isUserNameTaken (const std::string&, const std::vector<type*>&);
 
+    // Searching functions 
+    template <typename T> 
+    void searchUser (const std::vector<T*>&, const std::string&); // template function to search any user
+    void searchBuyer (const std::string&);
+    void searchSeller (const std::string&);
+
+
     // Add/SignUp functions
     template <typename type>
     void addUser (const std::string&, type*, std::vector<type*>&); // template function to add a new user
@@ -21,7 +28,7 @@ public:
 
     // Remove 
     template <typename type>
-    bool removeUser (const std::string&, const std::string&, std::vector<type*>&); // template function to remove a user
+    bool removeUser (const std::string&, std::vector<type*>&); // template function to remove a user
     bool removeSeller (const std::string& userName);
     bool removeBuyer (const std::string& userName);
     bool removeAdmin (const std::string& userName);

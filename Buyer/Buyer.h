@@ -19,7 +19,7 @@ public:
         // Buyer/Customer Functionalities
 
         static Buyer* fromJson (json& j); 
-        json toJson ();
+        json toJson () const ;
 };
 
 #endif // _BUYER_H_

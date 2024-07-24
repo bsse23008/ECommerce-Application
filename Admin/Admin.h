@@ -1,8 +1,8 @@
 #ifndef _ADMIN_H_
 #define _ADMIN_H_
-
 #include "../User/User.h"
-#include "../Database/Database.h"
+
+class ECommerce;
 
 class Admin : public User
 {
@@ -18,18 +18,15 @@ public:
         const std::string &);
 
         static Admin* fromJson (json& j); 
-        json toJson ();
-
-        void adminControls () { 
-
-        }
+        json toJson () const;
 
         void deleteMyAccount () { 
-            // Database :: getInstance ()->remove_admin (this->toJson()); 
-            delete this; 
+            
         }
-        // Admin Functionalities
 
+        // Admin Functionalities
 };
+
+void adminControls (Admin* a);
 
 #endif // _ADMIN_H_

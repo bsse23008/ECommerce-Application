@@ -1,4 +1,9 @@
 #include "ECommerce.h"
+// Header files location
+#include "./../Inventory/Inventory.h"
+#include "./../Admin/Admin.h"
+#include "./../Seller/Seller.h"
+#include "./../Buyer/Buyer.h"
 
 // Release the dynamically allocated memory
 ECommerce :: ~ECommerce () {
@@ -31,6 +36,28 @@ void ECommerce :: releaseInstance () {
 }
 
 
+// Searching functions 
+template <typename T> 
+void ECommerce :: searchUser (const std::vector<T*>& vec, const std::string& u) // template function to search any user 
+{
+    for (int i=0; i<vec.size(); i++) { 
+        if (vec[i]->getUserName() == u) { 
+            cout << "\nUSER INFO"<<endl; 
+            std::cout << *vec[i] << std::endl; 
+            return; 
+        }
+    }
+    cout << u << " was not found in the list :(" << std::endl; 
+}
+void ECommerce :: searchBuyer (const std::string& u) { 
+    searchUser <Buyer> (buyers, u);
+}
+
+void ECommerce :: searchSeller (const std::string& u) { 
+    searchUser <Seller> (sellers, u);
+}
+
+
 // template function to add a User (Admin/Buyer/Seller)
 template <typename type> 
 void ECommerce :: addUser (const std::string& filePath, type* obj, std::vector<type*>& vec) {
@@ -39,23 +66,23 @@ void ECommerce :: addUser (const std::string& filePath, type* obj, std::vector<t
 
 void ECommerce :: addBuyer(Buyer *b) { 
     addUser<Buyer> (buyers_filePath , b, buyers);
-    Database :: getInstance()->add_buyer (b->toJson());  // Updating the database 
+    Database :: getInstance()->add_buyer (*b);  // Updating the database 
 }
 
 void ECommerce :: addSeller(Seller *s) {
     addUser<Seller>(sellers_filePath, s, sellers);
-    Database :: getInstance()->add_seller (s->toJson());  // Updating the database 
+    Database :: getInstance()->add_seller (*s);  // Updating the database 
 }
 
 void ECommerce :: addAdmin(Admin *a) {
     addUser<Admin>(admins_filePath, a, admins);
-    Database :: getInstance()->add_admin (a->toJson());  // Updating the database 
+    Database :: getInstance()->add_admin (*a);  // Updating the database 
 }
 
 
 // template function to remove a User (Admin/Buyer/Seller)
 template<typename type>
-bool ECommerce :: removeUser (const std::string& filePath, const std::string& userName, std::vector<type*>&vec) {
+bool ECommerce :: removeUser (const std::string& userName, std::vector<type*>&vec) {
     for (auto it=vec.begin(); it!=vec.end(); it++) {
         if ((*it)->getUserName() == userName) {
             vec.erase(it);
@@ -67,7 +94,7 @@ bool ECommerce :: removeUser (const std::string& filePath, const std::string& us
 
 
 bool ECommerce :: removeBuyer(const std::string &userName) { 
-    if (removeUser<Buyer>(buyers_filePath, userName, buyers)) {
+    if (removeUser<Buyer>(userName, buyers)) {
         Database :: getInstance ()->remove_buyer (userName); // Remove the buyer from "buyers.json"
         return true; 
     }
@@ -76,7 +103,7 @@ bool ECommerce :: removeBuyer(const std::string &userName) {
 
 
 bool ECommerce :: removeSeller(const std::string &userName) { // Remove the seller from "sellers.json"
-    if (removeUser<Seller>(sellers_filePath, userName, sellers)) { 
+    if (removeUser<Seller>(userName, sellers)) { 
         Database :: getInstance ()->remove_seller (userName);
         return true;
     }
@@ -85,7 +112,7 @@ bool ECommerce :: removeSeller(const std::string &userName) { // Remove the sell
 
 
 bool ECommerce :: removeAdmin(const std::string &userName) { // Remove admin from "admins.json"
-    if (removeUser<Admin>(admins_filePath, userName, admins)) { 
+    if (removeUser<Admin>(userName, admins)) { 
         Database :: getInstance ()->remove_admin (userName);
         return true;
     }

@@ -59,7 +59,7 @@ Seller* Seller :: fromJson (json& j) {
     /*seller attributes*/ j["phoneNo"], j["organization"], j["DOB"], j["CNIC"]);
 }
 
-json Seller :: toJson ( ) { 
+json Seller :: toJson ( ) const { 
     json j; 
     j["firstName"] = this->firstName;
     j["lastName"] = this->lastName;

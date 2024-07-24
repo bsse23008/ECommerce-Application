@@ -11,6 +11,12 @@
             "lastName": "Ijaz",
             "password": "nomi1234",
             "userName": "nomi"
+        },
+        {
+            "firstName": "buyer",
+            "lastName": "buyer",
+            "password": "buyer123",
+            "userName": "buyer_1"
         }
     ]
 }

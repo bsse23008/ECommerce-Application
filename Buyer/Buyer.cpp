@@ -18,7 +18,7 @@ Buyer* Buyer :: fromJson (json& j) {
 }
 
 
-json Buyer :: toJson ( ) { 
+json Buyer :: toJson ( ) const { 
     json j; 
     j["firstName"] = this->firstName;
     j["lastName"] = this->lastName;

@@ -1,4 +1,9 @@
 #include "ECommerce.h"
+#include "./../Inventory/Inventory.h"
+#include "./../Admin/Admin.h"
+#include "./../Seller/Seller.h"
+#include "./../Buyer/Buyer.h"
+
 
 template <typename type> 
 bool ECommerce :: isUserNameTaken (const std::string& user_name, const std::vector<type*>&vec) {

@@ -36,7 +36,7 @@ public:
 
     // File loading methods
     static Seller* fromJson (json& j); 
-    json toJson ();
+    json toJson () const;
 
     // Seller Functionalities
     void addProduct (Product p); 

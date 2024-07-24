@@ -17,6 +17,12 @@
             "lastName": "admin",
             "password": "thirdone",
             "userName": "admin2"
+        },
+        {
+            "firstName": "admin",
+            "lastName": "admin",
+            "password": "admin123",
+            "userName": "admin3"
         }
     ]
 }
