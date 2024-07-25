@@ -139,6 +139,7 @@ bool Product :: operator == (const Product& p) {
 
 Product* Product :: fromJson ( json& j, Product* p ) {
     // Product p; 
+    p->set_unique_id (j["uniqueId"]);
     p->set_name(j["name"]);
     p->set_description(j["description"]);
     p->set_category(j["category"]);
@@ -156,7 +157,7 @@ Product* Product :: fromJson ( json& j, Product* p ) {
 }
 
 json* Product :: toJson (json* j) {
-
+    (*j)["uniqueId"] = this->uniqueId; 
     (*j)["name"] = this->name; 
     (*j)["description"] = this->description;
     (*j)["category"] = this->category; 
