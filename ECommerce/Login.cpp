@@ -91,8 +91,10 @@ void login() {
 
         // Attempt to log in as Seller
         else if (Seller* seller = ECommerce::getInstance()->isSellerLoggedIn(userName, pass)) {
-            cout << "\nSeller logged in successfully!" << endl;
+            cout << "\nSeller logged in successfully!" << endl; 
+            ECommerce :: getInstance()->loadSellerInventory (seller); // loading the seller inventory from Database
             // Additional seller-specific code
+            sellerControls (seller);
             break;
         }
 

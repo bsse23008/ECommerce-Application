@@ -1,34 +1,14 @@
 {
     "users": [
         {
-            "CNIC": "35202-1300000-0",
-            "DOB": "01-03-2003",
-            "firstName": "Ali",
-            "lastName": "Hamza",
-            "organization": "Telelance",
-            "password": "alik213001",
-            "phoneNo": "0309 900000",
-            "userName": "alik213001"
-        },
-        {
-            "CNIC": "sffsdf",
-            "DOB": "1212",
-            "firstName": "a",
-            "lastName": "a",
-            "organization": "122",
-            "password": "12345678",
-            "phoneNo": "1212",
-            "userName": "a"
-        },
-        {
-            "CNIC": "ooooooooooo",
-            "DOB": "12-12-12",
-            "firstName": "a",
-            "lastName": "a",
-            "organization": "lol",
-            "password": "qwqwqwqwqw",
-            "phoneNo": "1212",
-            "userName": "s"
+            "CNIC": "34101-1000000-5",
+            "DOB": "10-08-2004",
+            "firstName": "Ahmad",
+            "lastName": "Khan",
+            "organization": "N/A",
+            "password": "ahmad123",
+            "phoneNo": "0301 0000000",
+            "userName": "bsse23008"
         }
     ]
 }

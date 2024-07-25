@@ -8,13 +8,12 @@
 // Initialize the instance
 Database *Database::instance{nullptr};
 
-
 // RETRIEVE DATA FROM DATABASE
 template <typename T>
-void Database :: loadData(std::vector<T *> &vec, const std::string &file_path)
+void Database ::loadData(std::vector<T *> &vec, const std::string &file_path)
 {
-    json j; 
-    // j["users"]; 
+    json j;
+    // j["users"];
     std::ifstream read_file(file_path, std::ios::in);
     if (read_file.is_open())
     {
@@ -39,7 +38,7 @@ void Database::loadAdmins(std::vector<Admin *> &a)
 
 void Database::loadBuyers(std::vector<Buyer *> &b)
 {
-    loadData<Buyer>(b, buyers_filePath); 
+    loadData<Buyer>(b, buyers_filePath);
 }
 
 void Database::loadSellers(std::vector<Seller *> &s)
@@ -47,44 +46,57 @@ void Database::loadSellers(std::vector<Seller *> &s)
     loadData<Seller>(s, sellers_filePath);
 }
 
-
 // UPDATE FILES
 template <typename T>
-void Database :: add_user (const T& obj, const std::string& file_path) { 
-    json data; 
-    data["users"];   
-    std::ifstream in (file_path, std::ios::in); // Read the data -> already present in the file 
-    if (in.is_open()) { 
-        in >> data; 
-        in.close ();
-        data["users"].push_back (obj.toJson()); // Incorporate the new obj
+void Database :: add_user(const T &obj, const std::string &file_path)
+{
+    json data;
+    data["users"];
+    std::ifstream in(file_path, std::ios::in); // Read the data -> already present in the file
+    if (in.is_open()){
+        in >> data;
+        in.close();
+        data["users"].push_back(obj.toJson()); // Incorporate the new obj
 
         // After reading, write the new data to the file :)
-        std::ofstream out (file_path, std::ios::trunc); 
-        out << std::setw(4)  << data << std::endl ;
+        std::ofstream out(file_path, std::ios::trunc);
+        out << std::setw(4) << data << std::endl;
         out.close();
     }
-    else {
-        cerr << "Could not open the file! " << endl; 
+    else{
+        cerr << "Could not open the file! " << endl;
     }
+
+    // Now making a file to store products of the seller 
+    data.clear();
+    std::ofstream out ("./Database/Inventory/Sellers/" + obj.getUserName () + ".json", std::ios::out);
+    if (!out.is_open()) { 
+        cerr << "Could not open the file : (" << endl;
+        return;
+    }
+
+    data["productIds"] = json :: array();
+    out << std::setw(4) << data << std::endl; 
+    out.close(); 
 }
 
-
-void Database :: add_admin(const Admin& a) { 
-    add_user (a, admins_filePath);
+void Database ::add_admin(const Admin &a)
+{
+    add_user(a, admins_filePath);
 }
 
-void Database :: add_buyer(const Buyer& b) { 
-    add_user (b, buyers_filePath);
+void Database ::add_buyer(const Buyer &b)
+{
+    add_user(b, buyers_filePath);
 }
 
-void Database :: add_seller(const Seller& s) {
-    add_user (s, sellers_filePath);
+void Database ::add_seller(const Seller &s)
+{
+    add_user(s, sellers_filePath);
 }
-      
 
 // General function to remove a user from the JSON file
-void Database :: remove_user(const std::string &user_name, const std::string &file_path)
+void Database ::remove_user(const std::string &user_name, const std::string &file_path)
 {
     json j;
     std::ifstream IN(file_path, std::ios::in);
@@ -119,35 +131,83 @@ void Database :: remove_user(const std::string &user_name, const std::string &fi
     }
 }
 
-
-
-void Database :: remove_admin(const std::string &user_name)
+void Database ::remove_admin(const std::string &user_name)
 {
     remove_user(user_name, admins_filePath);
 }
 
-void Database :: remove_buyer(const std::string &user_name)
+void Database ::remove_buyer(const std::string &user_name)
 {
     remove_user(user_name, buyers_filePath);
 }
 
-void Database :: remove_seller(const std::string &user_name)
+void Database ::remove_seller(const std::string &user_name)
 {
     remove_user(user_name, sellers_filePath);
 }
 
-
 // INVENTORY METHODS
-void Database :: updateMyStore(json &j, const std::string &store_owner)
+void Database :: loadInventory(Inventory *inventory)
 {
-    j["inventory"].push_back(j);
-    std::ofstream out("Inventory/" + store_owner + ".json", std::ios::trunc);
-    if (out.is_open())
-    {
-        out << std::setw(4) << /*json_inventory*/ "nn" << std::endl;
+    std::ifstream IN(inventory_filePath, std::ios::in);
+    if (!IN.is_open()) {
+        throw std::runtime_error{"Could not open the inventory file :("};
     }
-    else
-    {
-        std::cerr << "Could not open: Inventory/" << store_owner << ".json" << std::endl;
+    json j;
+        IN >> j;
+        IN.close();
+    for (int i = 0; i < j["products"].size(); i++){
+        Product* p = new Product ();
+        inventory->addProduct(Product::fromJson (j["products"][i], p));
     }
+}
+
+
+void Database :: updateInventory (Product* p) 
+{ 
+    std::ifstream IN(inventory_filePath, std::ios::in); // Read the inventory that is already present -> to prevent any data loss
+    if (!IN.is_open()) {
+        /*
+        json j; 
+        j["products"] = json :: array ();
+        json* d = new json; 
+        j["products"].push_back (*(p->toJson(d))); 
+            // Write to the file 
+                std::ofstream out(inventory_filePath, std::ios::trunc);
+                out << std::setw (4) << j << endl; 
+                out.close();
+        delete d; 
+        */         
+        throw std::runtime_error{"Could not open the inventory file :("};
+    }
+    json j;
+        IN >> j;                    /*..........*/
+        IN.close();
+        json* d = new json; 
+        j["products"].push_back (*(p->toJson(d))); 
+    
+    // Write to the file 
+    std::ofstream out(inventory_filePath, std::ios::trunc);
+    out << std::setw (4) << j << endl; 
+    out.close();
+    delete d; 
+}
+ 
+
+// Add productId to seller,s store 
+void Database :: updateMyStore(const std::string& productId, const std::string &store_owner)
+{
+    std::ifstream in ("./Database/Inventory/Sellers/" + store_owner + ".json", std::ios::in); // Read the already present file 
+    if (!in.is_open()) { 
+        cerr << "Error opening the file!" << endl;
+        return; 
+    } 
+        json data;
+        in >> data; 
+        in.close();
+        data["productIds"].push_back (productId);
+
+    std::ofstream out("./Database/Inventory/Sellers/" + store_owner + ".json", std::ios::trunc);
+    out << std::setw (4) << data << endl; 
+    out.close();
 }

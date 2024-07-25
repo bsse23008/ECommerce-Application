@@ -49,17 +49,29 @@ public:
     template <typename T>
     void inputCredentials ( std::string&, std::string&, std::string&, std::string&, const std::vector<T*>&);
 
+    Inventory* getInventory () const { 
+        return inventory; 
+    }
+
+    void loadSellerInventory (Seller* seller);
     void loadData () { 
         Database :: getInstance()->loadAdmins(admins);
         Database :: getInstance()->loadBuyers(buyers);
         Database :: getInstance()->loadSellers(sellers);
+        try { 
+            Database :: getInstance()->loadInventory(inventory); 
+        }
+        catch (std::exception& ex) { 
+            cout << "EXCEPTION: " << ex.what() << endl; 
+        }
     }
 
 private:
 
-    ECommerce() = default;
+    ECommerce();
     ~ECommerce ();
-
+    
+    Inventory* inventory; 
     ECommerce(const ECommerce &) = delete;
     std::vector<Buyer *> buyers;
     std::vector<Seller *> sellers;

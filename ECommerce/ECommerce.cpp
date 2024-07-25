@@ -4,6 +4,12 @@
 #include "./../Admin/Admin.h"
 #include "./../Seller/Seller.h"
 #include "./../Buyer/Buyer.h"
+#include "./../Inventory/Inventory.h"
+
+
+ECommerce :: ECommerce() : inventory (nullptr) { 
+    inventory = new Inventory();
+}
 
 // Release the dynamically allocated memory
 ECommerce :: ~ECommerce () {
@@ -11,6 +17,7 @@ ECommerce :: ~ECommerce () {
 
     // Do we need to delete all the dynamically allocated memory here? 
     // Aggregation is not that easy :(
+    
     for (Buyer* buyer : buyers) {
         delete buyer;
     }
@@ -20,6 +27,11 @@ ECommerce :: ~ECommerce () {
     for (Admin* admin : admins) {
         delete admin;
     }
+    // The pointed-to memory has been released (from heap). Now clear the addresses of the vectors as well.
+    buyers.clear();
+    sellers.clear();
+    admins.clear();
+    delete inventory; 
 }
 
 // Singleton get instance function 
@@ -33,6 +45,26 @@ ECommerce *ECommerce ::getInstance()
 // Release the dynamic memory 
 void ECommerce :: releaseInstance () {
     delete getInstance(); 
+}
+
+
+
+
+// Loading seller inventory just after he logins 
+void ECommerce :: loadSellerInventory (Seller* seller) { 
+    std::ifstream in  ("./Database/Inventory/Sellers/" + seller->getUserName() + ".json", std::ios::in);
+    if (!in.is_open()) { 
+        cout << "\nCould not open the file :(" << endl; 
+        return;
+    }
+    json j; 
+    in >> j; 
+    in.close();
+    for (int i=0; i<j["productIds"].size(); i++) { 
+        Product* p = inventory->getReference (j["productIds"][i]);
+        if (p)
+            seller->addProduct (p); // If p is not null, only then add 
+    }
 }
 
 
@@ -85,8 +117,9 @@ template<typename type>
 bool ECommerce :: removeUser (const std::string& userName, std::vector<type*>&vec) {
     for (auto it=vec.begin(); it!=vec.end(); it++) {
         if ((*it)->getUserName() == userName) {
-            vec.erase(it);
-            return true;  // confirmation flag
+            delete *it;     // Delete the dynamically allocated memory
+            vec.erase(it);  // Erase the pointer from the vector
+            return true;    // Return confirmation flag
         }
     }
     return false;

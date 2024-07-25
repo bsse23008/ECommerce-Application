@@ -73,6 +73,6 @@ std::istream& operator >> (std::istream& is, User& p) {
     cout << "\nEnter first name: "; is >> p.firstName;
     cout << "Enter last name : "; is >> p.lastName;
     cout << "Enter user name : "; is >> p.userName; 
-    cout << "Enter password  : "; is >> p.password;
+    // cout << "Enter password  : "; is >> p.password; // I don,t know if it is good to show password or not ?
     return is;
 }

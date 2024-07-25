@@ -19,23 +19,26 @@ Product :: ~Product() {
 
 
 // setters
-void Product::set_name(std::string name)
+void Product :: set_unique_id (const std::string& id) { 
+    this->uniqueId = id; // Unique Identifier for every product 
+}
+void Product::set_name(const std::string& name)
 {
     this->name = name;
 }
-void Product::set_description(std::string description)
+void Product::set_description(const std::string& description)
 {
     this->description = description;
 }
-void Product::set_category(std::string category)
+void Product::set_category(const std::string& category)
 {
     this->category = category;
 }
-void Product::set_location(std::string location)
+void Product::set_location(const std::string& location)
 {
     this->location = location;
 }
-void Product::set_supplier(std::string supplier)
+void Product::set_supplier(const std::string& supplier)
 {
     this->supplier = supplier;
 }
@@ -92,8 +95,27 @@ double Product::get_rating(){
     }
     return this->rating; 
 }
-  //ostream operator
 
+
+//istream operator 
+std::istream& operator>>(std::istream& is, Product& product) { 
+
+// Take input of th product
+cout << "\nEnter the following details for the product:" << endl; 
+    cout << "Enter product Id (should be unique): "; is >> product.uniqueId; 
+    
+    cout << "Enter name of product: "; is >> product.name; 
+    cout << "Enter Description: "; is >> product.description;
+    cout << "Enyer category   : "; is >> product.category ;
+    cout << "Enter    Location: "; is >> product.location ;
+    cout << "Supplier of product: "; is >> product.supplier ;
+    cout << "Price of product   : "; is >> product.price ;
+    cout << "Stock of product   : "; is >> product.stock ; 
+    return is; 
+}
+
+
+//ostream operator
 std::ostream& operator<<(std::ostream& os, const Product& product){
     os << "Name: " << product.name << std::endl;
     os << "Description: " << product.description << std::endl;
@@ -108,6 +130,12 @@ std::ostream& operator<<(std::ostream& os, const Product& product){
     */
     return os;
 }
+
+// == operator (verify that the two objects are equal or not)
+bool Product :: operator == (const Product& p) { 
+    return (this->name == p.name && this->description == p.description && this->category == p.category && this->price == p.price); 
+}
+
 
 Product* Product :: fromJson ( json& j, Product* p ) {
     // Product p; 
@@ -125,13 +153,6 @@ Product* Product :: fromJson ( json& j, Product* p ) {
         delete temp; 
     }
     return p; 
-    /*
-        Product* p = new Product ();
-        json j; 
-        
-        Product :: fromJson (j)
-    
-    */
 }
 
 json* Product :: toJson (json* j) {

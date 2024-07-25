@@ -5,36 +5,47 @@
 #include <vector>
 #include "Review.h"
 
+using std::cout; 
+using std::cin; 
+using std::cerr; 
+using std::endl; 
+
 class Product
 {
 private:
-    std::string name;
-    std::string description;
-    std::string category;
-    std::string location;
-    std::string supplier;
-    double price;
-    double stock;
-    double rating;
+    std::string uniqueId, name, description, category, location, supplier;
+    double price, stock, rating;
     std::vector<Review> reviews;
 
 public:
     // constructor and destructor
-    Product(/* args */);
+    Product();
+    Product
+    (const std::string& id,
+     const std::string& name,
+      const std::string& description,
+       const std::string& category,
+        const std::string& location,
+         const std::string& supplier,
+          double price,
+           double stock,
+            double rating = 0.0 ) : uniqueId(id), name(name), description(description), category(category), location(location), supplier(supplier), price(price), stock(stock), rating(rating) {}
     ~Product();
 
     // setters
-    void set_name(std::string name);
-    void set_description(std::string description);
-    void set_category(std::string category);
-    void set_location(std::string location);
-    void set_supplier(std::string supplier);
+    void set_unique_id (const std::string&);
+    void set_name(const std::string&);
+    void set_description(const std::string&);
+    void set_category(const std::string&);
+    void set_location(const std::string&);
+    void set_supplier(const std::string&);
     void set_price(double price);
     void set_stock(double stock);
     void add_review(const Review);
     // void set_rating(double rating); // We don,t need to set the rating :(
 
     // getters
+    std::string get_unique_id () const { return uniqueId; }
     std::string get_name();
     std::string get_description();
     std::string get_category();
@@ -53,6 +64,12 @@ public:
 
     //ostream operator
     friend std::ostream& operator<<(std::ostream& os, const Product& product);
+    friend std::istream& operator>>(std::istream& is, Product& product);
+    bool operator == (const Product& p);
+
+    // void operator ++ (Product& p) { 
+    //     this->stock++; 
+    // }
 };
 
 
