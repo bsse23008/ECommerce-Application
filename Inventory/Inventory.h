@@ -19,8 +19,16 @@ public:
 
     Product *getReference(const std::string &id);
 
+    bool isUniqueId (const std::string& id) { 
+        for (int i=0; i<products.size(); i++) { 
+            if (id == products.at(i)->get_unique_id()) { 
+                return true; 
+            }
+        }
+        return false; 
+    }
+
     void addProduct(Product *p);
-    void removeProduct(const std::string &id);
     void removeProduct(Product *p);
 };
 

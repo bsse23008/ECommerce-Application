@@ -87,36 +87,20 @@ std::ostream& operator << (std::ostream& os, const Seller& seller) {
 }
 
 
-void Seller :: updateMyStore (const std::string& user_name) {
-    // json j; 
-    // j["products"]; 
-
-    // for (int i=0; i<products.size(); i++) {
-    //     json* temp = new json; 
-    //     j["products"].push_back (*(products.at(i)->toJson(temp))); 
-    //     delete temp;
-    // }
-
-    // // Time to write the updated information to file
-    // const std::string file_path = "Database/Inventory/" + this->userName + ".json";
-    // std::ofstream writeToFile (file_path, std::ios::trunc);
-    // try { 
-    //     if (writeToFile.is_open()) { 
-    //         writeToFile << std::setw(4) << j << std::endl; 
-    //         writeToFile.close ();
-    //     }
-    // }
-    // catch (std::exception& ex) {
-    //     std::cerr << "Error: " << ex.what() << endl; 
-    // }
+Product* Seller :: searchProduct (const std::string& id) { 
+    for (int i=0; i < products.size(); i++) { 
+        if (id == products[i]->get_unique_id()) { 
+            return products[i];
+        }
+    }
+    return nullptr;
 }
+
 
 void Seller :: addProduct (Product* p) {
     ECommerce::getInstance()->getInventory()->addProduct (p); // Add the product to the centralized inventory first :)
-    // Then add it seller,s products list
-    products.push_back (p); // copy 
-    // updateMyStore (this->userName); 
-    json* j = new json ();
+    // Then add it in seller,s products list
+    products.push_back (p); // address copy 
     Database :: getInstance()->updateMyStore (p->get_unique_id(), this->userName); 
 }
 
@@ -130,6 +114,16 @@ void Seller :: removeProduct (const std::string& id) {
     }
 }
 
+// Used mostly 
+void Seller :: removeProduct (Product* p) {
+    for (int i=0; i < products.size(); i++) { 
+        if (p == products[i]) { 
+            ECommerce :: getInstance ()->getInventory()->removeProduct (p);
+            products.erase (products.begin() + i);
+            break; 
+        }
+    }
+}
 
 void sellerControls (Seller* s) { 
     char outerSwitch; 
@@ -168,19 +162,19 @@ void sellerControls (Seller* s) {
                             bool is_unique = true; 
                             do {
                                 cout << "Enter product Id (should be unique): "; cin >> id; 
-                                is_unique = s->isUniqueId (id);
+                                is_unique = ECommerce::getInstance()->getInventory()->isUniqueId (id); // Check if the product Id has already been taken or not ?
                                 if (is_unique) 
-                                    cout << id << " has already benn taken :( " << endl;
+                                    cout << id << " has already been taken :( " << endl;
                             }while (is_unique); 
 
                             cin.ignore();
-                                cout << "Enter name of product: ";  getline (cin, name); 
-                                cout << "Enter Description: "; getline (cin, description) ;
-                                cout << "Enyer category   : "; getline (cin, category);
-                                cout << "Enter location   : "; cin >> location ;
-                                cout << "Supplier of product: "; cin >> supplier ;
-                                cout << "Price of product   : "; cin >> price ;
-                                cout << "Stock of product   : "; cin >> stock ; 
+                                cout << "Enter name of product  : ";  getline (cin, name); 
+                                cout << "Enter Description      : "; getline (cin, description) ;
+                                cout << "Enyer category         : "; getline (cin, category);
+                                cout << "Enter location         : "; cin >> location ;
+                                cout << "Supplier of product    : "; cin >> supplier ;
+                                cout << "Price of product       : "; cin >> price ;
+                                cout << "Stock of product       : "; cin >> stock ; 
 
                                 Product* p = new Product (id, name, description, category, location, supplier, price, stock);
                                 s->addProduct(p);
@@ -194,7 +188,6 @@ void sellerControls (Seller* s) {
                             Product* p = s->searchProduct (id); 
 
                             if (p) {  // If product was found in the list 
- 
                                 std::cout << *p << endl;
                                 bool confirm = 0; 
                                 cout << "Do you really want ot delete this product ? " << endl 
@@ -202,9 +195,9 @@ void sellerControls (Seller* s) {
                                 cin >> confirm; 
 
                                 if (confirm) { 
-                                    s->removeProduct (id);
-                                    s->removeProduct (p);
-                                    p = nullptr; 
+                                    delete p;               // delete the content at that memory address
+                                    s->removeProduct (p);   // Now remove the address from the vectors (both vectors -> Inventory :: <products*> and Seller :: <products*>)
+                                    p = nullptr;            
                                 }                                
                             }
                             else // In case : If nullptr was returned.

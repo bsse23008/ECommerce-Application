@@ -41,41 +41,13 @@ public:
     static Seller* fromJson (json& j); 
     json toJson () const;
 
-    void loadMyInventory () { 
-        
-    }
+    
 
     // Seller Functionalities
     void addProduct (Product* p); 
-    void removeProduct (const std::string& p);
-    void updateMyStore (const std::string& user_name);
-
-    void removeProduct (Product* p) {
-        for (int i=0; i<products.size(); i++) { 
-            if (p == products[i]) { 
-                products.erase (products.begin() + i);
-                break; 
-            }
-        }
-    }
-
-    Product* searchProduct (const std::string& id) { 
-        for (int i=0; i<products.size(); i++) { 
-            if (id == products[i]->get_unique_id()) { 
-                return products[i];
-            }
-        }
-        return nullptr;
-    }
-
-    bool isUniqueId (const std::string& id) { 
-        for (int i=0; i<products.size(); i++) { 
-            if (id == products.at(i)->get_unique_id()) { 
-                return true; 
-            }
-        }
-        return false; 
-    }
+    Product* searchProduct (const std::string& id);
+    void removeProduct (const std::string& p); // remove by unique Id of product
+    void removeProduct (Product* p); // remove by address 
 
     void displayMyProducts () const {
         for (const Product* p : products) { 

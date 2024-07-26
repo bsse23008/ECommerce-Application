@@ -166,8 +166,13 @@ json* Product :: toJson (json* j) {
     (*j)["price"] = this->price; 
     (*j)["stock"] = this->stock; 
 
-    for (int i=0; reviews.size(); i++) { 
-        (*j)["reviews"][i] = reviews[i].toJson();
+    if (reviews.size() == 0) { 
+        (*j)["reviews"] = json :: array ();
+    }
+    else {
+        for (int i=0; reviews.size(); i++) { 
+            (*j)["reviews"][i] = reviews[i].toJson();
+        }
     }
     return j;
 }

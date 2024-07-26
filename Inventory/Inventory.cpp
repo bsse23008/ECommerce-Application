@@ -32,13 +32,21 @@ void Inventory :: addProduct(Product *p)
     }
 }
 
-// Kal Inshallah
-void Inventory :: removeProduct(const std::string &id)
-{
-
-}
-
 void Inventory :: removeProduct(Product *p)
 {
+    // Which loop is better between the following : 
 
+    for (size_t i=0; i < products.size(); ++i) { 
+        if (products[i] == p) {    
+            products.erase (products.begin() + i);
+            break;
+        }
+    }
+
+    for (auto it = products.begin(); it !=products.end(); ++it) { 
+        if ((*it) == p) { 
+            products.erase (it);
+            break; 
+        }
+    }
 }
