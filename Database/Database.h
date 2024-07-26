@@ -45,6 +45,25 @@ public:
         instance = nullptr;
     }
 
+    // General functions to read and write
+    void readFile (const std::string& file_path, json& j)  {
+        std::ifstream in (file_path, std::ios::in);
+        if (!in.is_open()) { 
+            throw std::runtime_error {"Could not open the file :("};
+        } 
+            in >> j;
+            in.close();
+    }
+    // write function
+    void writeToFile (const std::string& file_path, const json& j) { 
+        std::ofstream out (file_path ,std::ios::trunc);
+        if (!out.is_open()) { 
+            throw std::runtime_error {"Could not open the file :("};
+        }
+            out << std :: setw(4) << j <<endl;
+            out.close();
+    }
+
     // LOAD DATA
     template <typename T>
     void loadData(std::vector<T *> &, const std::string &);

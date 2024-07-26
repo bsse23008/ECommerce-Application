@@ -13,21 +13,16 @@ template <typename T>
 void Database ::loadData(std::vector<T *> &vec, const std::string &file_path)
 {
     json j;
-    // j["users"];
-    std::ifstream read_file(file_path, std::ios::in);
-    if (read_file.is_open())
-    {
-        read_file >> j;
-        read_file.close();
+    try { 
+        readFile  (file_path, j);
         // Parse the data into the vector
         for (auto &user : j["users"])
         {
             vec.emplace_back(T::fromJson(user)); // from json to actual object
         }
     }
-    else
-    {
-        std::cerr << "Error opening the file: " << file_path << std::endl;
+    catch (std::exception& ex) { 
+        std::cout << "EXCEPTION:" << ex.what() << endl;
     }
 }
 
@@ -51,33 +46,31 @@ template <typename T>
 void Database :: add_user(const T &obj, const std::string &file_path)
 {
     json data;
-    data["users"];
-    std::ifstream in(file_path, std::ios::in); // Read the data -> already present in the file
-    if (in.is_open()){
-        in >> data;
-        in.close();
-        data["users"].push_back(obj.toJson()); // Incorporate the new obj
-
-        // After reading, write the new data to the file :)
-        std::ofstream out(file_path, std::ios::trunc);
-        out << std::setw(4) << data << std::endl;
-        out.close();
+    try { 
+        readFile (file_path, data);
+        data["users"].push_back(obj.toJson()); // Incorporate the new object 
     }
-    else{
-        cerr << "Could not open the file! " << endl;
+    catch (std::exception& ex) { 
+        std::cout << "EXCEPTION:" << ex.what() << endl;
+    }
+
+    // After reading, write the new data to the file :)
+    try { 
+        writeToFile (file_path, data);
+    }
+    catch (std::exception& ex) { 
+        std::cout << "EXCEPTION:" << ex.what() << endl;
     }
 
     // Now making a file to store products of the seller 
     data.clear();
-    std::ofstream out ("./Database/Inventory/Sellers/" + obj.getUserName () + ".json", std::ios::out);
-    if (!out.is_open()) { 
-        cerr << "Could not open the file : (" << endl;
-        return;
-    }
-
     data["productIds"] = json :: array();
-    out << std::setw(4) << data << std::endl; 
-    out.close(); 
+    try { 
+        writeToFile ("./Database/Inventory/Sellers/" + obj.getUserName () + ".json", data);
+    }
+    catch (std::exception& ex) { 
+        std::cout << "EXCEPTION:" << ex.what() << endl;
+    }
 }
 
 void Database ::add_admin(const Admin &a)
@@ -99,11 +92,9 @@ void Database ::add_seller(const Seller &s)
 void Database ::remove_user(const std::string &user_name, const std::string &file_path)
 {
     json j;
-    std::ifstream IN(file_path, std::ios::in);
-    if (IN.is_open())
-    {
-        IN >> j;
-        IN.close();
+    try {
+        // Read the data that is already present in the file to prevent data loss 
+        readFile (file_path, j);
         // Find and erase the user with the matching username
         for (auto it = j["users"].begin(); it != j["users"].end(); ++it)
         {
@@ -113,21 +104,17 @@ void Database ::remove_user(const std::string &user_name, const std::string &fil
                 break; // Exit the loop after removing the user
             }
         }
-        // Write the updated JSON back to the file
-        std::ofstream OUT(file_path, std::ios::trunc);
-        if (OUT.is_open())
-        {
-            OUT << std::setw(4) << j << std::endl;
-            OUT.close();
+
+        try {
+            // Write the updated JSON back to the file
+            writeToFile (file_path, j);
         }
-        else
-        {
-            cerr << "Could not open the file for writing!" << endl;
+        catch (std::exception& ex) {
+            std::cout << "EXCEPTION: " << ex.what() << endl; 
         }
     }
-    else
-    {
-        cerr << "Could not open the file for reading!" << endl;
+    catch (std::exception& ex) { 
+        std::cout << "EXCEPTION: " << ex.what() << endl; 
     }
 }
 
@@ -149,13 +136,8 @@ void Database ::remove_seller(const std::string &user_name)
 // INVENTORY METHODS
 void Database :: loadInventory(Inventory *inventory)
 {
-    std::ifstream IN(inventory_filePath, std::ios::in);
-    if (!IN.is_open()) {
-        throw std::runtime_error{"Could not open the inventory file :("};
-    }
-    json j;
-        IN >> j;
-        IN.close();
+    json j; 
+    readFile (inventory_filePath, j);
     for (int i = 0; i < j["products"].size(); i++){
         Product* p = new Product ();
         inventory->addProduct(Product::fromJson (j["products"][i], p));
@@ -163,51 +145,42 @@ void Database :: loadInventory(Inventory *inventory)
 }
 
 
-void Database :: updateInventory (Product* p) 
-{ 
-    std::ifstream IN(inventory_filePath, std::ios::in); // Read the inventory that is already present -> to prevent any data loss
-    if (!IN.is_open()) {
-        /*
-        json j; 
-        j["products"] = json :: array ();
-        json* d = new json; 
-        j["products"].push_back (*(p->toJson(d))); 
-            // Write to the file 
-                std::ofstream out(inventory_filePath, std::ios::trunc);
-                out << std::setw (4) << j << endl; 
-                out.close();
-        delete d; 
-        */         
-        throw std::runtime_error{"Could not open the inventory file :("};
-    }
+void Database::updateInventory(Product* p) 
+{
     json j;
-        IN >> j;                    /*..........*/
-        IN.close();
-        json* d = new json; 
-        j["products"].push_back (*(p->toJson(d))); 
-    
-    // Write to the file 
-    std::ofstream out(inventory_filePath, std::ios::trunc);
-    out << std::setw (4) << j << endl; 
-    out.close();
-    delete d; 
+    try {
+        // Read the file first to prevent any data loss
+        readFile(inventory_filePath, j);
+        
+        // Use a smart pointer to manage memory
+        auto d = std::make_unique<json>();
+        j["products"].push_back(*(p->toJson(d.get())));
+        
+        try {
+            // Write to the file
+            writeToFile(inventory_filePath, j);
+        }
+        catch (const std::exception& ex) {
+            std::cout << "Write EXCEPTION: " << ex.what() << std::endl;
+        }
+    }
+    catch (const std::exception& ex) {
+        std::cout << "Read or JSON EXCEPTION: " << ex.what() << std::endl;
+    }
 }
+
  
 
 // Add productId to seller,s store 
 void Database :: updateMyStore(const std::string& productId, const std::string &store_owner)
 {
-    std::ifstream in ("./Database/Inventory/Sellers/" + store_owner + ".json", std::ios::in); // Read the already present file 
-    if (!in.is_open()) { 
-        cerr << "Error opening the file!" << endl;
-        return; 
-    } 
-        json data;
-        in >> data; 
-        in.close();
+    json data; 
+    try { 
+        readFile ("./Database/Inventory/Sellers/" + store_owner + ".json", data);
         data["productIds"].push_back (productId);
-
-    std::ofstream out("./Database/Inventory/Sellers/" + store_owner + ".json", std::ios::trunc);
-    out << std::setw (4) << data << endl; 
-    out.close();
+        writeToFile ("./Database/Inventory/Sellers/" + store_owner + ".json", data);
+    }
+    catch (std::exception& ex) { 
+        cout << "EXCEPTION: " << ex.what() << endl; 
+    }
 }
