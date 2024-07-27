@@ -1,22 +1,26 @@
 {
     "products": [
         {
-            "category": "Cosmetics",
-            "description": "Natural oil shampoo",
+            "category": "Electronics",
+            "description": "Electronic Device",
             "location": "Lahore",
-            "name": "Shampoo",
-            "price": 320.0,
-            "stock": 12.0,
-            "supplier": "Samer"
+            "name": "Laptop",
+            "price": 120000.0,
+            "reviews": [],
+            "stock": 10.0,
+            "supplier": "Samer",
+            "uniqueId": "0x123"
         },
         {
             "category": "Cosmetics",
-            "description": "Cream to make your skon white and glowing",
+            "description": "Natural Olive Oil Shampoo to prevent hair fall",
             "location": "Lahore",
-            "name": "Fair and Lovely",
-            "price": 120.0,
-            "stock": 10.0,
-            "supplier": "Samer"
+            "name": "Shampoo",
+            "price": 300.0,
+            "reviews": [],
+            "stock": 100.0,
+            "supplier": "Samer",
+            "uniqueId": "0x111"
         }
     ]
 }

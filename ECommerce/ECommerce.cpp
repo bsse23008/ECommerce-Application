@@ -48,7 +48,17 @@ void ECommerce :: releaseInstance () {
 }
 
 
-
+void ECommerce :: loadData () { 
+        Database :: getInstance ()->loadData<Admin>(admins, admins_filePath);
+        Database :: getInstance ()->loadData<Buyer>(buyers, buyers_filePath);
+        Database :: getInstance ()->loadData<Seller>(sellers, sellers_filePath);
+    try { 
+        Database :: getInstance()->loadInventory(inventory); 
+    }
+    catch (std::exception& ex) { 
+        cout << "EXCEPTION: " << ex.what() << endl; 
+    }
+}
 
 // Loading seller inventory just after he logins 
 void ECommerce :: loadSellerInventory (Seller* seller) { 
@@ -63,7 +73,7 @@ void ECommerce :: loadSellerInventory (Seller* seller) {
     for (int i=0; i<j["productIds"].size(); i++) { 
         Product* p = inventory->getReference (j["productIds"][i]);
         if (p)
-            seller->addProduct (p); // If p is not null, only then add 
+            seller->loadProducts (p); // If p is not null, only then add 
     }
 }
 

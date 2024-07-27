@@ -2,15 +2,20 @@
 #define _DATABASE_H_
 
 #include "../nlohmann/json.hpp"
-using json = nlohmann ::json;
 #include <fstream>
 #include <string>
+#include <vector>
+#include <iomanip>
+#include <memory>
+#include <sstream>
 #include <iostream>
+#include <cstdlib>  // Needed for system() function
 
 using std::cerr;
+using std::cin;
 using std::cout;
-using std::cin; 
 using std::endl;
+using json = nlohmann ::json;
 
 // File Paths for convenience
 const std::string buyers_filePath = "./Database/Users/buyers.json";
@@ -18,62 +23,77 @@ const std::string sellers_filePath = "./Database/Users/sellers.json";
 const std::string admins_filePath = "./Database/Users/admins.json";
 const std::string inventory_filePath = "./Database/Inventory/inventory.json";
 
-class Admin;         
+class Admin;
 class Seller;
 class Buyer;
-class Inventory; 
-class Product; 
+class Inventory;
+class Product;
 
-class Database  
+class Database
 {
 private:
-    static Database *instance;   
+    static Database *instance;
     Database() = default;
     Database(const Database &d) = delete;
     ~Database() = default;
 
 public:
-    static Database *getInstance() {
-        if (!instance) {
+    static Database *getInstance()
+    {
+        if (!instance)
+        {
             instance = new Database();
         }
         return instance;
     }
 
-    static void releaseInstance() {
+    static void releaseInstance()
+    {
         delete instance;
         instance = nullptr;
     }
 
-    // General functions to read and write
-    void readFile (const std::string& file_path, json& j)  {
-        std::ifstream in (file_path, std::ios::in);
-        if (!in.is_open()) { 
-            throw std::runtime_error {"Could not open the file :("};
-        } 
-            in >> j;
-            in.close();
-    }
-    // write function
-    void writeToFile (const std::string& file_path, const json& j) { 
-        std::ofstream out (file_path ,std::ios::trunc);
-        if (!out.is_open()) { 
-            throw std::runtime_error {"Could not open the file :("};
+    // RETRIEVE DATA FROM DATABASE
+    template <typename T>
+    void loadData(std::vector<T *> &vec, const std::string &file_path)
+    {
+        json j;
+        try
+        {
+            readFile(file_path, j);
+            // Parse the data into the vector
+            for (auto &user : j["users"])
+            {
+                vec.emplace_back(T::fromJson(user)); // from json to actual object
+            }
         }
-            out << std :: setw(4) << j <<endl;
-            out.close();
+        catch (std::exception &ex)
+        {
+            std::cout << "EXCEPTION:" << ex.what() << endl;
+        }
     }
 
-    // LOAD DATA
-    template <typename T>
-    void loadData(std::vector<T *> &, const std::string &);
-    void loadAdmins(std::vector<Admin *> &a);
-    void loadBuyers(std::vector<Buyer *> &b);
-    void loadSellers(std::vector<Seller *> &s);
+    // General functions to read and write :)
+    void readFile(const std::string &, json &);
+    void writeToFile(const std::string &, const json &);
 
     // ADD USERS
     template <typename T>
-    void add_user(const T &, const std::string &); // General function to add a user from the JSON file
+    void add_user(const T &obj, const std::string &file_path)
+    {
+        json data;
+        try {
+            readFile(file_path, data);
+            data["users"].push_back(obj.toJson()); // Incorporate the new object
+
+            // After reading, write the new data to the file :)
+            writeToFile (file_path, data);
+        }
+        catch (std::exception &ex) {
+            std::cout << "EXCEPTION:" << ex.what() << endl;
+        }
+    }
+
     void add_admin(const Admin &a);
     void add_buyer(const Buyer &b);
     void add_seller(const Seller &s);
@@ -84,13 +104,15 @@ public:
     void remove_buyer(const std::string &);
     void remove_seller(const std::string &);
 
-
-    // INVENTORY METHODS 
-    // void loadSellerInventory (Inventory*);
-    void loadInventory (Inventory*);
-    void updateInventory (Product*);
-    void updateMyStore(const std::string&, const std::string&);
-
+    // INVENTORY METHODS
+    void loadInventory(Inventory *);
+    void addProductToAppInventory (Product *);
+    void removeProductFromAppInventory (const std::string& );
+    // Seller inventory methods
+    void addProductToMyList(const std::string &, const std::string &);
+    void removeProductFromMyList (const std::string&, const std::string&);
 };
+
+void clear_screen();
 
 #endif // _DATABASE_H_

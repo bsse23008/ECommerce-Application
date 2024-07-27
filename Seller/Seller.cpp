@@ -1,4 +1,5 @@
 #include "../ECommerce/ECommerce.h"
+#include "../Database/Database.h"
 #include "Seller.h"
 
 Seller :: Seller () : User () {
@@ -101,9 +102,12 @@ void Seller :: addProduct (Product* p) {
     ECommerce::getInstance()->getInventory()->addProduct (p); // Add the product to the centralized inventory first :)
     // Then add it in seller,s products list
     products.push_back (p); // address copy 
-    Database :: getInstance()->updateMyStore (p->get_unique_id(), this->userName); 
+    Database :: getInstance()->addProductToMyList (p->get_unique_id(), this->userName); 
 }
 
+
+
+/*
 void Seller :: removeProduct (const std::string& id) {
     for (int i=0; i<products.size(); i++) {
         if (id == products[i]->get_unique_id()) 
@@ -113,17 +117,23 @@ void Seller :: removeProduct (const std::string& id) {
         }
     }
 }
+*/
+
 
 // Used mostly 
 void Seller :: removeProduct (Product* p) {
     for (int i=0; i < products.size(); i++) { 
         if (p == products[i]) { 
-            ECommerce :: getInstance ()->getInventory()->removeProduct (p);
-            products.erase (products.begin() + i);
+				// Remove from database
+				Database :: getInstance()->removeProductFromMyList (p->get_unique_id(), this->userName); 
+            products.erase (products.begin() + i); // Erase the memory address as well :)
+            p = nullptr;
             break; 
         }
     }
 }
+
+
 
 void sellerControls (Seller* s) { 
     char outerSwitch; 
@@ -161,13 +171,14 @@ void sellerControls (Seller* s) {
                             
                             bool is_unique = true; 
                             do {
-                                cout << "Enter product Id (should be unique): "; cin >> id; 
+                                cout << "Enter product Id       : "; cin >> id; 
                                 is_unique = ECommerce::getInstance()->getInventory()->isUniqueId (id); // Check if the product Id has already been taken or not ?
                                 if (is_unique) 
                                     cout << id << " has already been taken :( " << endl;
                             }while (is_unique); 
 
                             cin.ignore();
+                            // cout << endl; 
                                 cout << "Enter name of product  : ";  getline (cin, name); 
                                 cout << "Enter Description      : "; getline (cin, description) ;
                                 cout << "Enyer category         : "; getline (cin, category);
@@ -188,16 +199,22 @@ void sellerControls (Seller* s) {
                             Product* p = s->searchProduct (id); 
 
                             if (p) {  // If product was found in the list 
-                                std::cout << *p << endl;
-                                bool confirm = 0; 
+                                std::cout << endl << *p << endl;
+                                bool confirm = false; 
                                 cout << "Do you really want ot delete this product ? " << endl 
-                                    << "\n If Yes -> press 1 \n If No -> press 0 " << endl; 
+                                    << "\n If Yes -> press 1 \n If No -> press 0 " << endl 
+                                    << " Enter: ";
                                 cin >> confirm; 
 
                                 if (confirm) { 
-                                    delete p;               // delete the content at that memory address
-                                    s->removeProduct (p);   // Now remove the address from the vectors (both vectors -> Inventory :: <products*> and Seller :: <products*>)
-                                    p = nullptr;            
+									//	1. Remove from centralized Inventory
+                                 	ECommerce :: getInstance ()->getInventory()->removeProduct (p); 
+									//	2. Remove from my product list in database
+                                 	s->removeProduct (p);   
+									std::cout << *p << endl; 	// The object still exists because we still have not deleted it :)
+                                 	delete p;					// Delete the content :)  
+									//  3. Null the pointer     
+                                 	p = nullptr;            
                                 }                                
                             }
                             else // In case : If nullptr was returned.
@@ -211,7 +228,12 @@ void sellerControls (Seller* s) {
                             break; 
                         }
                         case 'X': {
-                            system ("clear"); 
+							clear_screen();
+                            // system ("clear"); 
+                            break; 
+                        }
+                        case 'G': {
+                            cout << "\nBye :)" << endl;
                             break; 
                         }
                         default: {
@@ -228,7 +250,8 @@ void sellerControls (Seller* s) {
             }
             // Clear screen
             case 'X':{
-                system("clear");
+				clear_screen();
+                // system("clear");
                 break;
             }
             // Default case

@@ -5,6 +5,7 @@
 #include "../Inventory/Inventory.h"
 
 class ECommerce;
+class Database;
 
 class Seller : public User
 {
@@ -41,16 +42,20 @@ public:
     static Seller* fromJson (json& j); 
     json toJson () const;
 
-    
+    void loadProducts (Product*  p) { 
+        products.emplace_back  (p); 
+    }
 
+    
     // Seller Functionalities
     void addProduct (Product* p); 
     Product* searchProduct (const std::string& id);
-    void removeProduct (const std::string& p); // remove by unique Id of product
+    // void removeProduct (const std::string& p); // remove by unique Id of product
     void removeProduct (Product* p); // remove by address 
 
     void displayMyProducts () const {
         for (const Product* p : products) { 
+            cout << "\n____________________________________" << endl; 
             cout << *p << endl;
         }
     }  

@@ -28,6 +28,7 @@ public:
         return false; 
     }
 
+    void loadInventory (Product* p);
     void addProduct(Product *p);
     void removeProduct(Product *p);
 };

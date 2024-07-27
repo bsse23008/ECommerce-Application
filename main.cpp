@@ -1,5 +1,5 @@
 #include "./ECommerce/ECommerce.h"
-
+#include "./Database/Database.h"
 
 int main() {
 
@@ -15,6 +15,7 @@ int main() {
         cin >> choice; 
         switch (toupper(choice)) {
             case 'L':{
+                // ECommerce :: getInstance ()->login (userName, pass); 
                 login();                
                 break;
             }
@@ -26,7 +27,8 @@ int main() {
                 break;
             }
             case 'X':{
-                system("clear"); // clear the console
+                clear_screen();
+                // system("clear"); // clear the console
                 break;
             }
             case 'E':{

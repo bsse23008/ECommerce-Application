@@ -53,18 +53,8 @@ public:
         return inventory; 
     }
 
-    void loadSellerInventory (Seller* seller);
-    void loadData () { 
-        Database :: getInstance()->loadAdmins(admins);
-        Database :: getInstance()->loadBuyers(buyers);
-        Database :: getInstance()->loadSellers(sellers);
-        try { 
-            Database :: getInstance()->loadInventory(inventory); 
-        }
-        catch (std::exception& ex) { 
-            cout << "EXCEPTION: " << ex.what() << endl; 
-        }
-    }
+    void loadSellerInventory (Seller*);
+    void loadData ();
 
 private:
 

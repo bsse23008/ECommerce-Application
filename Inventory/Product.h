@@ -14,7 +14,7 @@ class Product
 {
 private:
     std::string uniqueId, name, description, category, location, supplier;
-    double price, stock, rating;
+    double price, stock;
     std::vector<Review> reviews;
 
 public:
@@ -28,8 +28,7 @@ public:
         const std::string& location,
          const std::string& supplier,
           double price,
-           double stock,
-            double rating = 0.0 ) : uniqueId(id), name(name), description(description), category(category), location(location), supplier(supplier), price(price), stock(stock), rating(rating) {}
+           double stock ) : uniqueId(id), name(name), description(description), category(category), location(location), supplier(supplier), price(price), stock(stock) {}
     ~Product();
 
     // setters
@@ -53,7 +52,7 @@ public:
     std::string get_supplier();
     double get_price();
     double get_stock();
-    double get_rating();
+    double get_rating() const;
     std::vector<std::string> get_reviews();
 
     // Loading data from files

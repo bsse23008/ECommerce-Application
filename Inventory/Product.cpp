@@ -7,8 +7,7 @@ Product :: Product ()
     location{"None"}, 
     supplier{"None"},
     price{0.0},
-    stock{0.0},
-    rating{0.0} {
+    stock{0.0} {
 }
 
 // Hey Samer also Implement the parameterized constructor!
@@ -89,11 +88,12 @@ double Product::get_stock(){
 //     return this->reviews;
 // }
 
-double Product::get_rating(){
+double Product :: get_rating() const {
+    double rating = 0.0;
     for (int i=0; i<reviews.size(); i++) {
-        this->rating += reviews[i].getRating();
+        rating += reviews[i].getRating();
     }
-    return this->rating; 
+    return rating; 
 }
 
 
@@ -117,15 +117,18 @@ cout << "\nEnter the following details for the product:" << endl;
 
 //ostream operator
 std::ostream& operator<<(std::ostream& os, const Product& product){
-    os << "Name: " << product.name << std::endl;
-    os << "Description: " << product.description << std::endl;
-    os << "Category: " << product.category << std::endl;
-    os << "Location: " << product.location << std::endl;
-    os << "Supplier: " << product.supplier << std::endl;
-    os << "Price: " << product.price << std::endl;
-    os << "Stock: " << product.stock << std::endl;
+    // Formatting to display in a structred form :)
+    os << "  Product Id   : " << product.uniqueId << endl; 
+    os << "  Name         : " << product.name << endl;
+    os << "  Description  : " << product.description << endl;
+    os << "  Category     : " << product.category << endl;
+    os << "  Location     : " << product.location << endl;
+    os << "  Supplier     : " << product.supplier << endl;
+    os << "  Price        : " << product.price << endl;
+    os << "  Stock        : " << product.stock << endl;
+    os << "  Rating       : " << product.get_rating () << endl; 
     /*
-        We can also see the reviews of this product by using display reviews method. 
+        We can also see the reviews of this product by using displayReviews() method. 
         But reviews will be shown on the demand of the customer/buyer.
     */
     return os;
