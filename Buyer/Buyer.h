@@ -7,9 +7,14 @@ class Buyer : public User
 {
 public:
     Buyer();
-    ~Buyer () {
+    virtual ~Buyer () {
         cout << "\nBuyer destructor called!" << endl;
     }
+
+    virtual void dashBoard () override { 
+
+    }
+
     Buyer(
         const std::string &,
         const std::string &,
@@ -19,7 +24,8 @@ public:
         // Buyer/Customer Functionalities
 
         static Buyer* fromJson (json& j); 
-        json toJson () const ;
+        virtual json& toJson (json& j) const override;
+
 };
 
 #endif // _BUYER_H_

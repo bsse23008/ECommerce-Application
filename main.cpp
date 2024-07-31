@@ -4,6 +4,7 @@
 int main() {
 
     ECommerce :: getInstance()->loadData();
+    ECommerce :: getInstance()->displayUsers ();
     // Application Menu
     char choice; 
     do
@@ -14,21 +15,19 @@ int main() {
         cout << "\nEnter choice: ";
         cin >> choice; 
         switch (toupper(choice)) {
-            case 'L':{
-                // ECommerce :: getInstance ()->login (userName, pass); 
-                login();                
+            case 'L':{                
+                Login ();                
                 break;
             }
             case 'S':{
-                ECommerce :: getInstance ()->signUp ();
+                SignUp();
                 break;
             }
             case 'G':{
                 break;
             }
             case 'X':{
-                clear_screen();
-                // system("clear"); // clear the console
+                system("clear"); // clear the console
                 break;
             }
             case 'E':{

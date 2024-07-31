@@ -1,18 +1,35 @@
 #include "Database.h"
 // Header files location
-#include "./../Inventory/Inventory.h"
-#include "./../Admin/Admin.h"
-#include "./../Seller/Seller.h"
-#include "./../Buyer/Buyer.h"
+
+    void Database :: loadData(std::vector<User *> &vec, const std::string &file_path) {
+        json j;
+        try
+        { 
+            // Reading function could potentially throw an exception :)
+            readFile(file_path, j);
+
+            // Parse the data into the vector
+            for (auto &user : j["users"]) {
+                if (user["type"] == "Admin") { 
+                    vec.emplace_back(Admin :: fromJson(user)); // from json to actual object
+                }
+                else if (user["type"] == "Seller") { 
+                    vec.emplace_back(Seller :: fromJson(user)); 
+                }
+                else if (user["type"] == "Buyer") { 
+                    vec.emplace_back(Buyer :: fromJson(user)); 
+                }
+                else { 
+                    cerr << "type not matched :)" << endl; 
+                }
+            }
+        }
+        catch (std::exception &ex) {
+            std::cout << "EXCEPTION:" << ex.what() << endl;
+        }
+    }
 
 
-void clear_screen() {
-#ifdef _WIN32
-    system("cls");
-#else
-    system("clear");
-#endif
-}
 
 // Initialize the instance
 Database *Database::instance{nullptr};
@@ -26,6 +43,7 @@ Database *Database::instance{nullptr};
             in >> j;
             in.close();
     }
+
     // write function
     void Database :: writeToFile (const std::string& file_path, const json& j) { 
         std::ofstream out (file_path ,std::ios::trunc);
@@ -36,75 +54,29 @@ Database *Database::instance{nullptr};
             out.close();
     }
 
-
-void Database ::add_admin(const Admin &a)
-{
-    add_user(a, admins_filePath);
-}
-
-void Database ::add_buyer(const Buyer &b)
-{
-    add_user(b, buyers_filePath);
-}
-
-void Database ::add_seller(const Seller &s)
-{
-    add_user(s, sellers_filePath);
-    // Now making a file to store products of the seller
-    json data;
-    data["productIds"] = json ::array();
-    try {
-        writeToFile("./Database/Inventory/Sellers/" + s.getUserName() + ".json", data);
-    }
-    catch (std::exception &ex) {
-        std::cout << "EXCEPTION:" << ex.what() << endl;
-    }
-}
-
 // General function to remove a user from the JSON file
-void Database ::remove_user(const std::string &user_name, const std::string &file_path)
+void Database :: remove_user (const User* user)
 {
     json j;
     try {
-        // Read the data that is already present in the file to prevent data loss 
-        readFile (file_path, j);
+        readFile (users_file_path, j);
+        
         // Find and erase the user with the matching username
-        for (auto it = j["users"].begin(); it != j["users"].end(); ++it)
-        {
-            if ((*it)["userName"] == user_name)
-            {
+        for (auto it = j["users"].begin(); it != j["users"].end(); ++it) {
+            if ((*it)["userName"] == user->getUserName()) {
                 j["users"].erase(it);
-                break; // Exit the loop after removing the user
+                break; 
             }
         }
 
-        try {
-            // Write the updated JSON back to the file
-            writeToFile (file_path, j);
-        }
-        catch (std::exception& ex) {
-            std::cout << "EXCEPTION: " << ex.what() << endl; 
-        }
+        // Write the updated JSON back to the file
+        writeToFile (users_file_path, j);
     }
     catch (std::exception& ex) { 
         std::cout << "EXCEPTION: " << ex.what() << endl; 
     }
 }
 
-void Database ::remove_admin(const std::string &user_name)
-{
-    remove_user(user_name, admins_filePath);
-}
-
-void Database ::remove_buyer(const std::string &user_name)
-{
-    remove_user(user_name, buyers_filePath);
-}
-
-void Database ::remove_seller(const std::string &user_name)
-{
-    remove_user(user_name, sellers_filePath);
-}
 
 // INVENTORY METHODS
 void Database :: loadInventory(Inventory *inventory)
@@ -112,7 +84,7 @@ void Database :: loadInventory(Inventory *inventory)
     json j; 
     try { 
         readFile (inventory_filePath, j);
-        for (ssize_t i = 0; i < j["products"].size(); i++){
+        for (size_t i = 0; i < j["products"].size(); ++i){
             Product* p = new Product ();
             inventory->loadInventory(Product::fromJson (j["products"][i], p));
         }

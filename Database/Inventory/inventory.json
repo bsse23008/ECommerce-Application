@@ -1,26 +1,5 @@
 {
     "products": [
-        {
-            "category": "Electronics",
-            "description": "Electronic Device",
-            "location": "Lahore",
-            "name": "Laptop",
-            "price": 120000.0,
-            "reviews": [],
-            "stock": 10.0,
-            "supplier": "Samer",
-            "uniqueId": "0x123"
-        },
-        {
-            "category": "Cosmetics",
-            "description": "Natural Olive Oil Shampoo to prevent hair fall",
-            "location": "Lahore",
-            "name": "Shampoo",
-            "price": 300.0,
-            "reviews": [],
-            "stock": 100.0,
-            "supplier": "Samer",
-            "uniqueId": "0x111"
-        }
+        
     ]
 }

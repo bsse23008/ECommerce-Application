@@ -8,14 +8,16 @@ Seller :: Seller () : User () {
 
 Seller :: Seller (
     const std::string & first,
-    const std::string & last,
-    const std::string & user_name,
-    const std::string & pass, 
+        const std::string & last,
+            const std::string & user_name,
+                const std::string & pass, 
+                
     /*seller-specific attributes*/
     const std::string & phone_number,
-    const std::string & org,
-    const std::string & dob,
-    const std::string & cnic
+        const std::string & org,
+            const std::string & dob,
+                const std::string & cnic
+
     ) : User (first, last, user_name, pass), phoneNo(phone_number), organization(org), DOB(dob), CNIC(cnic) {
 
 }
@@ -61,8 +63,8 @@ Seller* Seller :: fromJson (json& j) {
     /*seller attributes*/ j["phoneNo"], j["organization"], j["DOB"], j["CNIC"]);
 }
 
-json Seller :: toJson ( ) const { 
-    json j; 
+json& Seller :: toJson ( json& j ) const { 
+    j["type"] = "Seller"; // flag to differentiate between users
     j["firstName"] = this->firstName;
     j["lastName"] = this->lastName;
     j["userName"] = this->userName;
@@ -135,8 +137,18 @@ void Seller :: removeProduct (Product* p) {
 
 
 
-void sellerControls (Seller* s) { 
-    char outerSwitch; 
+void Seller :: dashBoard () { 
+    std::cout << *this << std::endl; 
+}
+
+
+
+// void sellerControls (Seller* s) { 
+    
+// }
+
+/*
+char outerSwitch; 
     char innerSwitch;
 
     do { 
@@ -261,4 +273,5 @@ void sellerControls (Seller* s) {
             }
         }
     } while (std::toupper (outerSwitch) != 'L'); 
-}
+
+*/

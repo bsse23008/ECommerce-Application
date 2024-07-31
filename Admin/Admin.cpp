@@ -20,8 +20,9 @@ Admin* Admin :: fromJson (json& j) {
 
 
 // Object to Json conversion
-json Admin :: toJson ( ) const { 
-    json j; 
+json& Admin :: toJson ( json& j ) const { 
+    // json j; 
+    j["type"] = "Admin"; // flag to differentiate between users
     j["firstName"] = this->firstName;
     j["lastName"] = this->lastName;
     j["userName"] = this->userName;
@@ -36,34 +37,25 @@ void adminControls (Admin * a) {
     do { 
         // system ("clear");
         cout << "___________________________________________________" << endl 
-             << "\n\t\t ADMIN CONTROLS " << endl;    
+             << "\n\t\t ADMIN DASHBOARD " << endl;    
 
-        cout<< "\n Press 'B' to search any buyer "
-            << "\n Press 'S' to search any seller "
-            << "\n Press 'L' to log out "
+        cout 
+            << "\n Press 'U' to search any User "
+            << "\n Press 'L' to Log out "
             << "\n X = Clear Screen "
             << endl;
 
+        cout << "\nEnter your choice: "; 
         cin >> choice; 
         switch (std::toupper(choice)) { 
 
-            case 'B':{
-                std::string* userName = new std::string; 
-                cout << "Enter userName: ";   std::cin >> *userName; 
-                ECommerce :: getInstance()->searchBuyer (*userName);
-                delete userName;
+            case 'U':{
+                    std::string userName; 
+                    cout << "Enter userName: "; getline (cin, userName);
+                    User* user = ECommerce :: getInstance ()->searchUser (userName);
+                    user->display(); 
                 break; 
             }
-
-            case 'S':{
-
-                std::string* userName = new std::string; 
-                cout << "Enter userName: ";   std::cin >> *userName; 
-                ECommerce :: getInstance()->searchSeller (*userName);
-                delete userName;
-                break; 
-            }
-
             case 'X':{
                 system ("clear"); 
                 break;

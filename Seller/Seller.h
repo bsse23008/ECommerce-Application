@@ -15,7 +15,7 @@ private:
     std::vector<Product*> products; // A Seller has some products to sell
 public:
     Seller();
-    ~Seller () {
+    virtual ~Seller () {
         cout << "\nSeller destructor called!" << endl;
     }
     Seller(
@@ -38,9 +38,12 @@ public:
     void setDOB (const std::string&); 
     void setCNIC (const std::string&);  
 
+    // Overriden
+    virtual void dashBoard () override;
+
     // File loading methods
     static Seller* fromJson (json& j); 
-    json toJson () const;
+    virtual json& toJson (json& j) const override;
 
     void loadProducts (Product*  p) { 
         products.emplace_back  (p); 
@@ -58,9 +61,14 @@ public:
             cout << "\n____________________________________" << endl; 
             cout << *p << endl;
         }
-    }  
-};
+    } 
 
-void sellerControls (Seller* s);
+    /*
+        virtual void display () const override {
+            User :: display();
+            cout << *this << endl;  
+        } 
+    */
+};
 
 #endif // _SELLER_H_

@@ -90,7 +90,7 @@ double Product::get_stock(){
 
 double Product :: get_rating() const {
     double rating = 0.0;
-    for (int i=0; i<reviews.size(); i++) {
+    for (size_t i=0; i<reviews.size(); i++) {
         rating += reviews[i].getRating();
     }
     return rating; 
@@ -151,7 +151,7 @@ Product* Product :: fromJson ( json& j, Product* p ) {
     p->set_price(j["price"]);
     p->set_stock(j["stock"]);
 
-    for (int i=0; i < j["reviews"].size(); i++) {
+    for (size_t i=0; i < j["reviews"].size(); i++) {
         Review* temp = new Review (j["review"][i]["rating"], j["review"][i]["comment"]); 
         p->add_review(*temp);
         delete temp; 

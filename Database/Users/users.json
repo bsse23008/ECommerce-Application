@@ -1,0 +1,26 @@
+{
+    "users": [
+        {
+            "CNIC": "3232323232",
+            "DOB": "10-08-2004",
+            "firstName": "Ahmad",
+            "lastName": "Khan",
+            "organization": "Telelance",
+            "password": "ahmad123",
+            "phoneNo": "0333 1212113",
+            "type": "Seller",
+            "userName": "bsse23008"
+        },
+        {
+            "CNIC": "<18",
+            "DOB": "200-BC",
+            "firstName": "Samer",
+            "lastName": "Nisar",
+            "organization": "Samurai",
+            "password": "radoz123",
+            "phoneNo": "0330303030303",
+            "type": "Seller",
+            "userName": "radoz"
+        }
+    ]
+}

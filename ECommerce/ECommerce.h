@@ -9,67 +9,81 @@ public:
     static ECommerce* getInstance ();
     static void releaseInstance ();
 
-    template <typename type> 
-    bool isUserNameTaken (const std::string&, const std::vector<type*>&);
-
-    // Searching functions 
-    template <typename T> 
-    void searchUser (const std::vector<T*>&, const std::string&); // template function to search any user
-    void searchBuyer (const std::string&);
-    void searchSeller (const std::string&);
-
-
-    // Add/SignUp functions
-    template <typename type>
-    void addUser (const std::string&, type*, std::vector<type*>&); // template function to add a new user
-    void addBuyer (Buyer* b);
-    void addSeller (Seller* p);
-    void addAdmin (Admin* a);
-
-    // Remove 
-    template <typename type>
-    bool removeUser (const std::string&, std::vector<type*>&); // template function to remove a user
-    bool removeSeller (const std::string& userName);
-    bool removeBuyer (const std::string& userName);
-    bool removeAdmin (const std::string& userName);
-
-    // Login functions
-    template <typename type>
-    type* isLoggedIn (const std::string&, const std::string&, std::vector<type*>); // template function to login
-    Buyer* isBuyerLoggedIn (const std::string&, const std::string&);
-    Seller* isSellerLoggedIn (const std::string&, const std::string&);
-    Admin* isAdminLoggedIn (const std::string&, const std::string&);
-
     
-    void signUp();
-    Admin* adminSignUp (const std::string&, const std::string&, const std::string&, const std::string&);
-    Buyer* buyerSignUp (const std::string&, const std::string&, const std::string&, const std::string&);
-    Seller* sellerSignUp (const std::string&, const std::string&, const std::string&, const std::string&);
+    bool isUserNameTaken (const std::string& userName)  {
+        std::vector<User*> :: const_iterator it; 
+        // auto it = users.cbegin();
 
-    template <typename T>
-    void inputCredentials ( std::string&, std::string&, std::string&, std::string&, const std::vector<T*>&);
+        for (it = users.begin(); it!=users.end(); ++it) { 
+            if ((*it)->getUserName() == userName) { 
+                return true; 
+            }
+        }
+        return false; 
+    }
+
+        User* searchUser (const std::string& userName) { // template function to search any user 
+
+            for (auto it = users.begin(); it != users.end(); ++it)  {
+                if (userName == (*it)->getUserName()) { 
+                    return *it; 
+                }
+            }
+            return nullptr; 
+        }
+    
+        void addUser (User* user) { 
+            Database :: getInstance ()->addUser (user); 
+            users.emplace_back (user);
+        }
+
+        void removeUser (User* user) { 
+            std::vector<User*> :: iterator it = users.begin();
+            
+            while (it != users.end()) { 
+                if ((*it) == user) { 
+                    Database::getInstance()->remove_user(user); // Ye dekhna pare ga 
+                    delete *it;
+                    users.erase(it);
+                }
+                ++it; 
+            }
+        }
 
     Inventory* getInventory () const { 
         return inventory; 
     }
 
     void loadSellerInventory (Seller*);
-    void loadData ();
+    void loadData ();        
+    User* login (const std::string&,  const std::string&);  
+
+
+    void displayUsers () const { 
+        std::vector<User*> :: const_iterator it; 
+        for (it = users.begin(); it!= users.end(); ++it) { 
+            cout << "_________________________________\n";
+            (*it)->display(); 
+        }
+    }
 
 private:
 
     ECommerce();
     ~ECommerce ();
+    ECommerce(const ECommerce &) = delete;
     
     Inventory* inventory; 
-    ECommerce(const ECommerce &) = delete;
-    std::vector<Buyer *> buyers;
-    std::vector<Seller *> sellers;
-    std::vector<Admin *> admins;
+    std::vector<User*> users;
 };
 
 // Global functions
-void inputCredentials (std::string&, std::string&);
-void login (); 
+void SignUp();
+void Login (); 
+
+void inputCredentials ( std::string&, std::string&, std::string&, std::string&);  // Common credentials among all kind of users
+Admin* adminSignUp (const std::string&, const std::string&, const std::string&, const std::string&);
+Buyer* buyerSignUp (const std::string&, const std::string&, const std::string&, const std::string&);
+Seller* sellerSignUp (const std::string&, const std::string&, const std::string&, const std::string&);
 
 #endif // _ECOMMERCE_H_ Singleton class
