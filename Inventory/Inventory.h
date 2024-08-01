@@ -31,6 +31,7 @@ public:
     void loadInventory (Product* p);
     void addProduct(Product *p);
     void removeProduct(Product *p);
+    void displayProducts () const; 
 };
 
 #endif // _INVENTORY_H_

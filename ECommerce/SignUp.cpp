@@ -172,11 +172,14 @@ void SignUp () {
                 Seller* s = sellerSignUp (firstName, lastName, userName, pass);
 
                 ECommerce::getInstance()->addUser /*<Seller>*/(s);
-                cout << "\nSigned-up successfully! " << endl;                 
-                cout << "Now Login to your account below :)" << endl; 
-                Login(); // global
-                s = nullptr; 
 
+                // Making a separate file for seller! 
+                // Where he can store his productIds
+                    Database :: getInstance()->createNewFileForSeller (s->getUserName()); 
+                    cout << "\nSigned-up successfully! " << endl;                 
+                    cout << "Now Login to your account below :)" << endl; 
+                    Login(); // global
+                s = nullptr; 
                 break;
             }
             case 'X': {

@@ -5,6 +5,8 @@ int main() {
 
     ECommerce :: getInstance()->loadData();
     ECommerce :: getInstance()->displayUsers ();
+    ECommerce :: getInstance()->getInventory ()->displayProducts();
+
     // Application Menu
     char choice; 
     do

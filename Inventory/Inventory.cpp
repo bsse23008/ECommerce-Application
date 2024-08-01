@@ -58,3 +58,13 @@ void Inventory :: removeProduct(Product *p)
         }
     }
 }
+
+
+void Inventory :: displayProducts () const { 
+    std::vector<Product*> :: const_iterator it = products.begin();
+    while (it != products.end()) { 
+        std::cout << **it << std::endl; 
+        std::cout <<  "___________________________________" << std::endl; 
+        ++it; 
+    }
+}

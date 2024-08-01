@@ -107,6 +107,8 @@ public:
     void addProductToAppInventory (Product *);
     void removeProductFromAppInventory (const std::string& );
     // Seller inventory methods
+    void createNewFileForSeller (const std::string&);
+    void loadSellerProductList (json&, const std::string&);
     void addProductToMyList(const std::string &, const std::string &);
     void removeProductFromMyList (const std::string&, const std::string&);
 };

@@ -79,6 +79,9 @@ void Database :: remove_user (const User* user)
 
 
 // INVENTORY METHODS
+
+// This function is called at the start of execution of the program to load all
+// the products in the inventory!
 void Database :: loadInventory(Inventory *inventory)
 {
     json j; 
@@ -136,8 +139,35 @@ void Database :: removeProductFromAppInventory(const std::string& product_id) {
 }
 
 
+
+/*
+When a new Seller creates his account by sign-up :)
+This function creates a new file based on his username (which is unique)
+This file will store an array of his product-Ids
+*/
+void Database :: createNewFileForSeller (const std::string& store_owner) { 
+    json j;
+    j["productIds"] = json :: array();
+    try { 
+        writeToFile ("./Database/Inventory/Sellers/" + store_owner + ".json", j);
+    }catch (std::exception& ex) { 
+        std::cerr << "Exception: " << ex.what() << std::endl; 
+    }
+}
+
+
+// This function retrieves the productIds from file, just after a seller logs-in :)
+void Database :: loadSellerProductList (json& data, const std::string& store_owner) { 
+    try {
+        readFile ("./Database/Inventory/Sellers/" + store_owner + ".json", data);
+    }
+    catch (std::exception& ex) { 
+        std::cerr << "Exception: " << ex.what() << std::endl; 
+    }
+}
+
  
-// Add productId to seller,s store 
+// Add productId to Seller store 
 void Database :: addProductToMyList(const std::string& product_id, const std::string &store_owner)
 {
     json data; 
@@ -152,6 +182,8 @@ void Database :: addProductToMyList(const std::string& product_id, const std::st
     }
 }
 
+
+
 // Remove the productId from seller,s product list 
 void Database :: removeProductFromMyList(const std::string& product_id, const std::string& store_owner) { 
     json data; 
@@ -159,12 +191,14 @@ void Database :: removeProductFromMyList(const std::string& product_id, const st
         readFile("./Database/Inventory/Sellers/" + store_owner + ".json", data);
         // Ensure the productIds field is an array
         if (data.contains("productIds") && data["productIds"].is_array()) {
-            for (size_t i = 0; i < data["productIds"].size(); ++i) { 
-                if (product_id == data["productIds"][i]) { 
-                    // Remove the product from the list using iterator
-                    data["productIds"].erase(data["productIds"].begin() + i);
+
+            auto it = data["productIds"].begin();
+            while (it != data["productIds"].end())  {
+                if (product_id == (*it)) { 
+                    data["productIds"].erase (it); // Remove the product-id
                     break; 
                 }
+                ++it; 
             }
         }
         writeToFile("./Database/Inventory/Sellers/" + store_owner + ".json", data);

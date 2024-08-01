@@ -1,5 +1,5 @@
-#if !defined(PRODUCT_H_)
-#define PRODUCT_H_
+#ifndef _PRODUCT_H_
+#define _PRODUCT_H_
 
 #include <iostream>
 #include <vector>
@@ -10,14 +10,20 @@ using std::cin;
 using std::cerr; 
 using std::endl; 
 
+class Seller; 
+
 class Product
 {
+    // friend void Seller :: addProduct (Product* p);
 private:
     std::string uniqueId, name, description, category, location, supplier;
     double price, stock;
+    // Seller* seller; // Every product has a seller :)
     std::vector<Review> reviews;
 
+
 public:
+    // void addSeller (Seller* s); 
     // constructor and destructor
     Product();
     Product
@@ -72,4 +78,4 @@ public:
 };
 
 
-#endif // PRODUCT_H_
+#endif // _PRODUCT_H_

@@ -1,5 +1,6 @@
 #include "../ECommerce/ECommerce.h"
 #include "../Database/Database.h"
+#include "../Inventory/Inventory.h"
 #include "Seller.h"
 
 Seller :: Seller () : User () {
@@ -90,6 +91,11 @@ std::ostream& operator << (std::ostream& os, const Seller& seller) {
 }
 
 
+void Seller :: loadMyProducts (Product*  p) { 
+    products.emplace_back  (p); 
+}
+
+
 Product* Seller :: searchProduct (const std::string& id) { 
     for (int i=0; i < products.size(); i++) { 
         if (id == products[i]->get_unique_id()) { 
@@ -101,6 +107,7 @@ Product* Seller :: searchProduct (const std::string& id) {
 
 
 void Seller :: addProduct (Product* p) {
+    // p->addSeller (this);
     ECommerce::getInstance()->getInventory()->addProduct (p); // Add the product to the centralized inventory first :)
     // Then add it in seller,s products list
     products.push_back (p); // address copy 
@@ -109,25 +116,12 @@ void Seller :: addProduct (Product* p) {
 
 
 
-/*
-void Seller :: removeProduct (const std::string& id) {
-    for (int i=0; i<products.size(); i++) {
-        if (id == products[i]->get_unique_id()) 
-        {
-            products.erase (products.begin() + i); 
-            break; 
-        }
-    }
-}
-*/
-
-
 // Used mostly 
 void Seller :: removeProduct (Product* p) {
     for (int i=0; i < products.size(); i++) { 
         if (p == products[i]) { 
 				// Remove from database
-				Database :: getInstance()->removeProductFromMyList (p->get_unique_id(), this->userName); 
+			Database :: getInstance()->removeProductFromMyList (p->get_unique_id(), this->userName); 
             products.erase (products.begin() + i); // Erase the memory address as well :)
             p = nullptr;
             break; 
@@ -137,23 +131,118 @@ void Seller :: removeProduct (Product* p) {
 
 
 
-void Seller :: dashBoard () { 
-    std::cout << *this << std::endl; 
+void Seller :: displayMyProducts () const {
+    if (products.size() == 0) { 
+        cout << "You don,t have any products in your Store :( " << endl; 
+        return; 
+    }
+    for (const Product* p : products) { 
+        cout << "\n____________________________________" << endl; 
+        cout << *p << endl;
+    }
+} 
+
+
+void Seller :: storeManagement () { 
+    char choice; 
+    do {
+        cout << "____________________________________________________________" << endl;
+        cout << "\n\t\t STORE MANAGEMENT" << endl; 
+        cout << "\n A = Add a Product to my store." 
+            << "\n R = Remove a Product from my store."  
+            << "\n V = View all products"
+            << "\n X = Clear screen" 
+            << "\n G = Go Back" << endl; 
+        cout << "\nEnter choice: ";
+        cin >> choice; 
+// Switch 
+        switch (std::toupper(choice)) {
+            case 'A': {
+                std::string id, name, description, category, location, supplier;
+                double price, stock;
+                
+                bool is_unique = true; 
+                do {
+                    cout << "Enter product Id       : "; cin >> id; 
+                    is_unique = ECommerce::getInstance()->getInventory()->isUniqueId (id); // Check if the product Id has already been taken or not ?
+                    if (is_unique) 
+                        cout << id << " has already been taken :( " << endl;
+                }while (is_unique); 
+                cin.ignore();
+                // cout << endl; 
+                    cout << "Enter name of product  : ";  getline (cin, name); 
+                    cout << "Enter Description      : "; getline (cin, description) ;
+                    cout << "Enyer category         : "; getline (cin, category);
+                    cout << "Enter location         : "; cin >> location ;
+                    // cout << "Supplier of product    : "; cin >> supplier ;
+                    supplier = this->userName; 
+                    cout << "Price of product       : "; cin >> price ;
+                    cout << "Stock of product       : "; cin >> stock; 
+                    Product* p = new Product (id, name, description, category, location, supplier, price, stock);
+                    addProduct(p);
+                break; 
+            }
+            case 'R': {
+                std::string id; 
+                cout << "Enter unique Id of product: ";
+                cin >> id; 
+                Product* p = searchProduct (id);
+                if (p) {  // If product was found in the list 
+                    std::cout << endl << *p << endl;
+                    bool confirm = false; 
+                    cout << "Do you really want ot delete this product ? " << endl 
+                        << "\n If Yes -> press 1 \n If No -> press 0 " << endl 
+                        << " Enter: ";
+                    cin >> confirm; 
+                    if (confirm) { 
+						//	1. Remove from centralized Inventory
+                     	ECommerce :: getInstance ()->getInventory()->removeProduct (p); 
+						//	2. Remove from my product list in database
+                     	removeProduct (p);   
+						// std::cout << *p << endl; // The object still exists because we still have not deleted it :)
+                     	delete p;					// Delete the content :)  
+						//  3. Null the pointer     
+                     	p = nullptr;       
+                        std::cout << "\nThe product was removed successfully!" << std::endl;      
+                    }                                
+                }
+                else // In case : If nullptr was returned.
+                {
+                    cout << "\nProduct with id " << id << " was not found in your store :(" << endl; 
+                }                           
+                break; 
+            }
+            case 'V': {
+                displayMyProducts ();
+                break; 
+            }
+            case 'X': {
+                system ("clear"); 
+                break; 
+            }
+            case 'G': {
+                cout << "\nBye :)" << endl;
+                break; 
+            }
+            default: {
+                cout << "Invalid Choice! " << endl; 
+                continue; 
+            }
+        }
+    }while (std::toupper(choice) != 'G'); 
 }
 
 
+// SELLER DASHBOARD 
+void Seller :: dashBoard () { 
+    // std::cout << *this << std::endl; 
 
-// void sellerControls (Seller* s) { 
-    
-// }
-
-/*
-char outerSwitch; 
-    char innerSwitch;
+    char outerSwitch; 
 
     do { 
         cout << "____________________________________________________________" << endl;
         cout << "\n\t\t SELLER INTERFACE " << endl; 
+        cout << "\nHi! " << getFirstName () << ". Welcome on the Board!" << endl;
         cout << "\n\n S = Store Management"
              << "\n\n L = Log out " 
              << "\n\n X = Clear screen " << endl;  
@@ -163,107 +252,39 @@ char outerSwitch;
         // Outer-switch case :)
         switch (std::toupper (outerSwitch)) { 
             
-            // Store Management 
+            // Store Management
             case 'S':{
-                do {
-                    cout << "____________________________________________________________" << endl;
-                    cout << "\n\t\t STORE MANAGEMENT" << endl; 
-                    cout << "\n A = Add a Product to my store." 
-                        << "\n R = Remove a Product from my store."  
-                        << "\n V = View all products"
-                        << "\n X = Clear screen" 
-                        << "\n G = Go Back" << endl; 
-                    cout << "\nEnter choice: ";
-                    cin >> innerSwitch; 
-                    // Inner-switch case :)
-                    switch (std::toupper(innerSwitch)) {
-                        case 'A': {
-                            std::string id, name, description, category, location, supplier;
-                            double price, stock;
-                            
-                            bool is_unique = true; 
-                            do {
-                                cout << "Enter product Id       : "; cin >> id; 
-                                is_unique = ECommerce::getInstance()->getInventory()->isUniqueId (id); // Check if the product Id has already been taken or not ?
-                                if (is_unique) 
-                                    cout << id << " has already been taken :( " << endl;
-                            }while (is_unique); 
 
-                            cin.ignore();
-                            // cout << endl; 
-                                cout << "Enter name of product  : ";  getline (cin, name); 
-                                cout << "Enter Description      : "; getline (cin, description) ;
-                                cout << "Enyer category         : "; getline (cin, category);
-                                cout << "Enter location         : "; cin >> location ;
-                                cout << "Supplier of product    : "; cin >> supplier ;
-                                cout << "Price of product       : "; cin >> price ;
-                                cout << "Stock of product       : "; cin >> stock ; 
+                json j; // Read the file in json object 
+                Database :: getInstance()->loadSellerProductList (j, getUserName());
 
-                                Product* p = new Product (id, name, description, category, location, supplier, price, stock);
-                                s->addProduct(p);
-                            break; 
-                        }
-                        case 'R': {
-                            std::string id; 
-                            cout << "Enter unique Id of product: ";
-                            cin >> id; 
+                    const size_t size = j["productIds"].size();
+                    std::string* productIds = new std::string[size];
+                    // Store the Ids in an array
+                    for (size_t k=0; k<size; ++k) { 
+                        productIds[k] = j["productIds"][k];
+                    }
 
-                            Product* p = s->searchProduct (id); 
-
-                            if (p) {  // If product was found in the list 
-                                std::cout << endl << *p << endl;
-                                bool confirm = false; 
-                                cout << "Do you really want ot delete this product ? " << endl 
-                                    << "\n If Yes -> press 1 \n If No -> press 0 " << endl 
-                                    << " Enter: ";
-                                cin >> confirm; 
-
-                                if (confirm) { 
-									//	1. Remove from centralized Inventory
-                                 	ECommerce :: getInstance ()->getInventory()->removeProduct (p); 
-									//	2. Remove from my product list in database
-                                 	s->removeProduct (p);   
-									std::cout << *p << endl; 	// The object still exists because we still have not deleted it :)
-                                 	delete p;					// Delete the content :)  
-									//  3. Null the pointer     
-                                 	p = nullptr;            
-                                }                                
-                            }
-                            else // In case : If nullptr was returned.
-                            {
-                                cout << "\nProduct with id " << id << " was not found in your store :(" << endl; 
-                            }                           
-                            break; 
-                        }
-                        case 'V': {
-                            s->displayMyProducts ();
-                            break; 
-                        }
-                        case 'X': {
-							clear_screen();
-                            // system ("clear"); 
-                            break; 
-                        }
-                        case 'G': {
-                            cout << "\nBye :)" << endl;
-                            break; 
-                        }
-                        default: {
-                            cout << "Invalid Choice! " << endl; 
-                            continue; 
+                    // Get your products
+                    for (size_t i=0; i<size; ++i) { 
+                        Product* p = ECommerce :: getInstance()->getInventory()->getReference (productIds[i]);
+                        if (p) { 
+                            loadMyProducts (p);
                         }
                     }
-                }while (std::toupper(innerSwitch) != 'G'); 
-            }
+                    delete [] productIds; 
+                storeManagement (); 
+                break; 
+            }             
             // Log out
             case 'L':{
+                products.clear();
                 cout << "Come Back soon :)" << endl;
                 break; 
             }
             // Clear screen
             case 'X':{
-				clear_screen();
-                // system("clear");
+                system ("clear"); 
                 break;
             }
             // Default case
@@ -273,5 +294,4 @@ char outerSwitch;
             }
         }
     } while (std::toupper (outerSwitch) != 'L'); 
-
-*/
+}

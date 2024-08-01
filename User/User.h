@@ -7,6 +7,7 @@
 #include <vector>
 #include <exception>
 #include <sstream>
+#include <array>
 #include <typeinfo> // User-defined types Identification
 #include "./../nlohmann/json.hpp"
 using json = nlohmann ::json;

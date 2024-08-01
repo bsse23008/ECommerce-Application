@@ -1,13 +1,13 @@
 {
     "users": [
         {
-            "CNIC": "3232323232",
+            "CNIC": "34101-1435620-1",
             "DOB": "10-08-2004",
             "firstName": "Ahmad",
             "lastName": "Khan",
             "organization": "Telelance",
             "password": "ahmad123",
-            "phoneNo": "0333 1212113",
+            "phoneNo": "0303 0161313",
             "type": "Seller",
             "userName": "bsse23008"
         },
@@ -16,11 +16,11 @@
             "DOB": "200-BC",
             "firstName": "Samer",
             "lastName": "Nisar",
-            "organization": "Samurai",
-            "password": "radoz123",
-            "phoneNo": "0330303030303",
+            "organization": "Discord",
+            "password": "samer123",
+            "phoneNo": "0301 1111111",
             "type": "Seller",
-            "userName": "radoz"
+            "userName": "bsse23113"
         }
     ]
 }

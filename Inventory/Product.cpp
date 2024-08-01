@@ -1,4 +1,5 @@
 #include "Product.h"
+#include "./../Seller/Seller.h"
 
 Product :: Product () 
 :   name{"None"}, 
@@ -15,6 +16,9 @@ Product :: Product ()
 Product :: ~Product() {
 
 }
+
+
+// void Product :: addSeller (Seller* s) { this->seller = s; }
 
 
 // setters
