@@ -32,6 +32,17 @@
             "stock": 13.0,
             "supplier": "bsse23113",
             "uniqueId": "0x22"
+        },
+        {
+            "category": "Cosmetics",
+            "description": "Neem flavour shampoo ",
+            "location": "Kuwait",
+            "name": "Head n Shoulders",
+            "price": 150.0,
+            "reviews": [],
+            "stock": 100.0,
+            "supplier": "jamzee",
+            "uniqueId": "1313"
         }
     ]
 }

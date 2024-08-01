@@ -21,6 +21,24 @@
             "phoneNo": "0301 1111111",
             "type": "Seller",
             "userName": "bsse23113"
+        },
+        {
+            "firstName": "admin",
+            "lastName": "admin",
+            "password": "admin123",
+            "type": "Admin",
+            "userName": "admin"
+        },
+        {
+            "CNIC": "<18",
+            "DOB": "January-2023",
+            "firstName": "Jamshaid",
+            "lastName": "Ahmad",
+            "organization": "AziMuthal",
+            "password": "jamzee123",
+            "phoneNo": "0301 0101134",
+            "type": "Seller",
+            "userName": "jamzee"
         }
     ]
 }

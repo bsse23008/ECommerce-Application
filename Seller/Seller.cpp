@@ -91,8 +91,20 @@ std::ostream& operator << (std::ostream& os, const Seller& seller) {
 }
 
 
-void Seller :: loadMyProducts (Product*  p) { 
-    products.emplace_back  (p); 
+void Seller :: loadMyProducts () { 
+    try { 
+    json j; 
+    Database :: getInstance ()->loadSellerProductList (j, getUserName());
+    // Load the product-Ids 
+    for (size_t i=0; i<j["productIds"].size(); i++) { 
+        Product* p = ECommerce :: getInstance ()->getInventory()->getReference (j["productIds"][i]);
+            if (p) { 
+                products.emplace_back (p); // If p is not null, only then add 
+            }
+        }
+    } catch (std::exception& ex) { 
+        std::cerr << "Exception caught: " << ex.what() << std::endl; 
+    }
 }
 
 
@@ -120,7 +132,7 @@ void Seller :: addProduct (Product* p) {
 void Seller :: removeProduct (Product* p) {
     for (int i=0; i < products.size(); i++) { 
         if (p == products[i]) { 
-				// Remove from database
+			// Remove from database
 			Database :: getInstance()->removeProductFromMyList (p->get_unique_id(), this->userName); 
             products.erase (products.begin() + i); // Erase the memory address as well :)
             p = nullptr;
@@ -254,25 +266,7 @@ void Seller :: dashBoard () {
             
             // Store Management
             case 'S':{
-
-                json j; // Read the file in json object 
-                Database :: getInstance()->loadSellerProductList (j, getUserName());
-
-                    const size_t size = j["productIds"].size();
-                    std::string* productIds = new std::string[size];
-                    // Store the Ids in an array
-                    for (size_t k=0; k<size; ++k) { 
-                        productIds[k] = j["productIds"][k];
-                    }
-
-                    // Get your products
-                    for (size_t i=0; i<size; ++i) { 
-                        Product* p = ECommerce :: getInstance()->getInventory()->getReference (productIds[i]);
-                        if (p) { 
-                            loadMyProducts (p);
-                        }
-                    }
-                    delete [] productIds; 
+                loadMyProducts ();
                 storeManagement (); 
                 break; 
             }             

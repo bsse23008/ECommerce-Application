@@ -1,47 +1,6 @@
 #include "ECommerce.h"
 
 
-Admin* adminSignUp (const std::string& firstName,
-                        const std::string& lastName,
-                            const std::string& userName,
-                                const std::string& password) { 
-    // Take input of additional attributes below
-    return new Admin (firstName, lastName, userName, password);
-}
-
-Buyer* buyerSignUp (const std::string& firstName,
-                        const std::string& lastName,
-                            const std::string& userName,
-                                const std::string& password) {
-    // Take input of additional attributes below
-    int age;
-    return new Buyer (firstName, lastName, userName, password);
-}
-
-Seller* sellerSignUp (const std::string& firstName,
-                        const std::string& lastName,
-                            const std::string& userName, 
-                                const std::string& password) {
-    // Take input of additional attributes below
-    std::string phone_number, org, dob, cnic; 
-    cout << "Enter your phone no: "; 
-    getline (cin, phone_number);
-    cout << "Enter your organization name: "; 
-    getline (cin, org);
-    cout << "Enter your date of birth: ";
-    getline (cin, dob);
-    cout << "Enter your CNIC: ";
-    getline (cin, cnic);
-
-    /*Address Info*/
-    /*
-
-    */
-    return new Seller (firstName, lastName, userName, password, phone_number, org, dob, cnic);
-}
-
-
-
 void inputCredentials (std::string& firstName, std::string& lastName, std::string& userName, std::string& pass) { 
     cout << "\n<--INPUT CREDENTIALS-->\n";
     cout << "\nEnter your first name: ";
@@ -136,7 +95,7 @@ void SignUp () {
                 if (verified) {
                     firstName.clear();
                     inputCredentials (firstName, lastName, userName, pass);
-                    Admin* a = adminSignUp(firstName, lastName, userName, pass);
+                    Admin* a = userSignUp<Admin>(firstName, lastName, userName, pass);
 
                     ECommerce::getInstance()->addUser /*<Admin>*/ (a);   
                     cout << "\nSigned-up successfully! " << endl;                    
@@ -154,8 +113,11 @@ void SignUp () {
                 inputCredentials (firstName, lastName, userName, pass);
 
                 // Input of additional attributes
-                Buyer* b = buyerSignUp (firstName, lastName, userName, pass);
-                
+                /*
+                    // Here 
+                */
+
+                Buyer* b = userSignUp<Buyer>(firstName, lastName, userName, pass);
                 ECommerce::getInstance()->addUser /*<Buyer>*/ (b);
                 cout << "\nSigned-up successfully! " << endl;   
                 cout << "\nNow Login to account below :)" << endl; 
@@ -168,17 +130,24 @@ void SignUp () {
                 // Take input of common credentials first
                 inputCredentials (firstName, lastName, userName, pass);
 
-                // Input of additional attributes
-                Seller* s = sellerSignUp (firstName, lastName, userName, pass);
+                // Take input of additional attributes below
+                std::string phone_number, org, dob, cnic; 
+                cout << "Enter your phone no: "; getline (cin, phone_number);
+                cout << "Enter your organization name: "; getline (cin, org);
+                cout << "Enter your date of birth: "; getline (cin, dob);
+                cout << "Enter your CNIC: "; getline (cin, cnic);
 
+                // Input of additional attributes
+                Seller* s = userSignUp<Seller>(firstName, lastName, userName, pass, phone_number, org, dob, cnic);
                 ECommerce::getInstance()->addUser /*<Seller>*/(s);
 
                 // Making a separate file for seller! 
-                // Where he can store his productIds
-                    Database :: getInstance()->createNewFileForSeller (s->getUserName()); 
-                    cout << "\nSigned-up successfully! " << endl;                 
-                    cout << "Now Login to your account below :)" << endl; 
-                    Login(); // global
+                // Where he can store his product Ids
+                Database :: getInstance()->createNewFileForSeller (s->getUserName()); 
+                cout << "\nSigned-up successfully! " << endl;                 
+                cout << "Now Login to your account below :)" << endl; 
+                cin.ignore();
+                Login(); // global
                 s = nullptr; 
                 break;
             }

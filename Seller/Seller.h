@@ -48,7 +48,7 @@ public:
 
     // Seller Functionalities
     void storeManagement ();
-    void loadMyProducts (Product* );
+    void loadMyProducts ();
     Product* searchProduct (const std::string& );
     void addProduct (Product* ); 
     void removeProduct (Product* );
