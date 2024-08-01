@@ -18,8 +18,9 @@ Buyer* Buyer :: fromJson (json& j) {
 }
 
 
-json Buyer :: toJson ( ) const { 
-    json j; 
+json& Buyer :: toJson ( json& j ) const { 
+    // json j; 
+    j["type"] = "Buyer"; // flag to differentiate between users
     j["firstName"] = this->firstName;
     j["lastName"] = this->lastName;
     j["userName"] = this->userName;

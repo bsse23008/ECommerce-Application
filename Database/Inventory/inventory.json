@@ -1,0 +1,37 @@
+{
+    "products": [
+        {
+            "category": "Electronics",
+            "description": "Mobile phone having some scratches on the back :)",
+            "location": "Lahore",
+            "name": "Samsung-A12",
+            "price": 0.0,
+            "reviews": [],
+            "stock": 10.0,
+            "supplier": "bsse23008",
+            "uniqueId": "1122"
+        },
+        {
+            "category": "Electronics",
+            "description": "Mobile phone Brand New",
+            "location": "Lahore",
+            "name": "Samsung A-32s",
+            "price": 45000.0,
+            "reviews": [],
+            "stock": 1.0,
+            "supplier": "bsse23008",
+            "uniqueId": "0x11"
+        },
+        {
+            "category": "Electronics",
+            "description": "Wrist watch with smooth touch and gorilla glass protection",
+            "location": "Lahore",
+            "name": "Apple Watch",
+            "price": 15000.0,
+            "reviews": [],
+            "stock": 13.0,
+            "supplier": "bsse23113",
+            "uniqueId": "0x22"
+        }
+    ]
+}

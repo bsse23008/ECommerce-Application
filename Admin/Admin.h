@@ -8,9 +8,14 @@ class Admin : public User
 {
 public:
     Admin();
-    ~Admin () {
+    virtual ~Admin () {
         cout << "\nAdmin destructor called!" << endl;
     }
+
+    virtual void dashBoard () override { 
+
+    }
+
     Admin(
         const std::string &,
         const std::string &,
@@ -18,8 +23,7 @@ public:
         const std::string &);
 
         static Admin* fromJson (json& j); 
-        json toJson () const;
-
+        virtual json& toJson (json& j) const override;
         void deleteMyAccount () { 
             
         }

@@ -5,18 +5,33 @@
 #include <vector>
 #include "Product.h"
 
+class Database;
+
 class Inventory
 {
 private:
-   std::vector<Product> products;
+    std::vector<Product *> products;
+
 public:
-    //constructor and destructor
+    // constructor and destructor
     Inventory(/* args */);
     ~Inventory();
-   
+
+    Product *getReference(const std::string &id);
+
+    bool isUniqueId (const std::string& id) { 
+        for (size_t i=0; i<products.size(); i++) { 
+            if (id == products.at(i)->get_unique_id()) { 
+                return true; 
+            }
+        }
+        return false; 
+    }
+
+    void loadInventory (Product* p);
+    void addProduct(Product *p);
+    void removeProduct(Product *p);
+    void displayProducts () const; 
 };
-
-
-
 
 #endif // _INVENTORY_H_

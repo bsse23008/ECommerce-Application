@@ -1,153 +1,210 @@
 #include "Database.h"
 // Header files location
-#include "./../Inventory/Inventory.h"
-#include "./../Admin/Admin.h"
-#include "./../Seller/Seller.h"
-#include "./../Buyer/Buyer.h"
+
+    void Database :: loadData(std::vector<User *> &vec, const std::string &file_path) {
+        json j;
+        try
+        { 
+            // Reading function could potentially throw an exception :)
+            readFile(file_path, j);
+
+            // Parse the data into the vector
+            for (auto &user : j["users"]) {
+                if (user["type"] == "Admin") { 
+                    vec.emplace_back(Admin :: fromJson(user)); // from json to actual object
+                }
+                else if (user["type"] == "Seller") { 
+                    vec.emplace_back(Seller :: fromJson(user)); 
+                }
+                else if (user["type"] == "Buyer") { 
+                    vec.emplace_back(Buyer :: fromJson(user)); 
+                }
+                else { 
+                    cerr << "type not matched :)" << endl; 
+                }
+            }
+        }
+        catch (std::exception &ex) {
+            std::cout << "EXCEPTION:" << ex.what() << endl;
+        }
+    }
+
+
 
 // Initialize the instance
 Database *Database::instance{nullptr};
 
+// General functions to read and write
+    void Database :: readFile (const std::string& file_path, json& j)  {
+        std::ifstream in (file_path, std::ios::in);
+        if (!in.is_open()) { 
+            throw std::runtime_error {"Could not open the file :("};
+        } 
+            in >> j;
+            in.close();
+    }
 
-// RETRIEVE DATA FROM DATABASE
-template <typename T>
-void Database :: loadData(std::vector<T *> &vec, const std::string &file_path)
-{
-    json j; 
-    // j["users"]; 
-    std::ifstream read_file(file_path, std::ios::in);
-    if (read_file.is_open())
-    {
-        read_file >> j;
-        read_file.close();
-        // Parse the data into the vector
-        for (auto &user : j["users"])
-        {
-            vec.emplace_back(T::fromJson(user)); // from json to actual object
+    // write function
+    void Database :: writeToFile (const std::string& file_path, const json& j) { 
+        std::ofstream out (file_path ,std::ios::trunc);
+        if (!out.is_open()) { 
+            throw std::runtime_error {"Could not open the file :("};
         }
+            out << std :: setw(4) << j <<endl;
+            out.close();
     }
-    else
-    {
-        std::cerr << "Error opening the file: " << file_path << std::endl;
-    }
-}
-
-void Database::loadAdmins(std::vector<Admin *> &a)
-{
-    loadData<Admin>(a, admins_filePath);
-}
-
-void Database::loadBuyers(std::vector<Buyer *> &b)
-{
-    loadData<Buyer>(b, buyers_filePath); 
-}
-
-void Database::loadSellers(std::vector<Seller *> &s)
-{
-    loadData<Seller>(s, sellers_filePath);
-}
-
-
-// UPDATE FILES
-template <typename T>
-void Database :: add_user (const T& obj, const std::string& file_path) { 
-    json data; 
-    data["users"];   
-    std::ifstream in (file_path, std::ios::in); // Read the data -> already present in the file 
-    if (in.is_open()) { 
-        in >> data; 
-        in.close ();
-        data["users"].push_back (obj.toJson()); // Incorporate the new obj
-
-        // After reading, write the new data to the file :)
-        std::ofstream out (file_path, std::ios::trunc); 
-        out << std::setw(4)  << data << std::endl ;
-        out.close();
-    }
-    else {
-        cerr << "Could not open the file! " << endl; 
-    }
-}
-
-
-void Database :: add_admin(const Admin& a) { 
-    add_user (a, admins_filePath);
-}
-
-void Database :: add_buyer(const Buyer& b) { 
-    add_user (b, buyers_filePath);
-}
-
-void Database :: add_seller(const Seller& s) {
-    add_user (s, sellers_filePath);
-}
-      
 
 // General function to remove a user from the JSON file
-void Database :: remove_user(const std::string &user_name, const std::string &file_path)
+void Database :: remove_user (const User* user)
 {
     json j;
-    std::ifstream IN(file_path, std::ios::in);
-    if (IN.is_open())
-    {
-        IN >> j;
-        IN.close();
+    try {
+        readFile (users_file_path, j);
+        
         // Find and erase the user with the matching username
-        for (auto it = j["users"].begin(); it != j["users"].end(); ++it)
-        {
-            if ((*it)["userName"] == user_name)
-            {
+        for (auto it = j["users"].begin(); it != j["users"].end(); ++it) {
+            if ((*it)["userName"] == user->getUserName()) {
                 j["users"].erase(it);
-                break; // Exit the loop after removing the user
+                break; 
             }
         }
+
         // Write the updated JSON back to the file
-        std::ofstream OUT(file_path, std::ios::trunc);
-        if (OUT.is_open())
-        {
-            OUT << std::setw(4) << j << std::endl;
-            OUT.close();
-        }
-        else
-        {
-            cerr << "Could not open the file for writing!" << endl;
-        }
+        writeToFile (users_file_path, j);
     }
-    else
-    {
-        cerr << "Could not open the file for reading!" << endl;
+    catch (std::exception& ex) { 
+        std::cout << "EXCEPTION: " << ex.what() << endl; 
     }
-}
-
-
-
-void Database :: remove_admin(const std::string &user_name)
-{
-    remove_user(user_name, admins_filePath);
-}
-
-void Database :: remove_buyer(const std::string &user_name)
-{
-    remove_user(user_name, buyers_filePath);
-}
-
-void Database :: remove_seller(const std::string &user_name)
-{
-    remove_user(user_name, sellers_filePath);
 }
 
 
 // INVENTORY METHODS
-void Database :: updateMyStore(json &j, const std::string &store_owner)
+
+// This function is called at the start of execution of the program to load all
+// the products in the inventory!
+void Database :: loadInventory(Inventory *inventory)
 {
-    j["inventory"].push_back(j);
-    std::ofstream out("Inventory/" + store_owner + ".json", std::ios::trunc);
-    if (out.is_open())
-    {
-        out << std::setw(4) << /*json_inventory*/ "nn" << std::endl;
+    json j; 
+    try { 
+        readFile (inventory_filePath, j);
+        for (size_t i = 0; i < j["products"].size(); ++i){
+            Product* p = new Product ();
+            inventory->loadInventory(Product::fromJson (j["products"][i], p));
+        }
     }
-    else
-    {
-        std::cerr << "Could not open: Inventory/" << store_owner << ".json" << std::endl;
+    catch (std::exception& ex) { 
+        cout << "EXCEPTION: " << ex.what() << endl;
     }
 }
+
+
+// Add the product to centralized inventory
+void Database :: addProductToAppInventory (Product* p) 
+{
+    json j;
+    try {
+        // Read the file first to prevent any data loss
+        readFile(inventory_filePath, j);
+        
+        // Use a smart pointer to manage memory
+        auto d = std::make_unique<json>();         
+        j["products"].push_back(*(p->toJson(d.get())));
+        
+        // Write to the file
+        writeToFile(inventory_filePath, j);
+        
+    }
+    catch (const std::exception& ex) {
+        std::cout << "Read or JSON EXCEPTION: " << ex.what() << std::endl;
+    }
+}
+
+
+// Remove the product from Centralized inventory 
+void Database :: removeProductFromAppInventory(const std::string& product_id) { 
+    json j;
+    try { 
+        readFile(inventory_filePath, j);
+        for (auto it = j["products"].begin(); it != j["products"].end(); ++it) { 
+            if ((*it)["uniqueId"] == product_id) { 
+                j["products"].erase(it);
+                break; // Exit the loop once the product is found and removed
+            }
+        }
+        writeToFile(inventory_filePath, j); 
+    }
+    catch (const std::exception& ex) { 
+        std::cout << "EXCEPTION: " << ex.what() << std::endl; 
+    }
+}
+
+
+
+/*
+When a new Seller creates his account by sign-up :)
+This function creates a new file based on his username (which is unique)
+This file will store an array of his product-Ids
+*/
+void Database :: createNewFileForSeller (const std::string& store_owner) { 
+    json j;
+    j["productIds"] = json :: array();
+    try { 
+        writeToFile ("./Database/Inventory/Sellers/" + store_owner + ".json", j);
+    }catch (std::exception& ex) { 
+        std::cerr << "Exception: " << ex.what() << std::endl; 
+    }
+}
+
+
+// This function retrieves the productIds from file, just after a seller logs-in :)
+void Database :: loadSellerProductList (json& data, const std::string& store_owner) { 
+    try {
+        readFile ("./Database/Inventory/Sellers/" + store_owner + ".json", data);
+    }
+    catch (std::exception& ex) { 
+        std::cerr << "Exception: " << ex.what() << std::endl; 
+    }
+}
+
+ 
+// Add productId to Seller store 
+void Database :: addProductToMyList(const std::string& product_id, const std::string &store_owner)
+{
+    json data; 
+    try { 
+        readFile ("./Database/Inventory/Sellers/" + store_owner + ".json", data);
+        // Add to my list 
+        data["productIds"].push_back (product_id);
+        writeToFile ("./Database/Inventory/Sellers/" + store_owner + ".json", data);
+    }
+    catch (std::exception& ex) { 
+        cout << "EXCEPTION: " << ex.what() << endl; 
+    }
+}
+
+
+
+// Remove the productId from seller,s product list 
+void Database :: removeProductFromMyList(const std::string& product_id, const std::string& store_owner) { 
+    json data; 
+    try { 
+        readFile("./Database/Inventory/Sellers/" + store_owner + ".json", data);
+        // Ensure the productIds field is an array
+        if (data.contains("productIds") && data["productIds"].is_array()) {
+
+            auto it = data["productIds"].begin();
+            while (it != data["productIds"].end())  {
+                if (product_id == (*it)) { 
+                    data["productIds"].erase (it); // Remove the product-id
+                    break; 
+                }
+                ++it; 
+            }
+        }
+        writeToFile("./Database/Inventory/Sellers/" + store_owner + ".json", data);
+    }
+    catch (std::exception& ex) { 
+        std::cout << "EXCEPTION: " << ex.what() << std::endl; 
+    }
+}
+
