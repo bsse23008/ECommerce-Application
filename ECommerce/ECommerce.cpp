@@ -42,6 +42,53 @@ void ECommerce :: releaseInstance () {
 
 
 
+bool ECommerce :: isUserNameTaken (const std::string& userName)  {
+        std::vector<User*> :: const_iterator it; 
+        // auto it = users.cbegin();
+
+        for (it = users.begin(); it!=users.end(); ++it) { 
+            if ((*it)->getUserName() == userName) { 
+                return true; 
+            }
+        }
+        return false; 
+    }
+
+        User* ECommerce :: searchUser (const std::string& userName) { // template function to search any user 
+
+            for (auto it = users.begin(); it != users.end(); ++it)  {
+                if (userName == (*it)->getUserName()) { 
+                    return *it; 
+                }
+            }
+            return nullptr; 
+        }
+    
+        void ECommerce :: addUser (User* user) { 
+            Database :: getInstance ()->addUser (user); 
+            users.emplace_back (user);
+        }
+
+        void ECommerce :: removeUser (User* user) { 
+            std::vector<User*> :: iterator it = users.begin();
+            
+            while (it != users.end()) { 
+                if ((*it) == user) { 
+                    Database::getInstance()->remove_user(user); // Ye dekhna pare ga 
+                    delete *it;
+                    users.erase(it);
+                }
+                ++it; 
+            }
+        }
+
+    Inventory* ECommerce :: getInventory () const { 
+        return inventory; 
+    }
+
+
+
+
 User* ECommerce :: login (const std::string& user_name,  const std::string& password) { 
 
     std::vector<User*> :: iterator it = users.begin(); 
@@ -52,6 +99,15 @@ User* ECommerce :: login (const std::string& user_name,  const std::string& pass
     }
     return nullptr; 
 }
+
+
+void ECommerce :: displayUsers () const { 
+        std::vector<User*> :: const_iterator it; 
+        for (it = users.begin(); it!= users.end(); ++it) { 
+            cout << "_________________________________\n";
+            (*it)->display(); 
+        }
+    }
 
 
 
@@ -73,21 +129,3 @@ void ECommerce :: loadData () {
     }
 }
 
-
-
-// Loading seller inventory just after he logins 
-void ECommerce :: loadSellerInventory (Seller* seller) { 
-    std::ifstream in  ("./Database/Inventory/Sellers/" + seller->getUserName() + ".json", std::ios::in);
-    if (!in.is_open()) { 
-        cout << "\nCould not open the file :(" << endl; 
-        return;
-    }
-    json j; 
-    in >> j; 
-    in.close();
-    for (size_t i=0; i<j["productIds"].size(); i++) { 
-        Product* p = inventory->getReference (j["productIds"][i]);
-        if (p)
-            seller->loadProducts (p); // If p is not null, only then add 
-    }
-}

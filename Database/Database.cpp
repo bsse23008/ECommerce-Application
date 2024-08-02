@@ -1,5 +1,22 @@
 #include "Database.h"
-// Header files location
+
+
+// One instance in the whole APP
+Database* Database :: getInstance() {
+    if (!instance) {
+        instance = new Database();
+    }
+    return instance;
+}
+
+
+// Delete the instance
+void Database :: releaseInstance() {
+    delete instance;
+    instance = nullptr;
+}
+
+
 
     void Database :: loadData(std::vector<User *> &vec, const std::string &file_path) {
         json j;
@@ -54,9 +71,31 @@ Database *Database::instance{nullptr};
             out.close();
     }
 
-// General function to remove a user from the JSON file
-void Database :: remove_user (const User* user)
-{
+
+
+// ADD USERS
+        /*  Admins  */
+        /*  Buyers  */
+        /*  Sellers */
+    void Database :: addUser (const User* newUser) { 
+        try {
+            json data; 
+            readFile (users_file_path, data);
+            json temp; 
+            temp = newUser->toJson(temp);
+            data["users"].push_back(temp); // Add the user to json array 
+            writeToFile (users_file_path, data);
+        }
+        catch (std::exception& ex) { 
+            std::cerr << "EXCEPTION: " << ex.what() << std::endl; 
+        }
+    }
+
+
+
+
+//  Function to remove a user from the JSON file
+void Database :: remove_user (const User* user) {
     json j;
     try {
         readFile (users_file_path, j);
@@ -71,8 +110,7 @@ void Database :: remove_user (const User* user)
 
         // Write the updated JSON back to the file
         writeToFile (users_file_path, j);
-    }
-    catch (std::exception& ex) { 
+    } catch (std::exception& ex) { 
         std::cout << "EXCEPTION: " << ex.what() << endl; 
     }
 }
@@ -82,8 +120,7 @@ void Database :: remove_user (const User* user)
 
 // This function is called at the start of execution of the program to load all
 // the products in the inventory!
-void Database :: loadInventory(Inventory *inventory)
-{
+void Database :: loadInventory(Inventory *inventory) {
     json j; 
     try { 
         readFile (inventory_filePath, j);
@@ -99,8 +136,7 @@ void Database :: loadInventory(Inventory *inventory)
 
 
 // Add the product to centralized inventory
-void Database :: addProductToAppInventory (Product* p) 
-{
+void Database :: addProductToAppInventory (Product* p) {
     json j;
     try {
         // Read the file first to prevent any data loss
@@ -168,8 +204,7 @@ void Database :: loadSellerProductList (json& data, const std::string& store_own
 
  
 // Add productId to Seller store 
-void Database :: addProductToMyList(const std::string& product_id, const std::string &store_owner)
-{
+void Database :: addProductToMyList(const std::string& product_id, const std::string &store_owner) {
     json data; 
     try { 
         readFile ("./Database/Inventory/Sellers/" + store_owner + ".json", data);
@@ -202,8 +237,7 @@ void Database :: removeProductFromMyList(const std::string& product_id, const st
             }
         }
         writeToFile("./Database/Inventory/Sellers/" + store_owner + ".json", data);
-    }
-    catch (std::exception& ex) { 
+    } catch (std::exception& ex) { 
         std::cout << "EXCEPTION: " << ex.what() << std::endl; 
     }
 }

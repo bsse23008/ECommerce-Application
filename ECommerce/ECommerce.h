@@ -10,63 +10,15 @@ public:
     static void releaseInstance ();
 
     
-    bool isUserNameTaken (const std::string& userName)  {
-        std::vector<User*> :: const_iterator it; 
-        // auto it = users.cbegin();
-
-        for (it = users.begin(); it!=users.end(); ++it) { 
-            if ((*it)->getUserName() == userName) { 
-                return true; 
-            }
-        }
-        return false; 
-    }
-
-        User* searchUser (const std::string& userName) { // template function to search any user 
-
-            for (auto it = users.begin(); it != users.end(); ++it)  {
-                if (userName == (*it)->getUserName()) { 
-                    return *it; 
-                }
-            }
-            return nullptr; 
-        }
-    
-        void addUser (User* user) { 
-            Database :: getInstance ()->addUser (user); 
-            users.emplace_back (user);
-        }
-
-        void removeUser (User* user) { 
-            std::vector<User*> :: iterator it = users.begin();
-            
-            while (it != users.end()) { 
-                if ((*it) == user) { 
-                    Database::getInstance()->remove_user(user); // Ye dekhna pare ga 
-                    delete *it;
-                    users.erase(it);
-                }
-                ++it; 
-            }
-        }
-
-    Inventory* getInventory () const { 
-        return inventory; 
-    }
-
-    void loadSellerInventory (Seller*);
-    void loadData ();        
+    bool isUserNameTaken (const std::string&);
     User* login (const std::string&,  const std::string&);  
-
-
-    void displayUsers () const { 
-        std::vector<User*> :: const_iterator it; 
-        for (it = users.begin(); it!= users.end(); ++it) { 
-            cout << "_________________________________\n";
-            (*it)->display(); 
-        }
-    }
-
+    User* searchUser (const std::string&);
+    void addUser (User* );
+    void removeUser (User* );
+    Inventory* getInventory () const;
+    void displayUsers () const;
+    void loadData ();      
+    
 private:
 
     ECommerce();
@@ -80,10 +32,18 @@ private:
 // Global functions
 void SignUp();
 void Login (); 
+void inputCredentials ( std::string&,
+                            std::string&,
+                                std::string&,
+                                     std::string&);  // Common credentials among all kind of users
 
-void inputCredentials ( std::string&, std::string&, std::string&, std::string&);  // Common credentials among all kind of users
-Admin* adminSignUp (const std::string&, const std::string&, const std::string&, const std::string&);
-Buyer* buyerSignUp (const std::string&, const std::string&, const std::string&, const std::string&);
-Seller* sellerSignUp (const std::string&, const std::string&, const std::string&, const std::string&);
+// Template function for user sign-up
+template <typename T, typename... Args>
+T* userSignUp(const std::string& firstName,
+                const std::string& lastName,
+                    const std::string& userName,
+                        const std::string& password, Args&&... args) {
+    return new T(firstName, lastName, userName, password, std::forward<Args>(args)...);
+}
 
 #endif // _ECOMMERCE_H_ Singleton class

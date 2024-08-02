@@ -1,11 +1,10 @@
 #include "./ECommerce/ECommerce.h"
-#include "./Database/Database.h"
 
 int main() {
 
     ECommerce :: getInstance()->loadData();
-    ECommerce :: getInstance()->displayUsers ();
-    ECommerce :: getInstance()->getInventory ()->displayProducts();
+    // ECommerce :: getInstance()->displayUsers ();
+    // ECommerce :: getInstance()->getInventory ()->displayProducts();
 
     // Application Menu
     char choice; 
@@ -17,7 +16,8 @@ int main() {
         cout << "\nEnter choice: ";
         cin >> choice; 
         switch (toupper(choice)) {
-            case 'L':{                
+            case 'L':{     
+                std::cin.ignore();  // Clear the buffer          
                 Login ();                
                 break;
             }
@@ -29,7 +29,7 @@ int main() {
                 break;
             }
             case 'X':{
-                system("clear"); // clear the console
+                system("clear"); // Clear the console
                 break;
             }
             case 'E':{

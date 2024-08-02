@@ -2,12 +2,12 @@
 #include "./../Database/Database.h"
 
 // constructor and destructor
-Inventory::Inventory(/* args */)
-{
+Inventory::Inventory(/* args */) {
+    
 }
 
-Inventory::~Inventory()
-{
+Inventory::~Inventory() {
+
 }
 
 // Every selller will have reference to his own products
@@ -26,6 +26,19 @@ void Inventory :: loadInventory (Product* p) {
     products.push_back (p);
 }
 
+
+
+bool Inventory :: isUniqueId (const std::string& id) { 
+    for (size_t i=0; i<products.size(); i++) { 
+        if (id == products.at(i)->get_unique_id()) { 
+            return true; 
+        }
+    }
+    return false; 
+}
+
+
+
 void Inventory :: addProduct(Product *p)
 {
     products.push_back(p);
@@ -37,19 +50,10 @@ void Inventory :: addProduct(Product *p)
     }
 }
 
+
+
 void Inventory :: removeProduct(Product *p)
 {
-    // Which loop is better between the following : 
-
-    /*
-        for (size_t i=0; i < products.size(); ++i) { 
-            if (products[i] == p) {    
-                products.erase (products.begin() + i); // Erase the memory adderss from the centralized inventory as well
-                break;
-            }
-        }
-    */
-
     for (auto it = products.begin(); it !=products.end(); ++it) { 
         if ((*it) == p) { 
             Database :: getInstance()-> removeProductFromAppInventory ((*it)->get_unique_id()); // Remove product from centralized inventory (Main Database for products)

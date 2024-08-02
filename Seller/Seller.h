@@ -38,17 +38,15 @@ public:
     void setCNIC (const std::string&);  
 
 
-    // Overriden
-    virtual void dashBoard () override;
-
     // File loading methods
     static Seller* fromJson (json&); 
     virtual json& toJson (json&) const override;
 
 
     // Seller Functionalities
+    virtual void dashBoard () override; // Seller DashBoard :)
     void storeManagement ();
-    void loadMyProducts (Product* );
+    void loadMyProducts ();
     Product* searchProduct (const std::string& );
     void addProduct (Product* ); 
     void removeProduct (Product* );
