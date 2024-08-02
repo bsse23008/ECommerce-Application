@@ -17,8 +17,8 @@ public:
     void removeUser (User* );
     Inventory* getInventory () const;
     void displayUsers () const;
-
     void loadData ();      
+    
 private:
 
     ECommerce();
@@ -36,23 +36,6 @@ void inputCredentials ( std::string&,
                             std::string&,
                                 std::string&,
                                      std::string&);  // Common credentials among all kind of users
-/*
-Admin* adminSignUp (const std::string&,
-                        const std::string&,
-                            const std::string&,
-                                const std::string&);
-
-Buyer* buyerSignUp (const std::string&,
-                        const std::string&,
-                            const std::string&,
-                                const std::string&);
-
-Seller* sellerSignUp (const std::string&,
-                        const std::string&,
-                            const std::string&,
-                                const std::string&);
-*/
-
 
 // Template function for user sign-up
 template <typename T, typename... Args>

@@ -30,10 +30,9 @@ json& Admin :: toJson ( json& j ) const {
     return j; 
 }
 
-// Admin Menu
-void adminControls (Admin * a) { 
-    char choice; 
 
+void Admin :: dashBoard () { 
+    char choice; 
     do { 
         // system ("clear");
         cout << "___________________________________________________" << endl 

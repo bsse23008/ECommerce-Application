@@ -38,9 +38,6 @@ void inputCredentials (std::string& firstName, std::string& lastName, std::strin
 
 void Login ()  {
     std::string userName, pass; 
-
-    // Clear the buffer 
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');                              
     std::cout << "\nEnter your username: "; getline (std::cin, userName);
     std::cout << "Enter your password: "; getline (std::cin, pass);
 
@@ -57,7 +54,7 @@ void SignUp () {
     std::string firstName, lastName, userName, pass;
     char choice;
     do {
-        system ("clear");
+        // system ("clear");
         cout << "____________________________________________________________" << endl;
         cout << "\n\t\t CREATE YOUR ACCOUNT " << endl;
         cout << "\nWhat type of account do you want to create? " << endl;
@@ -114,7 +111,7 @@ void SignUp () {
 
                 // Input of additional attributes
                 /*
-                    // Here 
+                    Here below :)
                 */
 
                 Buyer* b = userSignUp<Buyer>(firstName, lastName, userName, pass);

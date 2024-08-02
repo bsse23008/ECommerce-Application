@@ -11,9 +11,6 @@ public:
         cout << "\nBuyer destructor called!" << endl;
     }
 
-    virtual void dashBoard () override { 
-
-    }
 
     Buyer(
         const std::string &,
@@ -25,6 +22,9 @@ public:
 
         static Buyer* fromJson (json& j); 
         virtual json& toJson (json& j) const override;
+
+        // Buyer functionalities
+        virtual void dashBoard () override; // Buyer DashBoard :)
 
 };
 

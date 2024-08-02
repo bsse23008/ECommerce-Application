@@ -27,3 +27,10 @@ json& Buyer :: toJson ( json& j ) const {
     j["password"] = this->password;
     return j; 
 }
+
+
+void Buyer :: dashBoard () { 
+
+    cout << "\nBuyer :: dashBoard\n";
+
+}

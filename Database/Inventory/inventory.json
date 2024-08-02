@@ -43,6 +43,17 @@
             "stock": 100.0,
             "supplier": "jamzee",
             "uniqueId": "1313"
+        },
+        {
+            "category": "Electronics",
+            "description": "1 year old Hp laptop with some scratches at the back",
+            "location": "Kuwait",
+            "name": "HP-Laptop",
+            "price": 110000.0,
+            "reviews": [],
+            "stock": 1.0,
+            "supplier": "jamzee",
+            "uniqueId": "4141"
         }
     ]
 }

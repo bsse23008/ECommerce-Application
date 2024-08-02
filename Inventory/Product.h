@@ -14,16 +14,11 @@ class Seller;
 
 class Product
 {
-    // friend void Seller :: addProduct (Product* p);
-private:
-    std::string uniqueId, name, description, category, location, supplier;
-    double price, stock;
-    // Seller* seller; // Every product has a seller :)
-    std::vector<Review> reviews;
-
+    friend std::ostream& operator<<(std::ostream& os, const Product& product);
+    friend std::istream& operator>>(std::istream& is, Product& product);
+    bool operator == (const Product& p);
 
 public:
-    // void addSeller (Seller* s); 
     // constructor and destructor
     Product();
     Product
@@ -47,7 +42,6 @@ public:
     void set_price(double price);
     void set_stock(double stock);
     void add_review(const Review);
-    // void set_rating(double rating); // We don,t need to set the rating :(
 
     // getters
     std::string get_unique_id () const { return uniqueId; }
@@ -61,20 +55,18 @@ public:
     double get_rating() const;
     std::vector<std::string> get_reviews();
 
-    // Loading data from files
+    // Conversion Methods 
     static Product* fromJson (json& j, Product* p); 
     json* toJson (json* j); 
+    void displayReviews () const;  
 
-    void displayReviews () const;
 
-    //ostream operator
-    friend std::ostream& operator<<(std::ostream& os, const Product& product);
-    friend std::istream& operator>>(std::istream& is, Product& product);
-    bool operator == (const Product& p);
-
-    // void operator ++ (Product& p) { 
-    //     this->stock++; 
-    // }
+private:
+    std::string uniqueId, name, description, category, location, supplier;
+    double price, stock;
+    std::vector<Review> reviews;
+    
+    /*    MAP <review, Buyer*>    */
 };
 
 

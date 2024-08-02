@@ -18,20 +18,11 @@ public:
     ~Inventory();
 
     Product *getReference(const std::string &id);
-
-    bool isUniqueId (const std::string& id) { 
-        for (size_t i=0; i<products.size(); i++) { 
-            if (id == products.at(i)->get_unique_id()) { 
-                return true; 
-            }
-        }
-        return false; 
-    }
-
-    void loadInventory (Product* p);
+    void loadInventory(Product *p);
+    bool isUniqueId(const std::string &id);
     void addProduct(Product *p);
     void removeProduct(Product *p);
-    void displayProducts () const; 
+    void displayProducts() const;
 };
 
 #endif // _INVENTORY_H_

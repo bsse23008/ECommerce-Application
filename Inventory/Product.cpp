@@ -3,22 +3,18 @@
 
 Product :: Product () 
 :   name{"None"}, 
-    description{"None"}, 
-    category{"None"}, 
-    location{"None"}, 
-    supplier{"None"},
-    price{0.0},
-    stock{0.0} {
+        description{"None"}, 
+            category{"None"}, 
+                location{"None"}, 
+                    supplier{"None"},
+                        price{0.0},
+                            stock{0.0} {    
 }
 
-// Hey Samer also Implement the parameterized constructor!
 
 Product :: ~Product() {
 
 }
-
-
-// void Product :: addSeller (Seller* s) { this->seller = s; }
 
 
 // setters
@@ -88,9 +84,7 @@ double Product::get_price()
 double Product::get_stock(){
     return this->stock;
 }
-// std::vector <std::string> Product:: get_reviews(){
-//     return this->reviews;
-// }
+
 
 double Product :: get_rating() const {
     double rating = 0.0;

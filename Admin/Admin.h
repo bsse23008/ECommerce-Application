@@ -12,9 +12,6 @@ public:
         cout << "\nAdmin destructor called!" << endl;
     }
 
-    virtual void dashBoard () override { 
-
-    }
 
     Admin(
         const std::string &,
@@ -29,8 +26,7 @@ public:
         }
 
         // Admin Functionalities
+        virtual void dashBoard () override;
 };
-
-void adminControls (Admin* a);
 
 #endif // _ADMIN_H_
