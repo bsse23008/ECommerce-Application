@@ -1,10 +1,4 @@
 #include "ECommerce.h"
-// Header files location
-#include "./../Inventory/Inventory.h"
-#include "./../Admin/Admin.h"
-#include "./../Seller/Seller.h"
-#include "./../Buyer/Buyer.h"
-#include "./../Inventory/Inventory.h"
 
 
 ECommerce :: ECommerce() : inventory (nullptr) { 
@@ -128,5 +122,16 @@ void ECommerce :: loadData () {
     catch (std::exception& ex) { 
         std::cout << "Exception: " << ex.what() << std::endl; 
     }
+}
+
+
+
+const User* ECommerce :: getSellerReference (const std::string& sellerId) const { 
+    for (const auto& u : users) { 
+        if (u->getUserName() == sellerId) { 
+            return u;
+        }
+    }
+    return nullptr;
 }
 

@@ -6,7 +6,6 @@
 #include "Product.h"
 #include "./../ECommerce/Categories.h"
 
-class Database;
 
 class Inventory
 {

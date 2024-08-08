@@ -148,7 +148,12 @@ void Database :: addProductToAppInventory (Product* p) {
         
         // Write to the file
         writeToFile(inventory_filePath, j);
-        
+
+        j.clear();
+
+        // Add a separate file for product reviews
+        j["reviews"] = json :: array();
+        writeToFile ("./Database/Inventory/Product_Reviews/" + p->get_unique_id() + ".json", j);        
     }
     catch (const std::exception& ex) {
         std::cout << "Read or JSON EXCEPTION: " << ex.what() << std::endl;

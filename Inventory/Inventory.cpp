@@ -1,5 +1,6 @@
 #include "Inventory.h"
 #include "./../Database/Database.h"
+#include "./../ECommerce/ECommerce.h"
 
 // constructor and destructor
 Inventory::Inventory(/* args */) {
@@ -79,6 +80,9 @@ Product *Inventory ::getReference(const std::string &id)
 // void Inventory::searchProduct() {}
 
 void Inventory :: loadInventory (Product* p) { 
+    // const User* user = ECommerce :: getInstance ()->getSellerReference (p->get_supplier_id()); 
+    // const Seller* s = dynamic_cast<const Seller*> (user);
+    // p->setSupplier (s);
     products.push_back (p);
 }
 

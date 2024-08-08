@@ -11,6 +11,8 @@ public:
     static ECommerce *getInstance();
     static void releaseInstance();
 
+    const User* getSellerReference (const std::string&) const;  
+
     
     bool isUserNameTaken (const std::string&);
     User* login (const std::string&,  const std::string&);  
