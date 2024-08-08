@@ -1,21 +1,31 @@
 #include "ECommerce.h"
+// Header files location
+#include "./../Inventory/Inventory.h"
+#include "./../Admin/Admin.h"
+#include "./../Seller/Seller.h"
+#include "./../Buyer/Buyer.h"
+#include "./../Inventory/Inventory.h"
+
+
+ECommerce :: ECommerce() : inventory (nullptr) { 
+    inventory = new Inventory();
+}
 
 // Release the dynamically allocated memory
 ECommerce ::~ECommerce()
 {
     cout << "\nECommerce destructor called!" << endl;
-    for (Buyer *buyer : buyers)
-    {
-        delete buyer;
+
+    for (User* user : users) {
+        delete user;
     }
-    for (Seller *seller : sellers)
-    {
-        delete seller;
-    }
-    for (Admin *admin : admins)
-    {
-        delete admin;
-    }
+    /*
+        // The pointed-to memory has been released (from heap).
+        //  Now clear the addresses stored in the vector as well using clear() method :)
+    */
+
+    users.clear();    
+    delete inventory; 
 }
 
 // Singleton get instance function
@@ -31,135 +41,92 @@ void ECommerce ::releaseInstance()
     delete getInstance();
 }
 
-// template function to retrieve data from the files
-template <typename type>
-void ECommerce ::retrieveData(const std::string &filePath, std::vector<type *> &vec)
-{
-    json data;
-    std::ifstream read(filePath, std::ios::in);
-    if (read.is_open())
-    {
-        read >> data;
-        read.close();
 
-        for (int i = 0; i < data["users"].size(); ++i)
-        {
-            vec.emplace_back(type ::fromJson(data["users"][i]));
+
+bool ECommerce :: isUserNameTaken (const std::string& userName)  {
+        std::vector<User*> :: const_iterator it; 
+        // auto it = users.cbegin();
+
+        for (it = users.begin(); it!=users.end(); ++it) { 
+            if ((*it)->getUserName() == userName) { 
+                return true; 
+            }
+        }
+        return false; 
+    }
+
+        User* ECommerce :: searchUser (const std::string& userName) { // template function to search any user 
+
+            for (auto it = users.begin(); it != users.end(); ++it)  {
+                if (userName == (*it)->getUserName()) { 
+                    return *it; 
+                }
+            }
+            return nullptr; 
+        }
+    
+        void ECommerce :: addUser (User* user) { 
+            Database :: getInstance ()->addUser (user); 
+            users.emplace_back (user);
+        }
+
+        void ECommerce :: removeUser (User* user) { 
+            std::vector<User*> :: iterator it = users.begin();
+            
+            while (it != users.end()) { 
+                if ((*it) == user) { 
+                    Database::getInstance()->remove_user(user); // Ye dekhna pare ga 
+                    delete *it;
+                    users.erase(it);
+                }
+                ++it; 
+            }
+        }
+
+    Inventory* ECommerce :: getInventory () const { 
+        return inventory; 
+    }
+
+
+
+
+User* ECommerce :: login (const std::string& user_name,  const std::string& password) { 
+
+    std::vector<User*> :: iterator it = users.begin(); 
+    for ( ; it!=users.end(); ++it) { 
+        if (user_name == (*it)->getUserName() && password == (*it)->getPassword()) { 
+            return *it; 
         }
     }
-    else
-    {
-        throw std::runtime_error{"Unable to retrieve data!\n"};
-        // std::cerr << "\nError opening the file!: " << filePath << std::endl;
-    }
+    return nullptr; 
 }
 
-void ECommerce ::retrieveBuyers()
-{
-    retrieveData<Buyer>(buyers_filePath, buyers);
-}
 
-void ECommerce ::retrieveSellers()
-{
-    retrieveData<Seller>(sellers_filePath, sellers);
-}
-
-void ECommerce ::retrieveAdmins()
-{
-    retrieveData<Admin>(admins_filePath, admins);
-}
-
-// template function to update the files/databases
-template <typename type>
-void ECommerce ::updateFile(const std::string &filePath, std::vector<type *> &vec)
-{
-    json data;
-    data["users"];
-    for (int i = 0; i < vec.size(); ++i)
-    {
-        data["users"].push_back(vec.at(i)->toJson());
-    }
-    // Writing to the file
-    std::ofstream write(filePath, std::ios::trunc);
-    if (write.is_open())
-    {
-        write << std::setw(4) << data << endl; // updation of the old data
-        write.close();
-    }
-    else
-    {
-        std::cerr << "\nError opening the file\n"
-                  << endl;
-    }
-}
-
-// template function to add a User (Admin/Buyer/Seller)
-template <typename type>
-void ECommerce ::addUser(const std::string &filePath, type *obj, std::vector<type *> &vec)
-{
-    vec.push_back(obj);
-    updateFile<type>(filePath, vec);
-}
-
-void ECommerce ::addBuyer(Buyer *b)
-{
-    addUser<Buyer>(buyers_filePath, b, buyers);
-}
-
-void ECommerce ::addSeller(Seller *s)
-{
-    addUser<Seller>(sellers_filePath, s, sellers);
-}
-
-void ECommerce ::addAdmin(Admin *a)
-{
-    addUser<Admin>(admins_filePath, a, admins);
-}
-
-// template function to remove a User (Admin/Buyer/Seller)
-template <typename type>
-bool ECommerce ::removeUser(const std::string &filePath, const std::string &userName, std::vector<type *> &vec)
-{
-    for (auto it = vec.begin(); it != vec.end(); it++)
-    {
-        if ((*it)->getUserName() == userName)
-        {
-            vec.erase(it);
-            updateFile<type>(filePath, vec);
-            return true; // confirmation flag
+void ECommerce :: displayUsers () const { 
+        std::vector<User*> :: const_iterator it; 
+        for (it = users.begin(); it!= users.end(); ++it) { 
+            cout << "_________________________________\n";
+            (*it)->display(); 
         }
     }
-    return false;
+
+
+
+void ECommerce :: loadData () { 
+    // Loading Users (buyers, sellers, admins)
+    try { 
+        Database :: getInstance()->loadData (users, users_file_path);
+    }
+    catch (std::exception& ex) { 
+        std::cout << "Exception: " << ex.what() << std::endl; 
+    }
+
+    // Loading Inventory 
+    try { 
+        Database :: getInstance()->loadInventory (inventory);
+    }
+    catch (std::exception& ex) { 
+        std::cout << "Exception: " << ex.what() << std::endl; 
+    }
 }
 
-bool ECommerce ::removeBuyer(const std::string &userName)
-{ // Remove the buyer from "buyers.json"
-    if (removeUser<Buyer>(buyers_filePath, userName, buyers))
-        return true;
-    return false;
-}
-
-bool ECommerce ::removeSeller(const std::string &userName)
-{ // Remove the seller from "sellers.json"
-    if (removeUser<Seller>(sellers_filePath, userName, sellers))
-        return true;
-    return false;
-}
-
-bool ECommerce ::removeAdmin(const std::string &userName)
-{ // Remove admin from "admins.json"
-    if (removeUser<Admin>(admins_filePath, userName, admins))
-        return true;
-    return false;
-}
-
-// loading the categories
-void ECommerce ::loadCategories()
-{
-    categories.emplace_back(Categories("Electronics"));
-    categories.emplace_back(Categories("Fashion and Apparel"));
-    categories.emplace_back(Categories("Food and Groceries"));
-    categories.emplace_back(Categories("Home and Furniture"));
-    categories.emplace_back(Categories("Books, Music, Games, Movies"));
-    categories.emplace_back(Categories("Sports"));
-}

@@ -1,62 +1,29 @@
 
+/*
 
-// Login Function 
+using namespace FreePalestine; 
 
-void login() {
-    char choice; 
-    std::string userName, pass;
-    do {
-        system("clear");
-        cout << "\n____________________________________________________________" << endl;
-        cout << "\n\t\t USER AUTHENTICATION " << endl;
-        cout << "\nLogin as: \n\tA = Admin \n\tB = Buyer \n\tS = Seller \n\tX = Clear Screen \n\tE = Exit window" << endl;
-        cin >> choice; 
+FreePalestine :: AlJihad (); 
 
-        switch (std::toupper(choice)) {
-            case 'A': {
-                inputCredentials(userName, pass);
-                Admin* admin = ECommerce::getInstance()->isAdminLoggedIn(userName, pass);
-                if (admin) {
-                    cout << "\nLogged in successfully! " << endl;
-                    
-                } else {
-                    cout << "\nWrong Credentials!" << endl;
-                }
-                break;
-            }
-            case 'B': {
-                inputCredentials(userName, pass);
-                Buyer* buyer = ECommerce::getInstance()->isBuyerLoggedIn(userName, pass);
-                if (buyer) {
-                    cout << "\nLogged in successfully! " << endl;
+*/
 
-                } else {
-                    cout << "\nWrong Credentials!" << endl;
-                }
-                break;
-            }
-            case 'S': {
-                inputCredentials(userName, pass);
-                Seller* seller = ECommerce::getInstance()->isSellerLoggedIn(userName, pass);
-                if (seller) {
-                    cout << "\nLogged in successfully! " << endl;
 
-                } else {
-                    cout << "\nWrong Credentials!" << endl;
-                }
-                break;
-            }
-            case 'X': {
-                system("clear"); // clear the console
-                break;
-            }
-            case 'E': {
-                cout << "\n Exiting........" << endl;
-                break;
-            }
+
+/*
+void addUser (const std::vector<User*>& users) { 
+        json j; 
+        j["users"] = json::array();
+        for (auto it=users.begin(); it!=users.end(); ++it) { 
+            json* temp = nullptr; 
+            *temp = (*it)->toJson(*temp);
+            j["users"].emplace_back (*temp);
         }
-    } while (std::toupper(choice) != 'E');
-}
 
-//-----------------------------------------------------------------------------------------------------------------
-
+        // Write to file 
+        try { 
+            writeToFile(users_file_path, j);
+        } catch (std::exception& ex) { 
+            cerr << "Exception: " << ex.what() << endl; 
+        }
+    }
+*/

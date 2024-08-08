@@ -1,26 +1,10 @@
 #include "./ECommerce/ECommerce.h"
 
-
-void retrieveData(void (ECommerce::*retrieveFunction)(), const std::string& functionName) {
-    try {
-        (ECommerce::getInstance()->*retrieveFunction)();
-    }
-    catch (std::exception& ex) {
-        std::cerr << "Unable to retrieve data from Database in " << functionName << ": " << ex.what() << std::endl;
-    }
-    catch (...) {
-        std::cerr << "Unknown Exception caught in " << functionName << "!" << std::endl;
-    }
-}
-
- 
 int main() {
-    
-    // Retrieving data from Database folder
-    retrieveData(&ECommerce::retrieveAdmins, "retrieveAdmins");
-    retrieveData(&ECommerce::retrieveBuyers, "retrieveBuyers");
-    retrieveData(&ECommerce::retrieveSellers, "retrieveSellers");
-    retrieveData(&ECommerce::loadCategories, "loadCategories");
+
+    ECommerce :: getInstance()->loadData();
+    // ECommerce :: getInstance()->displayUsers ();
+    // ECommerce :: getInstance()->getInventory ()->displayProducts();
 
     // Application Menu
     char choice; 
@@ -32,28 +16,33 @@ int main() {
         cout << "\nEnter choice: ";
         cin >> choice; 
         switch (toupper(choice)) {
-            case 'L':{
-                login();                
+            case 'L':{     
+                std::cin.ignore();  // Clear the buffer          
+                Login ();                
                 break;
             }
             case 'S':{
-                ECommerce :: getInstance ()->signUp ();
+                SignUp();
                 break;
             }
             case 'G':{
                 break;
             }
             case 'X':{
-                system("clear"); // clear the console
+                system("clear"); // Clear the console
                 break;
             }
             case 'E':{
+                Database::releaseInstance(); 
                 ECommerce::releaseInstance(); // release all the dynamically allocated memory
                 cout << "\nExiting........." << endl;
                 break;
             }
+            default: {
+                cout << "Wrong Input!" << endl; 
+                continue; 
+            }
         }
     }while (toupper(choice)!='E');    
-
     return 0;
 }

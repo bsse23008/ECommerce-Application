@@ -1,0 +1,44 @@
+{
+    "users": [
+        {
+            "CNIC": "34101-1435620-1",
+            "DOB": "10-08-2004",
+            "firstName": "Ahmad",
+            "lastName": "Khan",
+            "organization": "Telelance",
+            "password": "ahmad123",
+            "phoneNo": "0303 0161313",
+            "type": "Seller",
+            "userName": "bsse23008"
+        },
+        {
+            "CNIC": "<18",
+            "DOB": "200-BC",
+            "firstName": "Samer",
+            "lastName": "Nisar",
+            "organization": "Discord",
+            "password": "samer123",
+            "phoneNo": "0301 1111111",
+            "type": "Seller",
+            "userName": "bsse23113"
+        },
+        {
+            "firstName": "admin",
+            "lastName": "admin",
+            "password": "admin123",
+            "type": "Admin",
+            "userName": "admin"
+        },
+        {
+            "CNIC": "<18",
+            "DOB": "January-2023",
+            "firstName": "Jamshaid",
+            "lastName": "Ahmad",
+            "organization": "AziMuthal",
+            "password": "jamzee123",
+            "phoneNo": "0301 0101134",
+            "type": "Seller",
+            "userName": "jamzee"
+        }
+    ]
+}

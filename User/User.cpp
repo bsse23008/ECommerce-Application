@@ -56,6 +56,10 @@ void User :: display () const {
 }
 
 
+// void User :: display () const { 
+//     std::cout << *this << std::endl; 
+// }
+
 
 // I/O stream Operators
 std::ostream& operator << (std::ostream& os, const User& p) {
@@ -63,7 +67,7 @@ std::ostream& operator << (std::ostream& os, const User& p) {
     os << "First Name: " << p.firstName << endl; 
     os << "Last Name : " << p.lastName << endl; 
     os << "User Name : " << p.userName << endl; 
-    os << "Password  : " << p.password << endl; 
+    // os << "Password  : " << p.password << endl; // I don,t know if it is good to show password or not ?
 
     return os; 
 }
@@ -73,6 +77,6 @@ std::istream& operator >> (std::istream& is, User& p) {
     cout << "\nEnter first name: "; is >> p.firstName;
     cout << "Enter last name : "; is >> p.lastName;
     cout << "Enter user name : "; is >> p.userName; 
-    cout << "Enter password  : "; is >> p.password;
+    cout << "Enter password  : "; is >> p.password; 
     return is;
 }

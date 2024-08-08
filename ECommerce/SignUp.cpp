@@ -1,94 +1,7 @@
 #include "ECommerce.h"
 
-template <typename type>
-bool ECommerce ::isUserNameTaken(const std::string &user_name, const std::vector<type *> &vec)
-{
-    for (const auto &i : vec)
-    {
-        if (i->getUserName() == user_name)
-            return true;
-    }
-    return false;
-}
 
-Admin *ECommerce ::adminSignUp(const std::string &firstName, const std::string &lastName, const std::string &userName, const std::string &password)
-{
-    // Take input of additional attributes below
-    return new Admin(firstName, lastName, userName, password);
-}
-
-Buyer *ECommerce ::buyerSignUp(const std::string &firstName, const std::string &lastName, const std::string &userName, const std::string &password)
-{
-    Buyer *b = new Buyer(firstName, lastName, userName, password);
-    // Take input of additional attributes
-    int choice, choice2;
-    b->setCategory(categories);
-
-    std::cout << "Enter [1] if you want to select the categories you are interested \n Enter [0] if you want to skip this stop\n";
-    std::cin >> choice;
-    switch (choice)
-    {
-    case 0:
-    {
-        std::cout << "Congratulations! you have successfully created your account.\n";
-    }
-    case 1:
-    {
-        std::cout << "Selection of the categories you are interested in: \n";
-        b->selectCategory();
-
-        std::cout << "Enter [1] if you want to select the sub categories of the categories you are interested \n Enter [0] if you want to skip this stop\n";
-        std::cin >> choice2;
-
-        switch (choice2)
-        {
-        case 0:
-        {
-            break;
-        }
-        case 1:
-        {
-            std::cout << "Selection of the sub categories you are interested in: \n";
-            b->selectSubCategory();
-            for (size_t i = 0; i < b->getPreferredSubCategory().size(); i++)
-            {
-                std::cout<<b->getPreferredSubCategory()[i]<<std::endl;
-            }
-            
-            
-            break;
-        }
-        default:
-        {
-            std::cout << "Invalid Input. Try Again :( \n";
-            break;
-        }
-        }
-        std::cout << "Congratulations! you have successfully created your account.\n";
-        break;
-    }
-    default:
-    {
-        std::cout << "Invalid Input. Try Again :( \n";
-    }
-    }
-
-    return b;
-}
-
-Seller *ECommerce ::sellerSignUp(const std::string &firstName, const std::string &lastName, const std::string &userName, const std::string &password)
-{
-    // Take input of additional attributes below
-    return new Seller(firstName, lastName, userName, password);
-}
-
-template <typename T>
-void ECommerce ::inputCredentials(
-    std::string &firstName,
-    std::string &lastName,
-    std::string &userName,
-    std::string &pass, const std::vector<T *> &vec) // Parameters
-{
+void inputCredentials (std::string& firstName, std::string& lastName, std::string& userName, std::string& pass) { 
     cout << "\n<--INPUT CREDENTIALS-->\n";
     cout << "\nEnter your first name: ";
     cin >> firstName;
@@ -101,8 +14,8 @@ void ECommerce ::inputCredentials(
     {
         cout << "Enter your user name : ";
         cin >> userName;
-        is_user_name_taken = isUserNameTaken(userName, vec);
-        if (is_user_name_taken)
+        is_user_name_taken = ECommerce::getInstance()->isUserNameTaken(userName);
+        if (is_user_name_taken) 
             cout << userName << " has already been taken. Try another one! " << endl;
     } while (is_user_name_taken);
 
@@ -127,58 +40,131 @@ void ECommerce ::inputCredentials(
     } while (retype_pass != pass);
 }
 
-void ECommerce ::signUp()
-{
+
+void Login ()  {
+    std::string userName, pass; 
+    std::cout << "\nEnter your username: "; getline (std::cin, userName);
+    std::cout << "Enter your password: "; getline (std::cin, pass);
+
+    User* user = ECommerce :: getInstance ()->login (userName, pass); 
+    if (user) {
+        user->dashBoard (); // calls the appropriate method :)
+    } else {
+        std::cout << "Wrong credentials :(" << std::endl; // In case: nullptr was returned!
+    }
+}
+
+
+void SignUp () {
     std::string firstName, lastName, userName, pass;
     char choice;
-    do
-    {
+    do {
+        // system ("clear");
         cout << "____________________________________________________________" << endl;
         cout << "\n\t\t CREATE YOUR ACCOUNT " << endl;
         cout << "\nWhat type of account do you want to create? " << endl;
-        cout << "\nSignUp as: \n\nA = Admin \nB = Buyer \nS = Seller \nX = Clear screen \nG = Go Back" << endl;
+        cout << "\nSignUp as: \n\nA = Admin \n\nB = Buyer \n\nS = Seller \n\nX = Clear screen \n\nG = Go Back" << endl;
         cout << "\nEnter choice: ";
         cin >> choice;
 
-        switch (std::toupper(choice))
-        {
-        case 'A':
-        {
-            inputCredentials<Admin>(firstName, lastName, userName, pass, admins);
-            Admin *a = adminSignUp(firstName, lastName, userName, pass);
-            addAdmin(a);
-            login(); // Login to your accout after signUp
-            a = nullptr;
-            break;
+        switch (std::toupper(choice)) {
+            case 'A': {
+                const std::string code("adminCode");  // Corrected typo from "amdinCode"
+                int count = 0;
+                bool verified = false;
+
+                cout << "____________________________________________________________" << endl;
+                cout << "\n\t\t\tVERIFICATION \n\nYou have to verify that you are eligible to create an admin account.\n" << endl;
+                
+                cin.ignore();
+                do {
+                    cout << "Enter admin code: ";
+                    getline (cin, firstName);
+                    count++;
+                    if (firstName == code) {
+                        verified = true;
+                        break;
+                    }
+                    else {
+                        cout << "Wrong code.Try again! " << endl;
+                    }
+                    if (count == 3) {
+                        cout << "\nTotal attempts reached." << endl;
+                        break;
+                    }
+                } while (count < 3);
+
+                if (verified) {
+                    firstName.clear();
+                    inputCredentials (firstName, lastName, userName, pass);
+                    Admin* a = userSignUp<Admin>(firstName, lastName, userName, pass);
+
+                    ECommerce::getInstance()->addUser /*<Admin>*/ (a);   
+                    cout << "\nSigned-up successfully! " << endl;                    
+                    cout << "\nNow Login to account below :)" << endl; 
+                    Login (); // global
+
+                    a = nullptr;
+                } else {
+                    cout << "\nVerification failed. Returning to the main menu." << endl;
+                }
+                break;
+            }
+            case 'B': {
+                // Take input of common credentials first
+                inputCredentials (firstName, lastName, userName, pass);
+
+                // Input of additional attributes
+                /*
+                    Here below :)
+                */
+
+                Buyer* b = userSignUp<Buyer>(firstName, lastName, userName, pass);
+                ECommerce::getInstance()->addUser /*<Buyer>*/ (b);
+                cout << "\nSigned-up successfully! " << endl;   
+                cout << "\nNow Login to account below :)" << endl; 
+                Login(); // global
+                b = nullptr;
+
+                break;
+            }
+            case 'S': {
+                // Take input of common credentials first
+                inputCredentials (firstName, lastName, userName, pass);
+
+                // Take input of additional attributes below
+                std::string phone_number, org, dob, cnic; 
+                cout << "Enter your phone no: "; getline (cin, phone_number);
+                cout << "Enter your organization name: "; getline (cin, org);
+                cout << "Enter your date of birth: "; getline (cin, dob);
+                cout << "Enter your CNIC: "; getline (cin, cnic);
+
+                // Input of additional attributes
+                Seller* s = userSignUp<Seller>(firstName, lastName, userName, pass, phone_number, org, dob, cnic);
+                ECommerce::getInstance()->addUser /*<Seller>*/(s);
+
+                // Making a separate file for seller! 
+                // Where he can store his product Ids
+                Database :: getInstance()->createNewFileForSeller (s->getUserName()); 
+                cout << "\nSigned-up successfully! " << endl;                 
+                cout << "Now Login to your account below :)" << endl; 
+                cin.ignore();
+                Login(); // global
+                s = nullptr; 
+                break;
+            }
+            case 'X': {
+                system("clear"); // clear the console
+                break;
+            }
+            case 'G': {
+                std::cout << "\nGoing back to home page........" << std::endl;
+                break;
+            }
+            default: {
+                cout << "\nInvalid command! " << endl;
+                break;
+            }
         }
-        case 'B':
-        {
-            inputCredentials<Buyer>(firstName, lastName, userName, pass, buyers);
-            Buyer *b = buyerSignUp(firstName, lastName, userName, pass);
-            addBuyer(b);
-            login();
-            b = nullptr;
-            break;
-        }
-        case 'S':
-        {
-            inputCredentials<Seller>(firstName, lastName, userName, pass, sellers);
-            Seller *s = sellerSignUp(firstName, lastName, userName, pass);
-            addSeller(s);
-            login();
-            s = nullptr;
-            break;
-        }
-        case 'X':
-        {
-            system("clear"); // clear the console
-            break;
-        }
-        case 'G':
-        {
-            std::cout << "\nGoing back to home page........" << std::endl;
-            break;
-        }
-        }
-    } while (std::toupper(choice) != 'E');
+    } while (std::toupper(choice) != 'G');
 }

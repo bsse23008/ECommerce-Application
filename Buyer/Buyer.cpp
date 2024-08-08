@@ -209,12 +209,20 @@ bool Buyer::isCategoryPresent(std::string category)
     return false;
 }
 
-json Buyer ::toJson()
-{
-    json j;
+
+json& Buyer :: toJson ( json& j ) const { 
+    // json j; 
+    j["type"] = "Buyer"; // flag to differentiate between users
     j["firstName"] = this->firstName;
     j["lastName"] = this->lastName;
     j["userName"] = this->userName;
     j["password"] = this->password;
-    return j;
+    return j; 
+}
+
+
+void Buyer :: dashBoard () { 
+
+    cout << "\nBuyer :: dashBoard\n";
+
 }

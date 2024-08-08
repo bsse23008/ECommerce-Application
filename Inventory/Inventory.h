@@ -6,30 +6,24 @@
 #include "Product.h"
 #include "./../ECommerce/Categories.h"
 
+class Database;
+
 class Inventory
 {
 private:
-    static Inventory* instance;
-    std::vector<Product> products;
-    std::vector<Categories>categories;
-    // pivate constructor
-    Inventory();
+    std::vector<Product *> products;
 
 public:
-    //singleton pattern
-    static Inventory* getInstance();
-    static void deleteInstance();
-    // destructor
+    // constructor and destructor
+    Inventory(/* args */);
     ~Inventory();
-    //setter
-    void setCategorie(std::vector<Categories> &categories);
-    //adding, removing, updating, displaying and searching products
-    void addProduct();
-    void removeProduct();
-    void updateProduct();
-    void displayProducts();
-    void searchProduct();
-    
+
+    Product *getReference(const std::string &id);
+    void loadInventory(Product *p);
+    bool isUniqueId(const std::string &id);
+    void addProduct(Product *p);
+    void removeProduct(Product *p);
+    void displayProducts() const;
 };
 
 #endif // _INVENTORY_H_

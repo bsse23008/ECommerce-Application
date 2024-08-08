@@ -1,13 +1,24 @@
-#include "inventory.h"
-Inventory *Inventory::instance = nullptr;
+#include "Inventory.h"
+#include "./../Database/Database.h"
 
 // constructor and destructor
-Inventory::Inventory(/* args */)
-{
+Inventory::Inventory(/* args */) {
+    
 }
 
-Inventory::~Inventory()
+Inventory::~Inventory() {
+
+}
+
+// Every selller will have reference to his own products
+Product *Inventory ::getReference(const std::string &id)
 {
+    for (auto &p : products) {
+        if (p->get_unique_id() == id) {
+            return p;
+        }
+    }
+    return nullptr;
 }
 // setting categories
 void Inventory::setCategorie(std::vector<Categories> &categories)
@@ -67,21 +78,53 @@ void Inventory::updateProduct() {}
 void Inventory::displayProducts() {}
 void Inventory::searchProduct() {}
 
-// singleton pattern
-Inventory *Inventory::getInstance()
-{
-    if (instance == nullptr)
-    {
-        instance = new Inventory();
-    }
-    return instance;
+void Inventory :: loadInventory (Product* p) { 
+    products.push_back (p);
 }
 
-void Inventory::deleteInstance()
+
+
+bool Inventory :: isUniqueId (const std::string& id) { 
+    for (size_t i=0; i<products.size(); i++) { 
+        if (id == products.at(i)->get_unique_id()) { 
+            return true; 
+        }
+    }
+    return false; 
+}
+
+
+
+void Inventory :: addProduct(Product *p)
 {
-    if (instance != nullptr)
-    {
-        delete instance;
-        instance = nullptr;
+    products.push_back(p);
+    try {
+        Database :: getInstance()->addProductToAppInventory(p);
+    }
+    catch (std::exception& ex) { 
+        cout << "EXCEPTION: " << ex.what() << endl;
+    }
+}
+
+
+
+void Inventory :: removeProduct(Product *p)
+{
+    for (auto it = products.begin(); it !=products.end(); ++it) { 
+        if ((*it) == p) { 
+            Database :: getInstance()-> removeProductFromAppInventory ((*it)->get_unique_id()); // Remove product from centralized inventory (Main Database for products)
+            products.erase (it);
+            break; 
+        }
+    }
+}
+
+
+void Inventory :: displayProducts () const { 
+    std::vector<Product*> :: const_iterator it = products.begin();
+    while (it != products.end()) { 
+        std::cout << **it << std::endl; 
+        std::cout <<  "___________________________________" << std::endl; 
+        ++it; 
     }
 }

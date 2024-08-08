@@ -12,10 +12,11 @@ class Buyer : public User
 
 public:
     Buyer();
-    ~Buyer()
+    virtual ~Buyer()
     {
         cout << "\nBuyer destructor called!" << endl;
     }
+
     Buyer(
         const std::string &,
         const std::string &,
@@ -24,20 +25,25 @@ public:
 
     /// setters
     void setCategory(const std::vector<Categories> &);
-    void setPreferredCategory(std::string );
+    void setPreferredCategory(std::string);
     void setPreferredSubCategory(std::string &);
     // getters
     std::vector<std::string> getPreferredCategory();
     std::vector<std::string> getPreferredSubCategory();
-    //checking if cattegory is already present
+    // checking if cattegory is already present
     bool isCategoryPresent(std::string);
-    //selecting the categories and subcategories
+    // selecting the categories and subcategories
     void selectCategory();
     void selectSubCategory();
     Categories findCategory(std::string);
-    // json functions
+
+    // Buyer/Customer Functionalities
+
     static Buyer *fromJson(json &j);
-    json toJson();
+    virtual json &toJson(json &j) const override;
+
+    // Buyer functionalities
+    virtual void dashBoard() override; // Buyer DashBoard :)
 };
 
 #endif // _BUYER_H_

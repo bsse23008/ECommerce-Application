@@ -1,37 +1,50 @@
-#if !defined(PRODUCT_H_)
-#define PRODUCT_H_
+#ifndef _PRODUCT_H_
+#define _PRODUCT_H_
 
 #include <iostream>
 #include <vector>
 #include "Review.h"
-#include "./../ECommerce/Categories.h"
+
+using std::cout; 
+using std::cin; 
+using std::cerr; 
+using std::endl; 
+
+class Seller; 
+
 class Product
 {
-private:
-    std::string name;
-    std::string description;
-    std::string category;
-    std::string subCategory;
-    std::string location;
-    std::string supplier;
-    double price;
-    int stock;
-    double rating;
-    std::vector<Review> reviews;
+    friend std::ostream& operator<<(std::ostream& os, const Product& product);
+    friend std::istream& operator>>(std::istream& is, Product& product);
+    bool operator == (const Product& p);
 
 public:
+    // constructor and destructor
+    Product();
+    Product
+    (const std::string& id,
+     const std::string& name,
+      const std::string& description,
+       const std::string& category,
+        const std::string& location,
+         const std::string& supplier,
+          double price,
+           double stock ) : uniqueId(id), name(name), description(description), category(category), location(location), supplier(supplier), price(price), stock(stock) {}
+    ~Product();
+
     // setters
-    void set_name(std::string name);
-    void set_description(std::string description);
-    void set_category(std::vector<Categories> &categories);
-    void set_SubCategory(Categories &category);
-    void set_location(std::string location);
-    void set_supplier(std::string supplier);
+    void set_unique_id (const std::string&);
+    void set_name(const std::string&);
+    void set_description(const std::string&);
+    void set_category(const std::string&);
+    void set_location(const std::string&);
+    void set_supplier(const std::string&);
     void set_price(double price);
-    void set_stock(int stock);
-    void add_review(std::string review);
-    void set_rating(double rating);
+    void set_stock(double stock);
+    void add_review(const Review);
+
     // getters
+    std::string get_unique_id () const { return uniqueId; }
     std::string get_name();
     std::string get_description();
     std::string get_category();
@@ -39,14 +52,22 @@ public:
     std::string get_supplier();
     double get_price();
     double get_stock();
-    double get_rating();
-    std::string get_subCategory();
+    double get_rating() const;
     std::vector<std::string> get_reviews();
-    // constructor and destructor
-    Product(/* args */);
-    ~Product();
-    // ostream operator
-    friend std::ostream &operator<<(std::ostream &os, const Product &product);
+
+    // Conversion Methods 
+    static Product* fromJson (json& j, Product* p); 
+    json* toJson (json* j); 
+    void displayReviews () const;  
+
+
+private:
+    std::string uniqueId, name, description, category, location, supplier;
+    double price, stock;
+    std::vector<Review> reviews;
+    
+    /*    MAP <review, Buyer*>    */
 };
 
-#endif // PRODUCT_H_
+
+#endif // _PRODUCT_H_
