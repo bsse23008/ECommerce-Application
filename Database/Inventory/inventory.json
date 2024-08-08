@@ -2,58 +2,13 @@
     "products": [
         {
             "category": "Electronics",
-            "description": "Mobile phone having some scratches on the back :)",
+            "description": "2017 Model Laptop with 4-GB RAM",
             "location": "Lahore",
-            "name": "Samsung-A12",
-            "price": 0.0,
-            "reviews": [],
-            "stock": 10.0,
-            "supplier": "bsse23008",
-            "uniqueId": "1122"
-        },
-        {
-            "category": "Electronics",
-            "description": "Mobile phone Brand New",
-            "location": "Lahore",
-            "name": "Samsung A-32s",
-            "price": 45000.0,
-            "reviews": [],
+            "name": "Acer-Laptop",
+            "price": 50000.0,
             "stock": 1.0,
-            "supplier": "bsse23008",
-            "uniqueId": "0x11"
-        },
-        {
-            "category": "Electronics",
-            "description": "Wrist watch with smooth touch and gorilla glass protection",
-            "location": "Lahore",
-            "name": "Apple Watch",
-            "price": 15000.0,
-            "reviews": [],
-            "stock": 13.0,
-            "supplier": "bsse23113",
-            "uniqueId": "0x22"
-        },
-        {
-            "category": "Cosmetics",
-            "description": "Neem flavour shampoo ",
-            "location": "Kuwait",
-            "name": "Head n Shoulders",
-            "price": 150.0,
-            "reviews": [],
-            "stock": 100.0,
-            "supplier": "jamzee",
-            "uniqueId": "1313"
-        },
-        {
-            "category": "Electronics",
-            "description": "1 year old Hp laptop with some scratches at the back",
-            "location": "Kuwait",
-            "name": "HP-Laptop",
-            "price": 110000.0,
-            "reviews": [],
-            "stock": 1.0,
-            "supplier": "jamzee",
-            "uniqueId": "4141"
+            "supplier": "auk",
+            "uniqueId": "ox123"
         }
     ]
 }

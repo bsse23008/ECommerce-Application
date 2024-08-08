@@ -5,7 +5,6 @@
 #include <vector>
 #include "Product.h"
 
-class Database;
 
 class Inventory
 {

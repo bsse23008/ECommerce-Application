@@ -1,5 +1,6 @@
 #include "Product.h"
-#include "./../Seller/Seller.h"
+#include "../ECommerce/ECommerce.h"
+
 
 Product :: Product () 
 :   name{"None"}, 
@@ -37,10 +38,12 @@ void Product::set_location(const std::string& location)
 {
     this->location = location;
 }
-void Product::set_supplier(const std::string& supplier)
+
+void Product :: set_supplier(const Seller* supplier)
 {
-    this->supplier = supplier;
+    this->productSupplier = const_cast <Seller*>(supplier);
 }
+
 void Product::set_price(double price)
 {
     this->price = price;
@@ -73,9 +76,9 @@ std::string Product::get_location()
 {
     return this->location;
 }
-std::string Product::get_supplier()
+std::string Product::get_supplier_id()
 {
-    return this->supplier;
+    return this->productSupplier->getUserName();
 }
 double Product::get_price()
 {
@@ -93,6 +96,12 @@ double Product :: get_rating() const {
     }
     return rating; 
 }
+
+
+void Product :: addSeller (Seller* seller) { 
+    this->productSupplier = seller; 
+}
+
 
 
 //istream operator 
@@ -121,7 +130,7 @@ std::ostream& operator<<(std::ostream& os, const Product& product){
     os << "  Description  : " << product.description << endl;
     os << "  Category     : " << product.category << endl;
     os << "  Location     : " << product.location << endl;
-    os << "  Supplier     : " << product.supplier << endl;
+    os << "  Supplier     : " << product.productSupplier->getFirstName() << ", User-ID: " << product.productSupplier->getUserName() << endl;
     os << "  Price        : " << product.price << endl;
     os << "  Stock        : " << product.stock << endl;
     os << "  Rating       : " << product.get_rating () << endl; 
@@ -134,7 +143,10 @@ std::ostream& operator<<(std::ostream& os, const Product& product){
 
 // == operator (verify that the two objects are equal or not)
 bool Product :: operator == (const Product& p) { 
-    return (this->name == p.name && this->description == p.description && this->category == p.category && this->price == p.price); 
+    return (this->name == p.name &&
+                this->description == p.description &&
+                    this->category == p.category &&
+                        this->price == p.price); 
 }
 
 
@@ -145,15 +157,23 @@ Product* Product :: fromJson ( json& j, Product* p ) {
     p->set_description(j["description"]);
     p->set_category(j["category"]);
     p->set_location(j["location"]);
-    p->set_supplier(j["supplier"]);
+
+    // Setting the reference to supplier
+    const Seller* s = dynamic_cast<const Seller*>(ECommerce::getInstance()->getSellerReference (j["supplier"]));
+    if (s) { 
+        p->set_supplier(s);
+    } else { 
+        p->set_supplier(nullptr);
+    }
+
     p->set_price(j["price"]);
     p->set_stock(j["stock"]);
 
-    for (size_t i=0; i < j["reviews"].size(); i++) {
-        Review* temp = new Review (j["review"][i]["rating"], j["review"][i]["comment"]); 
-        p->add_review(*temp);
-        delete temp; 
-    }
+    // for (size_t i=0; i < j["reviews"].size(); i++) {
+    //     Review* temp = new Review (j["review"][i]["rating"], j["review"][i]["comment"]); 
+    //     p->add_review(*temp);
+    //     delete temp; 
+    // }
     return p; 
 }
 
@@ -163,10 +183,11 @@ json* Product :: toJson (json* j) {
     (*j)["description"] = this->description;
     (*j)["category"] = this->category; 
     (*j)["location"] = this->location; 
-    (*j)["supplier"] = this->supplier; 
+    (*j)["supplier"] = this->productSupplier->getUserName(); 
     (*j)["price"] = this->price; 
     (*j)["stock"] = this->stock; 
 
+    /*
     if (reviews.size() == 0) { 
         (*j)["reviews"] = json :: array ();
     }
@@ -175,6 +196,7 @@ json* Product :: toJson (json* j) {
             (*j)["reviews"][i] = reviews[i].toJson();
         }
     }
+    */
     return j;
 }
 

@@ -119,7 +119,7 @@ Product* Seller :: searchProduct (const std::string& id) {
 
 
 void Seller :: addProduct (Product* p) {
-    // p->addSeller (this);
+    p->addSeller (this);
     ECommerce::getInstance()->getInventory()->addProduct (p); // Add the product to the centralized inventory first :)
     // Then add it in seller,s products list
     products.push_back (p); // address copy 

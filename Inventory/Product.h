@@ -4,18 +4,19 @@
 #include <iostream>
 #include <vector>
 #include "Review.h"
+#include "../Seller/Seller.h"
 
 using std::cout; 
 using std::cin; 
 using std::cerr; 
 using std::endl; 
 
-class Seller; 
 
 class Product
 {
     friend std::ostream& operator<<(std::ostream& os, const Product& product);
     friend std::istream& operator>>(std::istream& is, Product& product);
+    friend void Seller :: addProduct (Product*);
     bool operator == (const Product& p);
 
 public:
@@ -29,7 +30,7 @@ public:
         const std::string& location,
          const std::string& supplier,
           double price,
-           double stock ) : uniqueId(id), name(name), description(description), category(category), location(location), supplier(supplier), price(price), stock(stock) {}
+           double stock ) : uniqueId(id), name(name), description(description), category(category), location(location), supplier(supplier), price(price), stock(stock), productSupplier(nullptr) {}
     ~Product();
 
     // setters
@@ -38,7 +39,7 @@ public:
     void set_description(const std::string&);
     void set_category(const std::string&);
     void set_location(const std::string&);
-    void set_supplier(const std::string&);
+    void set_supplier(const Seller*);
     void set_price(double price);
     void set_stock(double stock);
     void add_review(const Review);
@@ -49,7 +50,7 @@ public:
     std::string get_description();
     std::string get_category();
     std::string get_location();
-    std::string get_supplier();
+    std::string get_supplier_id ();
     double get_price();
     double get_stock();
     double get_rating() const;
@@ -59,11 +60,13 @@ public:
     static Product* fromJson (json& j, Product* p); 
     json* toJson (json* j); 
     void displayReviews () const;  
+    void addSeller (Seller*);
 
 
 private:
     std::string uniqueId, name, description, category, location, supplier;
     double price, stock;
+    Seller* productSupplier; // Every product has a seller!
     std::vector<Review> reviews;
     
     /*    MAP <review, Buyer*>    */

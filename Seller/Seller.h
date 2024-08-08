@@ -3,8 +3,7 @@
 
 #include "../User/User.h"
 
-class ECommerce;
-class Database;
+class Product;
 
 class  Seller : public User
 {
