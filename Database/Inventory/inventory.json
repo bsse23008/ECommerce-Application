@@ -54,6 +54,17 @@
             "stock": 1.0,
             "supplier": "jamzee",
             "uniqueId": "4141"
+        },
+        {
+            "category": "7",
+            "description": "6",
+            "location": "7",
+            "name": "6",
+            "price": 8.0,
+            "reviews": [],
+            "stock": 8.0,
+            "supplier": "scorpRadoz",
+            "uniqueId": "5"
         }
     ]
 }

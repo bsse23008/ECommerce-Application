@@ -29,37 +29,37 @@ void Product::set_description(const std::string& description)
 {
     this->description = description;
 }
-void Product::set_category(const std::string& category)
-{
-    for (size_t i = 0; i < 7; i++)
-    {
-        categories[i].displayCategories();
-    }
-    bool flag = false;
-    std::string category;
-    do
-    {
-        std::cout << "Enter the category number : ";
-        std::getline(std::cin, category);
-        if (category.size() != 1)
-        {
-            std::cout << "Invalid input. Please try again." << std::endl;
-            flag = false;
-        }
-        else if ((static_cast<int>(category[0])) >= 49 || (static_cast<int>(category[0])) <= 55)
-        {
-            flag = true;
-        }
-        else
-        {
-            std::cout << "Invalid input. Please try again." << std::endl;
-            flag = false;
-        }
-    } while (!flag);
-    int cat = category[0] - '0';
-    this->category=categories[cat - 1].getCategory();
-    std::cout << "Category Has been set to " << this->category << std::endl;
-}
+// void Product::set_category(const std::string& category)
+// {
+//     for (size_t i = 0; i < 7; i++)
+//     {
+//         categories[i].displayCategories();
+//     }
+//     bool flag = false;
+//     std::string category;
+//     do
+//     {
+//         std::cout << "Enter the category number : ";
+//         std::getline(std::cin, category);
+//         if (category.size() != 1)
+//         {
+//             std::cout << "Invalid input. Please try again." << std::endl;
+//             flag = false;
+//         }
+//         else if ((static_cast<int>(category[0])) >= 49 || (static_cast<int>(category[0])) <= 55)
+//         {
+//             flag = true;
+//         }
+//         else
+//         {
+//             std::cout << "Invalid input. Please try again." << std::endl;
+//             flag = false;
+//         }
+//     } while (!flag);
+//     int cat = category[0] - '0';
+//     this->category=categories[cat - 1].getCategory();
+//     std::cout << "Category Has been set to " << this->category << std::endl;
+// }
 void Product::set_location(const std::string& location)
 {
     this->location = location;
@@ -72,9 +72,12 @@ void Product::set_price(double price)
 {
     this->price = price;
 }
-void Product::set_stock(int stock)
+void Product::set_stock(double stock)
 {
     this->stock = stock;
+}
+void Product::set_category(const std::string& category){
+    this->category = category;
 }
 
 

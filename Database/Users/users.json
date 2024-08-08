@@ -39,6 +39,17 @@
             "phoneNo": "0301 0101134",
             "type": "Seller",
             "userName": "jamzee"
+        },
+        {
+            "CNIC": "2",
+            "DOB": "1",
+            "firstName": "samer",
+            "lastName": "nisar",
+            "organization": "lol",
+            "password": "12345678",
+            "phoneNo": "999",
+            "type": "Seller",
+            "userName": "scorpRadoz"
         }
     ]
 }
