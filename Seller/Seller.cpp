@@ -184,7 +184,8 @@ void Seller :: storeManagement () {
                 // cout << endl; 
                     cout << "Enter name of product  : ";  getline (cin, name); 
                     cout << "Enter Description      : "; getline (cin, description) ;
-                    cout << "Enyer category         : "; getline (cin, category);
+                    // cout << "Enyer category         : "; getline (cin, category);
+                    category=selectCategoryForProduct();
                     cout << "Enter location         : "; cin >> location ;
                     // cout << "Supplier of product    : "; cin >> supplier ;
                     supplier = this->userName; 
@@ -288,4 +289,36 @@ void Seller :: dashBoard () {
             }
         }
     } while (std::toupper (outerSwitch) != 'L'); 
+}
+std::string Seller:: selectCategoryForProduct()
+{
+    for (size_t i = 0; i < 7; i++)
+    {
+        std::cout<<i+1<<". "<<ECommerce::getInstance()->getCategories()[i].getCategory();
+    }
+    bool flag = false;
+    std::string cate;
+    do
+    {
+        std::cout << "Enter the category number : ";
+        std::getline(std::cin, cate);
+        if (cate.size() != 1)
+        {
+            std::cout << "Invalid input. Please try again." << std::endl;
+            flag = false;
+        }
+        else if ((static_cast<int>(cate[0])) >= 49 || (static_cast<int>(cate[0])) <= 55)
+        {
+            flag = true;
+        }
+        else
+        {
+            std::cout << "Invalid input. Please try again." << std::endl;
+            flag = false;
+        }
+    } while (!flag);
+    int cat = cate[0] - '0';
+    cate=ECommerce::getInstance()->getCategories() [cat - 1].getCategory();
+    std::cout << "Category Has been set to " << cate << std::endl;
+    return cate;
 }

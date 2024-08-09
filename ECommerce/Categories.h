@@ -12,9 +12,10 @@ private:
 
 public:
     // constructor and destructor
-    Categories(std::string category);
+    Categories();
     ~Categories();
-
+    //setter
+    void setCategory(std::string);
     // getters
     std::string getCategory();
     std::vector<std::string> getSubCategory();

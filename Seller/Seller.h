@@ -46,6 +46,7 @@ public:
     virtual void dashBoard () override; // Seller DashBoard :)
     void storeManagement ();
     void loadMyProducts ();
+    std::string selectCategoryForProduct();
     Product* searchProduct (const std::string& );
     void addProduct (Product* ); 
     void removeProduct (Product* );

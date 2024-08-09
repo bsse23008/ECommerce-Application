@@ -9,6 +9,16 @@
             "stock": 1.0,
             "supplier": "auk",
             "uniqueId": "ox123"
+        },
+        {
+            "category": "Fashion and Apparel",
+            "description": "2",
+            "location": "lahore",
+            "name": "2",
+            "price": 78.0,
+            "stock": 29.0,
+            "supplier": "auk",
+            "uniqueId": "2"
         }
     ]
 }

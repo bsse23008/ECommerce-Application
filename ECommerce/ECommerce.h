@@ -21,7 +21,8 @@ public:
     void removeUser (User* );
     Inventory* getInventory () const;
     void displayUsers () const;
-    void loadData ();      
+    void loadData (); 
+    std::vector<Categories> getCategories();     
     
 private:
 

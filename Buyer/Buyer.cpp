@@ -96,108 +96,108 @@ void Buyer::selectCategory()
     } while (exit > 0);
 }
 
-void Buyer::selectSubCategory()
-{
+// void Buyer::selectSubCategory()
+// {
 
-    for (size_t i = 0; i < preferredCategory.size(); i++)
+//     for (size_t i = 0; i < preferredCategory.size(); i++)
 
-    {
+//     {
 
-        Categories category("");
-        int count = 0, exit = 0;
-        do
-        {
-            std ::cout << " Category : " << preferredCategory[i]<<std::endl;
-            std::cout << " Sub Categories :-\n";
-            bool check;
-            std::vector<int> subCat;
-            int inputCheck = 0;
-            // displaying only unselected subcategories
-            for (size_t j = 0; j < 4; j++)
-            {
-                for (int h = 0; h < subCat.size(); h++)
-                {
-                    if (j == subCat[h])
-                    {
-                        check = false;
-                        break;
-                    }
-                    check = true;
-                }
-                if (!check)
-                {
-                    continue;
-                }
-                inputCheck++;
-                Categories category("");
-                category = findCategory(preferredCategory[i]);
-                std::cout << j + 1 << ". " << category.getSubCategory()[j] << std::endl;
-            }
-            // checking if all subcategories are selected or not
-            if (inputCheck != 0)
-            {
-                int choice;
-                bool flag = false;
-                do
-                {
-                    // taking input of desired  sub category
-                    std::cout << "Enter the sub-category you want to select :";
-                    std::cin >> choice;
-                    int v = 0;
-                    for (int k = 0; k < subCat.size(); k++)
-                    {
-                        std::cout << " in the check loop\n";
-                        // checking if selected sub category is valid or not
-                        if ((choice - 1) == subCat[k])
-                        {
-                            v = 1;
-                            flag = false;
-                            break;
-                        }
-                    }
+//         Categories category("");
+//         int count = 0, exit = 0;
+//         do
+//         {
+//             std ::cout << " Category : " << preferredCategory[i]<<std::endl;
+//             std::cout << " Sub Categories :-\n";
+//             bool check;
+//             std::vector<int> subCat;
+//             int inputCheck = 0;
+//             // displaying only unselected subcategories
+//             for (size_t j = 0; j < 4; j++)
+//             {
+//                 for (int h = 0; h < subCat.size(); h++)
+//                 {
+//                     if (j == subCat[h])
+//                     {
+//                         check = false;
+//                         break;
+//                     }
+//                     check = true;
+//                 }
+//                 if (!check)
+//                 {
+//                     continue;
+//                 }
+//                 inputCheck++;
+//                 Categories category();
+//                 category = findCategory(preferredCategory[i]);
+//                 std::cout << j + 1 << ". " << category.getSubCategory()[j] << std::endl;
+//             }
+//             // checking if all subcategories are selected or not
+//             if (inputCheck != 0)
+//             {
+//                 int choice;
+//                 bool flag = false;
+//                 do
+//                 {
+//                     // taking input of desired  sub category
+//                     std::cout << "Enter the sub-category you want to select :";
+//                     std::cin >> choice;
+//                     int v = 0;
+//                     for (int k = 0; k < subCat.size(); k++)
+//                     {
+//                         std::cout << " in the check loop\n";
+//                         // checking if selected sub category is valid or not
+//                         if ((choice - 1) == subCat[k])
+//                         {
+//                             v = 1;
+//                             flag = false;
+//                             break;
+//                         }
+//                     }
 
-                    if (v == 0)
-                    {
-                        flag = true;
-                        subCat.push_back((choice - 1));
-                        setPreferredSubCategory(category.getSubCategory()[(choice - 1)]);
-                    }
-                    else if (subCat.size() == 0)
-                    {
-                        flag = true;
-                    }
-                    else if (!flag)
-                    {
-                        std::cout << "Invalid choice. Please try again!" << std::endl;
-                    }
+//                     if (v == 0)
+//                     {
+//                         flag = true;
+//                         subCat.push_back((choice - 1));
+//                         setPreferredSubCategory(category.getSubCategory()[(choice - 1)]);
+//                     }
+//                     else if (subCat.size() == 0)
+//                     {
+//                         flag = true;
+//                     }
+//                     else if (!flag)
+//                     {
+//                         std::cout << "Invalid choice. Please try again!" << std::endl;
+//                     }
 
-                } while (!flag);
-                count++;
-                std::cout << "Enter a positive integer to continue selecting subcategories of this category and negative integer to stop : ";
-                std::cin >> exit;
-            }
-            else
-            {
-                std::cout << "You have already selected all of the subcategories of this category.";
-                break;
-            }
-        } while (exit > 0);
-        std::cout << "===============================================\n";
-    }
-}
+//                 } while (!flag);
+//                 count++;
+//                 std::cout << "Enter a positive integer to continue selecting subcategories of this category and negative integer to stop : ";
+//                 std::cin >> exit;
+//             }
+//             else
+//             {
+//                 std::cout << "You have already selected all of the subcategories of this category.";
+//                 break;
+//             }
+//         } while (exit > 0);
+//         std::cout << "===============================================\n";
+//     }
+// }
 
-Categories Buyer::findCategory(std::string category)
-{
-    Categories cat("");
-    for (size_t i = 0; i < categories.size(); i++)
-    {
-        if (categories[i].getCategory() == category)
-        {
-            cat = categories[i];
-        }
-    }
-    return cat;
-}
+// Categories Buyer::findCategory(std::string category)
+// {
+//     Categories cat("");
+//     for (size_t i = 0; i < categories.size(); i++)
+//     {
+//         if (categories[i].getCategory() == category)
+//         {
+//             cat = categories[i];
+//         }
+//     }
+//     return cat;
+// }
 // checking if cattegory is already present
 bool Buyer::isCategoryPresent(std::string category)
 {
